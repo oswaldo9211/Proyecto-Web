@@ -4,6 +4,7 @@
 **/
 
 
+<<<<<<< HEAD
 
 function ValidarVIN($VIN=''){
 	if($VIN != "")
@@ -85,4 +86,6 @@ function ValidarColor($color)
 		return false;
 }
 
+=======
+>>>>>>> 25d6e71171fceff2cbbee6de9bba681daaa8b657
 ?>
