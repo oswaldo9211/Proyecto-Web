@@ -26,10 +26,8 @@ class VehiculoCtrl
 
 	public function run(){
 		$this->VE = new VehiculoCtrl();
-<<<<<<< HEAD
-=======
+
 		echo 'here';
->>>>>>> 25d6e71171fceff2cbbee6de9bba681daaa8b657
 		$Act ='';
 		if(isset($_GET['Act']) )
 			$Act = $_GET['Act'];
@@ -44,7 +42,6 @@ class VehiculoCtrl
 				 $this->VE->Alta();
 				 	break;
 				 case 'Modificacion':
-<<<<<<< HEAD
 				 	$this->VE->Modificacion();
 					 break;
 				 case 'Consulta':
@@ -52,7 +49,6 @@ class VehiculoCtrl
 				 	break;
 				 case 'Baja':
 				 	$this->VE->Baja();
-=======
 				 	$Vehicle->Modificacion();
 					 break;
 				 case 'Consulta':
@@ -60,7 +56,6 @@ class VehiculoCtrl
 				 	break;
 				 case 'Baja':
 				 	$Vehicle->Baja();
->>>>>>> 25d6e71171fceff2cbbee6de9bba681daaa8b657
 				 	break;
 				 default:
 				 	//require('Views/defaultVehicle.html');
@@ -77,7 +72,6 @@ class VehiculoCtrl
 		//require('Views/VehicleAlta.html');
 		if(isset($_POST['VIN']))
 		{
-<<<<<<< HEAD
 			if(ValidarVIN($_POST['VIN']))
 				$this->VIN = $_POST['VIN'];
 		}
@@ -112,17 +106,13 @@ class VehiculoCtrl
 				echo 'Alta';
 			else
 				echo 'ERROR 2002 ';
-
-=======
 			var_dump($_POST['VIN']);
 
 		}
->>>>>>> 25d6e71171fceff2cbbee6de9bba681daaa8b657
 
-	}
+	
 
 	public  function Modificacion(){
-<<<<<<< HEAD
 		
 		if(isset($_POST['VIN']))
 		{
@@ -185,19 +175,15 @@ class VehiculoCtrl
 			echo $value;
 			echo "\n";
 		}
-=======
 		echo "Modificacion";
 	}
 
-	public  function Consulta(){
-		echo "Consulta";
->>>>>>> 25d6e71171fceff2cbbee6de9bba681daaa8b657
-	}
 
 	public  function Baja(){
 		echo "Baja";
 	}
 }
+
 
 
 ?>

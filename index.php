@@ -3,6 +3,7 @@
 if(isset($_GET['Ctrl']) )
 			 switch($_GET['Ctrl']) {
 				 case 'Vehiculo':
+				 
 				 	require('Controllers/VehiculoCtrl.php');
 				 	$Vctrl = new VehiculoCtrl();
 					$Vctrl->run();
@@ -18,5 +19,5 @@ if(isset($_GET['Ctrl']) )
 			 }
 			 else
 			 	//require('Views/default.htm');
-
+echo "string";
 ?>
