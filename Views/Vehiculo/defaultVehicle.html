@@ -1,7 +1,7 @@
 <script type="text/javascript" src="js/main.js"></script>
 <link rel="stylesheet" href="css/main.css" type="text/css" media="screen"/>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<form action="?Ctrl=Vehiculo" method="POST">
+<form action="?ctrl=Vehiculo" method="POST">
 <div class="Nuevo">
 <button id='nuevo' name="Act" value="Alta">NUEVO</button>
 </div>
@@ -25,13 +25,13 @@
 	<div id="paging">
 		<ul>
 
-			<li><a href="#"><span>Paginas</span></a></li>
-			<li><a href="#" class="active"><span>1</span></a></li>
-			<li><a href="#"><span>2</span></a></li>
-			<li><a href="#"><span>3</span></a></li>
-			<li><a href="#"><span>4</span></a></li>
-			<li><a href="#"><span>5</span></a></li>
-			<li><a href="#"><span>Next</span></a></li>
+			<li><a href=""><span>Paginas</span></a></li>
+			<li><a href="?ctrl=Vehiculo&pag=1" class="active"><span>1</span></a></li>
+			<li><a href="?ctrl=Vehiculo&pag=2"><span>2</span></a></li>
+			<li><a href="?ctrl=Vehiculo&pag=3"><span>3</span></a></li>
+			<li><a href="?ctrl=Vehiculo&pag=4"><span>4</span></a></li>
+			<li><a href="?ctrl=Vehiculo&pag=5"><span>5</span></a></li>
+			<li><a href="?ctrl=Vehiculo&next"><span>Next</span></a></li>
 		</ul>
 	</div>
 	</td>
