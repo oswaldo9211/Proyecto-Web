@@ -1,12 +1,10 @@
 <?php
-
-if(isset($_GET['Ctrl']) )
+$Vctrl ='';
+if(isset($_GET['Ctrl']) ){
 			 switch($_GET['Ctrl']) {
 				 case 'Vehiculo':
-				 
 				 	require('Controllers/VehiculoCtrl.php');
 				 	$Vctrl = new VehiculoCtrl();
-					$Vctrl->run();
 				 break;
 				 case 'Inv':
 				 break;
@@ -17,7 +15,7 @@ if(isset($_GET['Ctrl']) )
 
 
 			 }
-			 else
+			 $Vctrl->run();
+}
 			 	//require('Views/default.htm');
-echo "string";
 ?>

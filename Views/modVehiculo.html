@@ -1,0 +1,33 @@
+<form method="post" action="?Ctrl=Vehiculo&Act={Act}&idV={id}">
+
+		<div class="input">
+			<label for="idvehiculo">ID</label>
+			<input type="text" id="idvehiculo" name="idvehiculo" value="{id}" onKeyUp="Mayusculas(this)" readonly="" />
+		</div>
+		<div class="input">
+			<label for="vin">VIN</label>
+			<input type="text" id="vin" name="vin" onKeyUp="Mayusculas(this)"  value="{vin}" r/>
+		</div>
+		<div  class="input">
+			<label for="marca">Marca</label>
+			<input type="text" name="marca" id='marca' value="{marca}" / >
+		</div>
+		<div class="input">
+		<label for="modelo">Modelo</label>
+         <input type="text" name="modelo" id="modelo"  value="{modelo}" />
+
+		<div class="input">
+			<label for="des">Descripcion</label>
+			<input type="text" name="des" id="des" value="{des}" />
+		</div>
+
+		<div class="input">
+			<label for="color">Color Favorito</label>
+			<input type="color" name="color" id="color" value="{color}" />
+		</div>
+		<div class="button">
+			<button name='Edit' id='Edit'>Modificar</button>
+		</div>
+		</div>
+</form>
+		

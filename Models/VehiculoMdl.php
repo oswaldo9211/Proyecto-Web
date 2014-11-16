@@ -9,18 +9,54 @@
 class VehiculoMdl 
 {
 	private $Vehicle;
-	
-	public function __construct()
-	{
-		$this->Vehicle = array('VIN' => 4040,
-		                 'Marca'=>'Renault','Modelo'=>'Clio',
-		                 'Color'=>'Rojo',
-		                 'Car'=>'1898 - 1900 Una idea que nace en una cabañaLa aventura de la marca francesa comienza cuando la Sociedad Renault Frères da sus primeros pasos en 1898');
-	}
+	private $db_driver;
 	private $vin;
 	private $brand;
     private $type;
 
+	public function __construct()
+	{
+		$this->Vehicle = array('VIN' => 4040,
+		                 'Marca'=>'Renault',
+		                 'Modelo'=>'Clio',
+		                 'Color'=>'Rojo',
+		                 'Car'=>'1898 - 1900 Una idea que nace en una cabañaLa aventura de la marca francesa comienza cuando la Sociedad Renault Frères da sus primeros pasos en 1898');
+		include_once('connection.php');
+		$conexion = getConnectionData();
+		//var_dump($conexion);
+		$this ->db_driver = new mysqli($conexion["SERVER"] , $conexion['USER'], $conexion["PASSWORD"], $conexion["DATABASE"]);
+		if($this->db_driver->connect_errno){
+			die("No se pudo conectar porque {$this->db_driver->connect_error}");
+		}
+
+	}
+
+	public function getRow($tabla, $campos, $condicion,&$ok){
+		$ok['errno'] =0;
+		$sql = "SELECT  ".$campos."  FROM    ".$tabla." ".$condicion."";
+		//echo "SQL 38", $sql;
+		$result = $this->db_driver->query($sql);
+		if($this->db_driver->errno ){
+			$ok['errno']=1;
+			$ok['error'] .= "No se puedo optener la consulta ". $this->db_driver->error;
+			
+		}
+		return $result;
+	}
+	public function Inset($tabla,$campos, $values)
+	{
+		$sql  = " INSERT INTO  ".$tabla." (".$campos.") VALUES(".$values." )";
+		//echo $sql;
+		$this->db_driver->query($sql);
+
+		if($this->db_driver->errno){
+			die("No se pudo hacer la consulta al insertar ".$this->db_driver->error);
+			return false;
+		}
+		else
+			return true;
+
+	}
 
 	public function createVehicle($VIN,$marca,$modelo,$caracteristicas,$color){
 		$query="";
@@ -35,18 +71,35 @@ class VehiculoMdl
 	 return true;		
 	}
 
-	public function ModificarVehiculo($VIN,$Marca,$Modelo,$Car,$Color){
-		if( $this->Vehicle['VIN'] = $VIN){
-			$this->Vehicle['Marca']= $Marca;
-		    $this->Vehicle['Modelo']=$Modelo;
-		    $this->Vehicle['Car']=$Car;
-		    $this->Vehicle['Color']=$Color;
 
-		    var_dump($this->Vehicle); 
-			return true;
+	public function del_Rows($tabla,$condicion)
+	{
+		$sql = "DELETE FROM $tabla $condicion";
+		//var_dump($sql);
+		$result= $this->db_driver->query($sql);
+	   	if($this->db_driver->errno){
+			//die("No se pudo hacer la consulta al insertar ".$this->db_driver->error);
+			return false;
 		}
 		else
+			return true;
+	}
+	public function ModificarVehiculo($id,$VIN,$Marca,$Modelo,$Car,$Color){
+		$sql = "UPDATE  vehiculo  SET vin    	  = '$VIN',
+								      marca  	  = '$Marca',
+								      modelo 	  = '$Modelo',
+								      descripcion = '$Car',
+								      color       = '$Color'
+				WHERE                 vehiculo_id = $id"; 
+	    $result= $this->db_driver->query($sql);
+	   	if($this->db_driver->errno){
+			//die("No se pudo hacer la consulta al insertar ".$this->db_driver->error);
 			return false;
+		}
+		else
+			return true;
+		
+
 	
 	}
 	public function ShowAll($tabla){
@@ -59,7 +112,7 @@ class VehiculoMdl
 		$this->model =  $model;
 		return true;
 	}*/
-	
+
 }
 
 ?>
