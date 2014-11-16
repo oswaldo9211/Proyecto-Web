@@ -58,9 +58,9 @@ class VehiculoCtrl
 				$data['VehiculosLista'] .="<td> $vehiculos[vin] </td>";
 				$data['VehiculosLista'] .="<td> $vehiculos[marca] </td>";
 				$data['VehiculosLista'] .="<td> $vehiculos[modelo] </td>";
-				$data['VehiculosLista'] .="<td><a href='?Ctrl=Vehiculo&Act=Ver&idV=$vehiculos[vehiculo_id]'><i class='icon-view'></i></a>";
-				$data['VehiculosLista'] .="<a href='?Ctrl=Vehiculo&Act=Edit&idV=$vehiculos[vehiculo_id]'><i class='icon-edit'></i></a>";
-				$data['VehiculosLista'] .="<a href='?Ctrl=Vehiculo&Act=Delete&idV=$vehiculos[vehiculo_id]'><i class='icon-remove'></i></a> </td>";
+				$data['VehiculosLista'] .="<td><a href='?ctrl=Vehiculo&Act=Ver&idV=$vehiculos[vehiculo_id]'><i class='icon-view'></i></a>";
+				$data['VehiculosLista'] .="<a href='?ctrl=Vehiculo&Act=Edit&idV=$vehiculos[vehiculo_id]'><i class='icon-edit'></i></a>";
+				$data['VehiculosLista'] .="<a href='?ctrl=Vehiculo&Act=Delete&idV=$vehiculos[vehiculo_id]'><i class='icon-remove'></i></a> </td>";
 				$data['VehiculosLista'] .='</tr>';
 			}
 		}
@@ -254,7 +254,7 @@ class VehiculoCtrl
 									   $this->modelo,$this->caracteristicas,
 									   $this->color))
 				{
-		         	header('Location: index.php?Ctrl=Vehiculo');
+		         	header('Location: index.php?ctrl=Vehiculo');
 		        }
 		        else
 		        	echo 'Error 2003';
@@ -305,7 +305,7 @@ class VehiculoCtrl
 			}
 			$result=$this->model->del_Rows('vehiculo', ' WHERE  vehiculo_id = '.$this->VIN.'');
 			if ($result!= false) {
-				header('Location: index.php?Ctrl=Vehiculo');
+				header('Location: index.php?ctrl=Vehiculo');
 				echo "ELIMINO";
 			}
 		}

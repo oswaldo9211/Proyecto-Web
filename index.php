@@ -2,6 +2,7 @@
 
 /**
  * Oswaldo Martinez Fonseca
+ * Marco Antonio
  *  since
  *
  *Este archivo recibe la peticion y decide que controlador
@@ -21,7 +22,7 @@ switch($ctrl){
 	break;
 	case 'Vehiculo':
 		 	require('Controllers/VehiculoCtrl.php');
-		 	$Vctrl = new VehiculoCtrl();
+		 	$ctrl = new VehiculoCtrl();
 		 break;
 	case 'login':
 		require('Controllers/loginCtrl.php');
