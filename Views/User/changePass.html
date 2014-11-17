@@ -1,0 +1,60 @@
+        <link rel="stylesheet" type="text/css" href="assets/stylesheets/pagina.css" />
+        <link rel="stylesheet" type="text/css" href="assets/stylesheets/style.css" />
+        <link rel="stylesheet" type="text/css" href="assets/stylesheets/animate-custom.css"/>
+        <link href="assets/stylesheets/main.css" rel="stylesheet">
+            <header class="header">
+              <div class="container">
+              </div>
+            </header>
+            <section>
+                <div id="container" >
+                <div id="wrapper">
+                    <h1>Cambiar Password</h1>
+                <div id="message"></div>
+                <form id="changePass" method="post" action="index.php?ctrl=usuario&act=changePass">
+                     <p> 
+                        <label for="password" class="youpasswd" data-icon="p"> Contraseña </label>
+                        <input id="password" name="password" required="required" type="password" placeholder="ejem.X8df!90EO" /> 
+                    </p>
+                    <p> 
+                        <label for="password_confirm" class="youpasswd" data-icon="p"> Confirmar Contraseña </label>
+                        <input id="password_confirm" name="password_confirm" required="required" type="password" placeholder="ejem.X8df!90EO" /> 
+                    </p>
+                    <p class="button"> 
+                        <input id="sumit"type="submit" value="Cambiar" /> 
+                    </p>
+                </form>
+                </div>
+                </div>
+             </section>
+        </div>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="assets/stylesheets/message.css" />
+<script type="text/javascript">
+    $('#sumit').click(function(){
+        var p1 = document.getElementById("password");
+        var p2 = document.getElementById("password_confirm");
+        var message = document.getElementById("message");
+        if (p1.value != p2.value) {
+            if (! document.getElementById( "alert")) {
+                var div = document.createElement('div');
+                div.setAttribute('class', 'alert alert-danger alert-dismissable');
+                var button = document.createElement('button');
+                button.setAttribute('id','alert');
+                button.setAttribute('type','button');
+                button.setAttribute('class','close');
+                button.setAttribute('data-dismiss','alert');
+                var textoboton = document.createTextNode('x');
+                button.appendChild(textoboton);
+                var texto = document.createTextNode('Las contraseña deben de ser iguales');
+                div.appendChild(button);
+                div.appendChild(texto);
+                message.appendChild(div);
+            }
+            return false;
+        } 
+        else{
+            return true;
+        }
+     });
+</script>

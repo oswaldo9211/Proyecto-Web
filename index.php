@@ -24,13 +24,9 @@ switch($ctrl){
 		 	require('Controllers/VehiculoCtrl.php');
 		 	$ctrl = new VehiculoCtrl();
 		 break;
-	case 'login':
-		require('Controllers/loginCtrl.php');
-		$ctrl = new LoginCtrl();
-	break;
 	case 'usuario':
-		require('Controllers/UsuarioCtrl.php');
-		$ctrl = new UsuarioCtrl();
+		require('Controllers/UserCtrl.php');
+		$ctrl = new UserCtrl();
 	break;
 	case 'employee':
 		require('Controllers/EmployeeCtrl.php');
@@ -40,8 +36,8 @@ switch($ctrl){
 		require('Views/changePass.html');
 	break;
 	default:
-		require('Controllers/loginCtrl.php');
-		$ctrl = new LoginCtrl();
+		require('Controllers/UserCtrl.php');
+		$ctrl = new UserCtrl();
 }
 
 $ctrl->run();

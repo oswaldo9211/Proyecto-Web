@@ -28,7 +28,7 @@
 		}
 
 		function login($usuario, $pass){
-			$model =new loginMdl();
+			$model =new UserMdl();
 			$result = $model->login($usuario, md5($pass));
 			if ($result == null){
 				return false;
@@ -37,6 +37,10 @@
 			$_SESSION['type'] = $result['rol'];
 			$_SESSION['username'] = $usuario;
 			return true;
+		}
+
+		function getUserName(){
+			return $_SESSION['username'];
 		}
 
 		function loguear($usuario){

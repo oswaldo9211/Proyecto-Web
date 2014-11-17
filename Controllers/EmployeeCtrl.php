@@ -25,7 +25,6 @@ class EmployeeCtrl extends CtrlEstandar{
 					$this->create();
 				//else
 				//	echo "No tienes permisos";
-				$this->delete();
 				break;
 			case 'delete':
 				//Validate User and permissions
@@ -79,7 +78,10 @@ class EmployeeCtrl extends CtrlEstandar{
 		//include('Controllers/validacionesCtrl.php');
 		//Validate variables
 		if(empty($_POST)){
-			require_once('Views/Employee/create.html');
+			$header = file_get_contents('Views/header.html');
+			$section = file_get_contents('Views/Employee/create.html');
+			$footer = file_get_contents('Views/footer.html');
+			echo $header . $section. $footer;
 		}
 		else{
 			$name = $_POST['name'];
@@ -94,7 +96,6 @@ class EmployeeCtrl extends CtrlEstandar{
 			$no_internal = $_POST['no_internal'];
 
 			$employee = new Employee($name, $last_name, $RFC, $email, $phones, $street, $colony, $municipality, $no_external, $no_internal);
-
 			$result =$this->model->create($employee);
 
 			if($result){
@@ -107,10 +108,10 @@ class EmployeeCtrl extends CtrlEstandar{
 			}
 		}
 	}
+
 	private function delete(){
 		if(empty($_GET['id'])){
-			//Mostrar todos los empleados
-			//require_once('Views/');
+			$this->show_all();
 		}
 		else{
 			$id_employee= $_GET['id'];
@@ -128,17 +129,15 @@ class EmployeeCtrl extends CtrlEstandar{
 	}
 	private function details(){
 		if(empty($_GET['id'])){
-			//Mostrar todos los empleados
-			//require_once('Views/');
+			$this->show_all();
 		}
 		else{
 			$id_employee= $_GET['id'];
 			$employee =$this->model->get($id_employee);
 			if($employee){
-				//$header = file_get_contents('Views/header.html');
-				//$nav = file_get_contents('Views/header.html');
+				$header = file_get_contents('Views/header.html');
 				$section = file_get_contents('Views/Employee/details.html');
-				//$footer = file_get_contents('Views/footer.html');
+				$footer = file_get_contents('Views/footer.html');
 
 			    $dicc = array('{nombre}' => $employee['name']
 			    			 ,'{apellido}' => $employee['last_name']
@@ -152,7 +151,7 @@ class EmployeeCtrl extends CtrlEstandar{
 			    			 ,'{municipio}' => $employee['municipality']
 			    	);
 			    $section = strtr($section, $dicc);
-				echo $section;
+				echo $header . $section. $footer;
 			}
 			else{
 				echo 'no existe ese empleado';
@@ -162,17 +161,15 @@ class EmployeeCtrl extends CtrlEstandar{
 	}
 	private function edit(){
 		if(empty($_GET['id'])){
-			//Mostrar todos los empleados
-			//require_once('Views/');
+			$this->show_all();
 		}
 		else if(empty($_POST)){
 			$id_employee= $_GET['id'];
 			$employee =$this->model->get($id_employee);
 			if($employee){
-				//$header = file_get_contents('Views/header.html');
-				//$nav = file_get_contents('Views/header.html');
+				$header = file_get_contents('Views/header.html');
 				$section = file_get_contents('Views/Employee/edit.html');
-				//$footer = file_get_contents('Views/footer.html');
+				$footer = file_get_contents('Views/footer.html');
 
 			    $dicc = array('{id}' => $employee['id']
 			    	         ,'{nombre}' => $employee['name']
@@ -187,7 +184,7 @@ class EmployeeCtrl extends CtrlEstandar{
 			    			 ,'{municipio}' => $employee['municipality']
 			    	);
 			    $section = strtr($section, $dicc);
-				echo $section;
+				echo $header . $section. $footer;
 			}
 			else{
 				echo 'no existe ese empleado para editarlo';

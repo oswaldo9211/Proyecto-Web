@@ -35,9 +35,8 @@ a.hiddenanchor{
 /** The wrapper that will contain our two forms **/
 #wrapper{
 	right: 0px;
-	min-height: 500px;
 	margin: 0px auto;	
-	width: 500px;
+	max-width: 500px;
 	position: relative;	
 
 }
@@ -45,7 +44,8 @@ a.hiddenanchor{
 
 /**** general text styling ****/
 #wrapper a{
-	color: rgb(95, 155, 198);
+	font-family:  Cambria, Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;
+	color: rgb(34, 163, 255);
 	text-decoration: underline;
 }
 
@@ -146,7 +146,7 @@ input {
     color: rgb(106, 159, 171);
     position: absolute;
     left: 10px;
-    top: 35px;
+    top: 40px;
 	width: 30px;
 }
 
@@ -290,12 +290,12 @@ p.change_link{
 	top: 1px;
 }
 /** Styling both forms **/
-#register, 
 #login{
-	position: absolute;
+	position: relative;
+	/*max-width: 90%*/
 	top: 0px;
-	width: 88%;	
-	padding: 18px 6% 60px 6%;
+	width: 90%;	
+	padding: 18px 6% 2px 6%;
 	margin: 0 0 35px 0;
 	background: rgb(247, 247, 247);
 	border: 1px solid rgba(147, 184, 189,0.8);
@@ -380,4 +380,27 @@ p.change_link{
 	position: absolute;
 	height: 90px;
 	background: transparent;
+}
+
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 40px;
+    background-color: #BBD7E5;
+}
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 40px;
+}
+.footer > .container {
+    text-align: left;
+    padding-right: 15px;
+    padding-left: 35px;
+}
+html {
+    position: relative;
+    min-height: 100%;
 }
