@@ -32,8 +32,9 @@ switch($ctrl){
 		require('Controllers/EmployeeCtrl.php');
 		$ctrl = new EmployeeCtrl();
 	break;
-	case 'show':
-		require('Views/changePass.html');
+	case 'client':
+		require('Controllers/ClientCtrl.php');
+		$ctrl = new ClientCtrl();
 	break;
 	default:
 		require('Controllers/UserCtrl.php');

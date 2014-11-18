@@ -74,12 +74,9 @@ class UserCtrl extends CtrlEstandar{
 
 	private function index(){
 		//Si es admin mostrar otra vista
-		$header = file_get_contents('Views/header.html');
 		$section = file_get_contents('Views/index.html');
-		$footer = file_get_contents('Views/footer.html');
-		$dicc = array('{user}' => $this->getUserName());
-	    $header = strtr($header, $dicc);
-		echo $header . $section. $footer;
+		$this->template($section);
+		
 	}
 	
 	private function loguearte(){
@@ -99,26 +96,18 @@ class UserCtrl extends CtrlEstandar{
 
 	private function changePass(){
 		if(empty($_POST)){
-			$header = file_get_contents('Views/header.html');
 			$section = file_get_contents('Views/User/changePass.html');
-			$footer = file_get_contents('Views/footer.html');
-			$dicc = array('{user}' => $this->getUserName());
-		    $header = strtr($header, $dicc);
-			echo $header . $section. $footer;
+			$this->template($section);
 		}
 		else{
 			$password = $_POST['password'];
 			$result= $this->model->changePassword($this->getUserName(), md5($password));
 			if($result){
 				//Si es admin mostrar otra vista
-				$header = file_get_contents('Views/header.html');
 				$section = file_get_contents('Views/index.html');
-				$footer = file_get_contents('Views/footer.html');
-				$dicc = array('{user}' => $this->getUserName());
-			    $header = strtr($header, $dicc);
-				echo $header . $section. $footer;
+				$this->template($section);
 			}else{
-				//require_once('Views/error404.html');//error
+				require_once('Views/error.html');//error
 			}
 		}
 	}
@@ -132,12 +121,8 @@ class UserCtrl extends CtrlEstandar{
 			//var_dump($result);
 			$this->loguear($result);
 			if($this->isLogged()){
-				$header = file_get_contents('Views/header.html');
 				$section = file_get_contents('Views/User/changePass.html');
-				$footer = file_get_contents('Views/footer.html');
-				$dicc = array('{user}' => $this->getUserName());
-			    $header = strtr($header, $dicc);
-				echo $header . $section. $footer;
+				$this->template($section);
 			}
 			else{
 				//require_once('Views/error404.html');
@@ -199,6 +184,15 @@ class UserCtrl extends CtrlEstandar{
 	}
 	private function edit(){
 
+	}
+
+	private function template($section){
+		$header = file_get_contents('Views/header.html');
+		$footer = file_get_contents('Views/footer.html');
+		$dicc = array('{user}' => $this->getUserName());
+	    $header = strtr($header, $dicc);
+	    
+		echo $header . $section . $footer;
 	}
 	
 }

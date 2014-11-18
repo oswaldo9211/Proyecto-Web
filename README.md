@@ -12,6 +12,10 @@ De La Cruz Marco
 
 # Inventario vehicular e inspecciones
 
+#Pagina
+
+pagina url: 
+
 ## Descripción general
 Se requiere llevar control de inspecciones vehiculares cuantos estos ingresan al taller.
 La inspección se lleva por medio de un checklist en el cual se evalua el status del vehiculo así como daños que este pudiera presentar.

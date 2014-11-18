@@ -1,6 +1,6 @@
             <header class="header">
             	<div class="container" >
-	                <h1>Editar Empleado</h1>
+	                <h1>Editar Cliente</h1>
 	                <span id="menssage"></span>
             	</div>
             </header>
@@ -8,7 +8,7 @@
                 <div class="container" >
                     <div id="wrapper">
                     	<!--Conenerdor-->
-					    <form method="post" action="index.php?ctrl=employee&act=edit&id={id}">
+					    <form method="post" action="index.php?ctrl=client&act=edit&id={id}">
 					    	<hr>
 							<div class="input">
 								<label for="name">Nombre*</label>
@@ -27,33 +27,12 @@
 								<input type="email" id="email" name="email" value="{email}" required/>
 							</div>
 							<div class="input">
-								<label for="phones">Telefono</label>
-								<input type="tel" id="phones" name="phones" value="{telefono}"  pattern="[0-9]{10}"/>
-							</div>
-							<hr>
-							<div class="input">
-								<label for="street">Calle</label>
-								<input type="text" id="street" name="street" value="{calle}"/>
-							</div>
-							<div class="input">
-								<label for="no_external">Numero Exterior</label>
-								<input type="text" id="no_external" name="no_external" value="{no. exterior}"/>
-							</div>
-							<div class="input">
-								<label for="no_internal">Numero Interior</label>
-								<input type="text" id="no_internal" name="no_internal" value="{no. interior}"/>
-							</div>
-							<div class="input">
-								<label for="colony">Colonia</label>
-								<input type="text" id="colony" name="colony" value="{colonia}" pattern="[A-Za-záéóúíñ\s]*"/>
-							</div>
-							<div class="input">
-								<label for="municipality">Municipio</label>
-								<input type="text" id="municipality" name="municipality" value="{municipio}" pattern="[A-Za-záéóúíñ\s]*"/>
+								<label for="phone">Telefono</label>
+								<input type="tel" id="phone" name="phone" value="{telefono}"  pattern="[0-9]{10}"/>
 							</div>
 						<div class="input">
 								<button id="crear"class="btn btn-primary" type="submit">Actualizar</button>		
-								<a href="index.php?ctrl=employee" class="btn btn-primary">Cancelar</a>
+								<a href="index.php?ctrl=client" class="btn btn-primary">Cancelar</a>
 						</div>
 						</br>
 					</form>

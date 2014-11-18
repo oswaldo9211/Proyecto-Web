@@ -17,30 +17,39 @@ class EmployeeCtrl extends CtrlEstandar{
 
 	function run()
 	{
+		if(!$this->isLogged())
+			header('Location:  index.php');
 		$act = isset($_GET['act'])?$_GET['act'] : 'show_all';
 		switch($act){
 			case 'create':
-				//Validar permisos en cada uno de estas
-				//if($this->isAdmin())
+				if($this->isAdmin())
 					$this->create();
-				//else
-				//	echo "No tienes permisos";
+				else
+					echo "No tienes permisos";
 				break;
 			case 'delete':
-				//Validate User and permissions
-				$this->delete();
+				if($this->isAdmin())
+					$this->delete();
+				else
+					echo "No tienes permisos";
 				break;
 			case 'details':
-				//Validate User and permissions
-				$this->details();
+				if($this->isUser())
+					$this->details();
+				else
+					echo "No tienes permisos";
 				break;
 			case 'edit':
-				//Validate User and permissions
-				$this->edit();
+				if($this->isAdmin())
+					$this->edit();
+				else
+					echo "No tienes permisos";
 				break;
 			case 'show_all':
-				//Validate User and permissions
-				$this->show_all();
+				if($this->isUser())
+					$this->show_all();
+				else
+					echo "No tienes permisos";
 				break;
 		    default:
 		    	header('Location:  index.php');
@@ -50,14 +59,22 @@ class EmployeeCtrl extends CtrlEstandar{
 	private function show_all(){
 		//get all employees to display
 		$staff =$this->model->get_all();
-
-		$header = file_get_contents('Views/header.html');
-		$section = file_get_contents('Views/Employee/show_all.html');
-		$footer = file_get_contents('Views/footer.html');
-
+		$section = file_get_contents('Views/Employee/show_all.html');;
 		$info = "";
 		foreach ($staff as $employee) {
 			$info .= "<tr>
+		         		<td> $employee[name] $employee[last_name] </td>
+		         		<td> $employee[RFC] </td>
+		         		<td> $employee[email] </td>
+		         		<td>
+		         			<a href='index.php?ctrl=employee&act=details&id=$employee[id]'><i class='icon-view'></i></a>";
+		    if($this->isAdmin()){
+				$info .=   "<a href='index.php?ctrl=employee&act=edit&id=$employee[id]'><i class='icon-edit'></i></a>
+						    <a href='index.php?ctrl=employee&act=delete&id=$employee[id]'><i class='icon-remove'></i></a>";
+			}
+				$info .="</td>
+	      			</tr>";
+	      	/*$info .= "<tr>
 		         		<td> $employee[name] $employee[last_name] </td>
 		         		<td> $employee[RFC] </td>
 		         		<td> $employee[email] </td>
@@ -66,22 +83,28 @@ class EmployeeCtrl extends CtrlEstandar{
 							<a href='index.php?ctrl=employee&act=edit&id=$employee[id]'><i class='icon-edit'></i></a>
 							<a href='index.php?ctrl=employee&act=delete&id=$employee[id]'><i class='icon-remove'></i></a>
 						</td>
-	      			</tr>";
+	      			</tr>";*/
+	    }
+
+	    if(!$this->isAdmin()){
+			$info .= '<script type="text/javascript">
+						var boton = document.getElementById("NewButton");
+						boton.parentNode.removeChild(boton);
+					  </script>';
 	    }
 
 	    $dicc = array('{info}' => $info);
 	    $section = strtr($section, $dicc);
-		echo $header . $section. $footer;
+
+		$this->template($section);
 	}
 	
 	private function create(){
 		//include('Controllers/validacionesCtrl.php');
 		//Validate variables
 		if(empty($_POST)){
-			$header = file_get_contents('Views/header.html');
 			$section = file_get_contents('Views/Employee/create.html');
-			$footer = file_get_contents('Views/footer.html');
-			echo $header . $section. $footer;
+			$this->template($section);
 		}
 		else{
 			$name = $_POST['name'];
@@ -135,9 +158,8 @@ class EmployeeCtrl extends CtrlEstandar{
 			$id_employee= $_GET['id'];
 			$employee =$this->model->get($id_employee);
 			if($employee){
-				$header = file_get_contents('Views/header.html');
+
 				$section = file_get_contents('Views/Employee/details.html');
-				$footer = file_get_contents('Views/footer.html');
 
 			    $dicc = array('{nombre}' => $employee['name']
 			    			 ,'{apellido}' => $employee['last_name']
@@ -151,7 +173,7 @@ class EmployeeCtrl extends CtrlEstandar{
 			    			 ,'{municipio}' => $employee['municipality']
 			    	);
 			    $section = strtr($section, $dicc);
-				echo $header . $section. $footer;
+				$this->template($section);
 			}
 			else{
 				echo 'no existe ese empleado';
@@ -167,9 +189,8 @@ class EmployeeCtrl extends CtrlEstandar{
 			$id_employee= $_GET['id'];
 			$employee =$this->model->get($id_employee);
 			if($employee){
-				$header = file_get_contents('Views/header.html');
+
 				$section = file_get_contents('Views/Employee/edit.html');
-				$footer = file_get_contents('Views/footer.html');
 
 			    $dicc = array('{id}' => $employee['id']
 			    	         ,'{nombre}' => $employee['name']
@@ -184,7 +205,7 @@ class EmployeeCtrl extends CtrlEstandar{
 			    			 ,'{municipio}' => $employee['municipality']
 			    	);
 			    $section = strtr($section, $dicc);
-				echo $header . $section. $footer;
+				$this->template($section);
 			}
 			else{
 				echo 'no existe ese empleado para editarlo';
@@ -218,7 +239,13 @@ class EmployeeCtrl extends CtrlEstandar{
 		}
 	}
 
-
+	private function template($section){
+		$header = file_get_contents('Views/header.html');
+		$footer = file_get_contents('Views/footer.html');
+		$dicc = array('{user}' => $this->getUserName());
+	    $header = strtr($header, $dicc);
+		echo $header. $section . $footer;
+	}
 
 
 	/**

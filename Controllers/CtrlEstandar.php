@@ -9,13 +9,13 @@
 		}
 
 		function isAdmin(){
-			if( isset($_SESSION['type']) && $_SESSION['type'] == '1' )
+			if( isset($_SESSION['type']) && $_SESSION['type'] == '100' )
 				return true;
 			return false;
 		}
 
 		function isUser(){
-			if( isset($_SESSION['type']) && $_SESSION['type'] == '0' )
+			if( isset($_SESSION['type']) && ($_SESSION['type'] == '1' || $_SESSION['type'] == '100'))
 				return true;
 			return false;
 		}

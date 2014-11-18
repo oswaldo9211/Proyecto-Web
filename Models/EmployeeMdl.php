@@ -48,8 +48,7 @@ class EmployeeMdl {
 		$municipality = $this->db_driver->real_escape_string($employee->municipality);
 		$no_external = $this->db_driver->real_escape_string($employee->no_external);
 		$no_internal = $this->db_driver->real_escape_string($employee->no_internal);
-		$phone = $employee->phones;
-		var_dump($RFC);
+		$phone = $this->db_driver->real_escape_string($employee->phones);
 
 		$query   =	"INSERT INTO Employee
 					(name, last_name, RFC, email, id_phone, street, colony, municipality, no_external, no_internal)
