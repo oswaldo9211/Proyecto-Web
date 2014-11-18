@@ -1,21 +1,23 @@
-<!DOCTYPE>
-<html>
-<head>
-	<title></title>
-</head>
-<body>
 
-
+<header class="header">
+<div class="container">
+<h1><span>Nuevo Inspeccion</span></h1>
+<span id="message"></span>
+</div>
+</header>
 <form action="?ctrl=inspeccion&Act=Alta" method="POST">
 <div class="buuton">
 <button id='nuevo' name="Guardar" value="Guardar">Guardar</button>
 </div>
 
+<!-- <section class="section">				
+                <div class="container">
+                    <div id="wrapper">
+                        <div class="table-responsive">-->
 <section>				
 <div id="container" >
 <div id="wrapper">
 <div class="table-responsive">
-<div class="datagrid">
 	<table class='table table-hover'>
 		<thead>
 		<tr>
@@ -59,7 +61,7 @@
 			</select>
 			</td>
 			<td>
-				<input type='text' class="Fila" name='observaciones'/>
+				<input type='text' class="Fila" name='observaciones' id='observaciones' />
 			</td>
 			<td>
 				<input type="button" value="-" class="clsEliminarFila">
@@ -84,7 +86,6 @@
 			</tr>
 				</tfoot>
 		</table>		
-</div>
 </div>
 </div>
 </div>

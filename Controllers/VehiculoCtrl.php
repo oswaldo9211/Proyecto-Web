@@ -179,7 +179,7 @@ class VehiculoCtrl
 				 echo '<br>', $values;*/
 				if($result)
 				{
-						header('Location: index.php?Ctrl=Vehiculo');
+						header('Location: index.php?ctrl=Vehiculo');
 				}
 				else
 					echo 'ERROR 2002 ';
@@ -187,15 +187,26 @@ class VehiculoCtrl
 		}
 		else
 		{
+			$dataHeader = array();
+			$dataFooter = array();
+			$Vehicle  = new  VehiculoCtrl(); 
 			$this->nameFile='/Vehiculo/AltaVehiculo';
 			$this->data['Act'] ='Alta';
-			$this->fTemplate->setTemplate($this->nameFile);
-			$this->fTemplate->setVars($this->data);
-			echo $this->fTemplate->show();
+
+			echo  $Vehicle->getFile('header',$dataHeader) . $Vehicle->getFile('Vehiculo/AltaVehiculo',$this->data). $Vehicle->getFile('footer',$dataFooter);
 		}
 
 	}//fin de alta
+	public function getFile( $nameFile, $vars)
+	{
 
+		require_once('include/Template.php');
+		$FileTemplate = new Template();
+		$FileTemplate->setTemplate($nameFile);
+		if(count($vars) > 0)
+			$FileTemplate->setvars($vars);
+		return $FileTemplate->show();
+	}
 	
 
 	public  function Modificacion(){
