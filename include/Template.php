@@ -1,84 +1,55 @@
 <?php
+
 /**
-* 
+* Marco Antonio
 */
 class Template
 {
-	public $tpl_file;
-	public $htmlTemplate;
-	public $fileReaded ;
-	public $PATH;
-	public $EXT;
-	public $fileData;
-	public $vars = array();
-	public $htmlText ;
-
-	function __construct()
-	{
-		$this->PATH = 'Views';
-		$this->EXT  = '.html';
-	}
-
-	public function set_path($PATH)
+	
+	private $tpl_file;
+	private $Vars;
+	private $PATH;
+	private $EXT;
+	private $htmlTemplate;
+	private $Remplazo;
+	
+	function __construct($PATH='Views/',$EXT='.html')
 	{
 		$this->PATH = $PATH;
+		$this->EXT  = $EXT;
 	}
-	public function setTemplate($TemplateFile)
+
+	public function setTemplate($FileName)
 	{
-
-		$this->tpl_file = $this->PATH . $TemplateFile . $this->EXT;
-		//echo "</br> ", $this->tpl_file;
-		$this->fileReaded = $this->fileData =  @fopen($this->tpl_file, 'r');
-		if (!$this->fileReaded) {
-			return false;
-		}
-		else
-		{
-			$this->htmlTemplate = fread($this->fileData, filesize($this->tpl_file));
-			$this->htmlTemplate = str_replace("'", "\'", $this->htmlTemplate);
-			fclose($this->fileData);
-		}
-		return true;
+		$this->tpl_file = $this->PATH . $FileName . $this->EXT;
+		//echo "</br>", $this->tpl_file;
+		$this->htmlTemplate = file_get_contents($this->tpl_file);
+		//var_dump($this->htmlTemplate);
 	}
-
 	public function setVars($vars)
 	{
-		if ( $this->fileReaded ) {
+		//echo "long" , strlen($this->htmlTemplate);
+		if($this->htmlTemplate!= false){
 			$this->vars = $vars;
-			$this->htmlText = $this->htmlTemplate;
-			$this->htmlText = preg_replace('#\{([a-z0-9\-_]*?)\}#is' ,  "' . $\\1 . '" , $this->htmlText);
-			reset ($this->vars);
-			while (list($key, $val) = each($this->vars)) {//
-					$$key = $val;
+			reset($this->vars);
+			foreach ($this->vars as $key => $value) {
+				$key = '{'. $key.'}';
+				$this->Remplazo{$key} = $value; 
 			}
-			eval("\$this->htmlText = '$this->htmlText';");//Su uso está totalmente desaconsejado.//Evaluar una cadena como código PHP
-			reset ($this->vars);
+			$this->htmlTemplate = strtr($this->htmlTemplate, $this->Remplazo);
 
-			while (list($key, $val) = each($this->vars)) {
-					unset($$key);// Destruye una variable especificada
-			}
-
-			$this->htmlText = str_replace ("\'", "'", $this->htmlText);//linea 27
-			
-			return true;
-		
-		}else{
-			return false;
 		}
 	}
-
-	public function show(){
-
-		if ( $this->fileReaded ) {
-			if(isset($this->htmlText)){// Destruye una variable especificada
-				return $this->htmlText;
-			}else{
+	public function show()
+	{
+		if($this->htmlTemplate!= false){
+			if(isset($this->htmlTemplate)){
 				return $this->htmlTemplate;
 			}
-		}else{
-			//Error, you must set a template file
-			return "[ERROR]";
 		}
+		else
+			return "{NO ESPESIFICO ARCHIVO}";
 	}
 }
+
 ?>

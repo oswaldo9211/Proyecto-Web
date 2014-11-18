@@ -36,6 +36,10 @@ switch($ctrl){
 		require('Controllers/ClientCtrl.php');
 		$ctrl = new ClientCtrl();
 	break;
+	case 'inspeccion':
+		require('Controllers/inspeccionCtrl.php');
+		$ctrl = new InspeccionCtrl();
+	break;
 	default:
 		require('Controllers/UserCtrl.php');
 		$ctrl = new UserCtrl();

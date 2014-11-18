@@ -1,0 +1,97 @@
+<!DOCTYPE>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+
+<form action="?ctrl=inspeccion&Act=Alta" method="POST">
+<div class="buuton">
+<button id='nuevo' name="Guardar" value="Guardar">Guardar</button>
+</div>
+
+<section>				
+<div id="container" >
+<div id="wrapper">
+<div class="table-responsive">
+<div class="datagrid">
+	<table class='table table-hover'>
+		<thead>
+		<tr>
+			<!--
+			<th>
+				Estatus
+			</th>
+			<td>
+				{estatus}
+			</td>
+			<th>
+				Id Proceso
+			</th>
+			<td>
+				{IdInspeccion}
+			</td>
+			-->
+		</tr>
+		<tr>
+		<th>Pieza</th>
+		<th>Severidad</th>
+		<th>Servicio</th>
+		<th>Obsercacion</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td>
+			<select id='pieza'  name="pieza">
+					<option selected value='0'>Pieza</option>
+				{Piezas}
+			</select>
+			</td>
+			<td>
+				<input type="range"  name='severidad' id="severidad"  />
+			</td>
+			<td>
+				<select id='servicio' name="servicio">
+					<option selected value='0'>Servicio</option>
+				{Servicios}
+			</select>
+			</td>
+			<td>
+				<input type='text' class="Fila" name='observaciones'/>
+			</td>
+			<td>
+				<input type="button" value="-" class="clsEliminarFila">
+			</td>
+			<!--
+			<td>
+				<img  id='agregar' src="imgs/agregar.jpg" height="25px" width="25px">
+			</td>
+			-->
+		</tr>
+		</tbody>
+
+		<tfoot>
+			<tr>
+				<!--
+				<td colspan="4" align="right">
+					<input type="button" value="Agregar una fila" class="clsAgregarFila">
+					<input type="button" value="Clonar la tabla" class="clsClonarTabla">
+					<input type="button" value="Eliminar la tabla" class="clsEliminarTabla">
+				</td>
+				-->
+			</tr>
+				</tfoot>
+		</table>		
+</div>
+</div>
+</div>
+</div>
+</section>
+
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+</form>
+</body>
+</html>

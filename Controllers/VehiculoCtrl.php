@@ -21,6 +21,7 @@ class VehiculoCtrl
 	
 	function __construct()
 	{
+
 		include_once('include/Template.php');
 		$this->fTemplate = new Template();
 		include_once('Models/VehiculoMdl.php');
@@ -69,7 +70,7 @@ class VehiculoCtrl
 	public function run(){
 		$this->VE = new VehiculoCtrl();
 		$Act ='';
-
+		//var_dump($_SESSION);
 		if(isset($_GET['Act']) )
 			$Act = $_GET['Act'];
 		elseif (isset($_POST['Act'])){
@@ -100,7 +101,9 @@ class VehiculoCtrl
 				$this->VE->init($this->data);
 				$this->fTemplate->setTemplate($this->nameFile);
 				$this->fTemplate->setVars($this->data);
-				echo $this->fTemplate->show();
+				$header= file_get_contents('Views/header.html');
+				$footer = file_get_contents('Views/footer.html');
+				echo $header . $this->fTemplate->show(). $footer;
 			 	break;
 			 }
 		
