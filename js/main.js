@@ -116,3 +116,33 @@ $(document).ready(function(){
     
             
 });
+
+
+
+
+var ajax = new sack();
+var currentart=false;
+function getClientData(e)
+{
+    var art = document.getElementById(e).value.replace(/[^0-9]/g,'');
+    alert(e);
+    //art.length==4 &&
+   if( art!=currentart){
+        currentart = art
+        ajax.requestFile = 'Controllers/getClient.php?getart='+art+'&Num='+e;   // Specifying which file to get
+        ajax.onCompletion = showClientData; // Specify function that will be executed after file has been found
+        ajax.runAJAX();     // Execute AJAX function            
+    }
+    
+}
+
+function showClientData()
+{
+    var formObj = document.forms['clientForm']; 
+    eval(ajax.response);
+}
+
+function initFormEvents(e)
+{ 
+    document.getElementById(e).blur = getClientData(e);
+}
