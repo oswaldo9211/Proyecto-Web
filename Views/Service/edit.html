@@ -1,0 +1,27 @@
+            <header class="header">
+            	<div class="container" >
+	                <h1>Editar Servicio</h1>
+	                <span id="menssage"></span>
+            	</div>
+            </header>
+            <section>				
+                <div class="container" >
+                    <div id="wrapper">
+                    	<!--Conenerdor-->
+					    <form method="post" action="index.php?ctrl=service&act=edit&id={id}">
+					    	<hr>
+							<div class="input">
+								<label for="name">Nombre*</label>
+								<input type="text" id="name" name="name" value="{nombre}" pattern="[A-Za-záéóúíñ\s]*"required/>
+							</div>
+							<div class="input">
+								<label for="location">Ubicacion*</label>
+								<input type="text" id="location" name="location" value="{ubicacion}" pattern="[0-9]+"/>
+							</div>
+						<div class="input">
+								<button id="crear"class="btn btn-primary" type="submit">Actualizar</button>		
+								<a href="index.php?ctrl=service" class="btn btn-primary">Cancelar</a>
+						</div>
+						</br>
+					</form>
+            </section>

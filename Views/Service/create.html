@@ -1,0 +1,33 @@
+        <style type="text/css">
+    	</style>
+
+            <header class="header">
+              <div class="container">
+                <h1>Nuevo Servicio</span></h1>
+                <span id="message"></span>
+              </div>
+            </header>
+            <section>				
+                <div id="container" >
+                    <div id="wrapper">
+                    	<!--Conenerdor-->
+					    <form method="post" action="index.php?ctrl=service&act=create">
+					    	<hr>
+							<div class="input">
+								<label for="name">Nombre*</label>
+								<input type="text" id="name" name="name" placeholder="Laminado" pattern="[A-Za-záéóúíñ\s]*"required/>
+							</div>
+							<div class="input">
+								<label for="location">Ubicacion*</label>
+								<input type="text" id="location" name="location" placeholder="select" pattern="[0-9]+" required/>
+							</div>
+							<hr>
+							<div class="input">
+								<button id="crear"class="btn btn-primary" type="submit">Crear</button>		
+								<a href="index.php?ctrl=service" class="btn btn-primary">Cancelar</a>
+							</div>
+							<br/>
+						</form>
+					</div>
+				</div>
+            </section>

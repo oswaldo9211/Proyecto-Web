@@ -3,7 +3,7 @@
 	/**
 	*/
 
-class ClientMdl {
+class ServiceMdl {
 	public $db_driver;
 	function __construct() {
 	require('config.ini');
@@ -15,7 +15,7 @@ class ClientMdl {
 
 
 	public function get_all(){
-		$query = "SELECT * FROM Client";
+		$query = "SELECT * FROM Servicio";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
 			die("No se pudeo hacer la consulta de mostrar todos");
@@ -32,9 +32,9 @@ class ClientMdl {
 		}
 	}
 
-	public function get($id_client){
+	public function get($id_service){
 
-		$query = "SELECT * FROM Client  WHERE id='$id_client'";
+		$query = "SELECT * FROM Servicio  WHERE idservicio='$id_service'";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
 			die("No se pudeo hacer la consulta de mostrar");
@@ -45,16 +45,13 @@ class ClientMdl {
 	}
 
 
-	public function create($client){
-		$name = $this->db_driver->real_escape_string($client->name);
-		$last_name = $this->db_driver->real_escape_string($client->last_name);
-		$RFC = $this->db_driver->real_escape_string($client->RFC);
-		$email = $this->db_driver->real_escape_string($client->email);
-		$phone = $this->db_driver->real_escape_string($client->phone);
+	public function create($service){
+		$name = $this->db_driver->real_escape_string($service->name);
+		$id_location = $this->db_driver->real_escape_string($service->id_location);
 
-		$query   =	"INSERT INTO Client
-					(name, last_name, RFC, email, phone)
-					VALUES('$name','$last_name','$RFC','$email', '$phone')";
+		$query   =	"INSERT INTO Servicio
+					(nombre, ubicacion)
+					VALUES('$name','$id_location')";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
 			die("No se pudeo hacer la consulta de insertar");
@@ -66,18 +63,15 @@ class ClientMdl {
 			return false;
 	}
 
-	public function edit($client, $id_client){
+	public function edit($service, $id_service){
 
-		$name = $this->db_driver->real_escape_string($client->name);
-		$last_name = $this->db_driver->real_escape_string($client->last_name);
-		$RFC = $this->db_driver->real_escape_string($client->RFC);
-		$email = $this->db_driver->real_escape_string($client->email);
-		$phone = $this->db_driver->real_escape_string($client->phone);
+		$name = $this->db_driver->real_escape_string($service->name);
+		$id_location = $this->db_driver->real_escape_string($service->id_location);
 
 
-		$query   =	"UPDATE Client
-					set name = '$name', last_name = '$last_name', RFC = '$RFC', email = '$email', phone = '$phone'
-					WHERE id='$id_client'";
+		$query   =	"UPDATE Servicio
+					set nombre = '$name', ubicacion = '$id_location'
+					WHERE idservicio='$id_service'";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
 			die("No se pudeo hacer la consulta de editar");
@@ -89,8 +83,8 @@ class ClientMdl {
 			return false;
 	}
 
-	public function delete($id_client){
-		$query = "DELETE  FROM Client  WHERE id='$id_client'";
+	public function delete($id_service){
+		$query = "DELETE  FROM Servicio  WHERE idservicio='$id_service'";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
 			die("No se pudeo hacer la consulta de eliminar");

@@ -84,4 +84,125 @@ function ValidarColor($color)
 		return false;
 }
 
+
+function validateName($name)
+{
+	if($name != ""){
+		if(preg_match("/^([a-zA-ZáéóíúñÑ\s]+$)/i", $name)){
+			return $name;
+		}
+		else{
+			echo "</br> Name incorrecto Sintaxis invalida";
+			return null;
+		}
+	}
+	else{
+		return null;
+	}
+}
+
+function validateEmail($email)
+{
+	if($email != ""){
+		if(preg_match("/^([a-zA-Z0-9._%+-]+[@][a-zA-Z]+\.com[a-zA-Z.]*$)/i", $email))
+		{
+			return $email;
+		}
+		else
+		{
+			echo "</br> Email incorrecto Sintaxis invalida";
+			return null;
+		}
+	}
+	else{
+		return null;
+	}
+}
+
+function validateText($texto)
+{
+	if($texto != ""){
+		if(preg_match("/^([a-zA-ZáéóíúñÑ\s.]+$)/i", $texto)){
+			return $texto;
+		}
+		else{
+			echo "</br> Texto incorrecto Sintaxis invalida";
+			return null;
+		}
+	}
+	else{
+		return null;
+	}
+}
+
+function validatePhone($phone)
+{
+	if($phone != ""){
+		if(preg_match("/^([0-9]{10}$)/i", $phone)){
+			return $phone;
+		}
+		else
+		{
+			echo "</br> Phone incorrecto Sintaxis invalida";
+			return null;
+		}
+	}
+	else{
+		return null;
+	}
+}
+
+function validateAdressNumber($number)
+{
+	if($number != ""){
+		if(preg_match("/^([0-9a-zA-Z.]+$)/i", $number)){
+			return $number;
+		}
+		else
+		{
+			echo "</br> Number Adress incorrecto Sintaxis invalida";
+			return null;
+		}
+	}
+	else{
+		return null;
+	}
+}
+
+function validateRFC($RFC)
+{
+	if($RFC != ""){
+		if(preg_match("/^([A-Z]?[A-Z]{3}[0-9]{6}[A-Za-z0-9]{3}$)/i", $RFC)){
+			return $RFC;
+		}
+		else
+		{
+			echo "</br> RFC incorrecto Sintaxis invalida";
+			return null;
+		}
+	}
+	else{
+		return null;
+	}
+}
+
+function validateNumber($number)
+{
+	if($number != ""){
+		if(preg_match("/^([0-9]+$)/i", $number)){
+			return $number;
+		}
+		else
+		{
+			echo "</br> RFC incorrecto Sintaxis invalida";
+			return null;
+		}
+	}
+	else{
+		return null;
+	}
+}
+
+
+
 ?>

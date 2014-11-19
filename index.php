@@ -40,6 +40,18 @@ switch($ctrl){
 		require('Controllers/inspeccionCtrl.php');
 		$ctrl = new InspeccionCtrl();
 	break;
+	case 'piece':
+		require('Controllers/PieceCtrl.php');
+		$ctrl = new PieceCtrl();
+	break;
+	case 'location':
+		require('Controllers/LocationCtrl.php');
+		$ctrl = new LocationCtrl();
+	break;
+	case 'service':
+		require('Controllers/ServiceCtrl.php');
+		$ctrl = new ServiceCtrl();
+	break;
 	default:
 		require('Controllers/UserCtrl.php');
 		$ctrl = new UserCtrl();

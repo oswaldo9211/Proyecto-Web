@@ -107,16 +107,17 @@ class EmployeeCtrl extends CtrlEstandar{
 			$this->template($section);
 		}
 		else{
-			$name = $_POST['name'];
-			$last_name = $_POST['last_name'];
-			$RFC = $_POST['RFC'];
-			$email = $_POST['email'];
-			$phones = $_POST['phones'];
-			$street = $_POST['street'];
-			$colony = $_POST['colony'];
-			$municipality = $_POST['municipality'];
-			$no_external = $_POST['no_external'];
-			$no_internal = $_POST['no_internal'];
+			require_once("Controllers/Validaciones.php");
+			$name = validateName($_POST['name']);
+			$last_name = validateName($_POST['last_name']);
+			$RFC = validateRFC($_POST['RFC']);
+			$email = validateEmail($_POST['email']);
+			$phones = validatePhone($_POST['phones']);
+			$street = validateText($_POST['street']);
+			$colony = validateText($_POST['colony']);
+			$municipality = validateText($_POST['municipality']);
+			$no_external = validateAdressNumber($_POST['no_external']);
+			$no_internal = validateAdressNumber($_POST['no_internal']);
 
 			$employee = new Employee($name, $last_name, $RFC, $email, $phones, $street, $colony, $municipality, $no_external, $no_internal);
 			$result =$this->model->create($employee);
@@ -213,16 +214,17 @@ class EmployeeCtrl extends CtrlEstandar{
 		}
 		else{
 			$id_employee= $_GET['id'];
-			$name = $_POST['name'];
-			$last_name = $_POST['last_name'];
-			$RFC = $_POST['RFC'];
-			$email = $_POST['email'];
-			$phones = $_POST['phones'];
-			$street = $_POST['street'];
-			$colony = $_POST['colony'];
-			$municipality = $_POST['municipality'];
-			$no_external = $_POST['no_external'];
-			$no_internal = $_POST['no_internal'];
+			require_once("Controllers/Validaciones.php");
+			$name = validateName($_POST['name']);
+			$last_name = validateName($_POST['last_name']);
+			$RFC = validateRFC($_POST['RFC']);
+			$email = validateEmail($_POST['email']);
+			$phones = validatePhone($_POST['phones']);
+			$street = validateText($_POST['street']);
+			$colony = validateText($_POST['colony']);
+			$municipality = validateText($_POST['municipality']);
+			$no_external = validateAdressNumber($_POST['no_external']);
+			$no_internal = validateAdressNumber($_POST['no_internal']);
 
 			$employee = new Employee($name, $last_name, $RFC, $email, $phones, $street, $colony, $municipality, $no_external, $no_internal);
 

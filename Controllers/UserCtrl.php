@@ -138,18 +138,18 @@ class UserCtrl extends CtrlEstandar{
 				if($result){
 					require_once('Views/login.html');
 					require_once('mailer/Mail.php');
+					require('config.ini');
 					require_once('Views/Message.php');
 					require_once('Models/User.php');
 
 					$mail = new Mail();
-					var_dump($result);
 
 					//The token is created for recovering the password
 					$token = sha1(rand(0,999).rand(999,9999).rand(1,300));
 
 					$this->model->actionUser((int)$result['idUsuario'], $token, "recoverPass");
 
-					$enlace = $SERVER. "index.php?ctrl=usuario&act=recoverPass&token=".$token;
+					$enlace = $SERVER . "index.php?ctrl=usuario&act=recoverPass&token=".$token;
 
 					$contentMail = file_get_contents('Views/Mailer/password_reset_instructions.html');
 

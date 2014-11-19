@@ -1,0 +1,28 @@
+        <style type="text/css">
+    	</style>
+
+            <header class="header">
+              <div class="container">
+                <h1>Nueva Ubicacion</span></h1>
+                <span id="message"></span>
+              </div>
+            </header>
+            <section>				
+                <div id="container" >
+                    <div id="wrapper">
+                    	<!--Conenerdor-->
+					    <form method="post" action="index.php?ctrl=location&act=create">
+					    	<hr>
+							<div class="input">
+								<label for="name">Nombre*</label>
+								<input type="text" id="name" name="name" placeholder="Taller" pattern="[A-Za-záéóúíñ\s]*"required/>
+							</div>
+							<div class="input">
+								<button id="crear"class="btn btn-primary" type="submit">Crear</button>		
+								<a href="index.php?ctrl=location" class="btn btn-primary">Cancelar</a>
+							</div>
+							<br/>
+						</form>
+					</div>
+				</div>
+            </section>

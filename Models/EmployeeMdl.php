@@ -21,8 +21,15 @@ class EmployeeMdl {
 			die("No se pudeo hacer la consulta de mostrar todos");
 			return false;
 		}
-		return $result;
-
+		if($result->num_rows<=0){
+				return false;
+		}
+		else{
+			while ($row = $result->fetch_array()){
+				$rows[] = $row;
+			}
+			return $rows;
+		}
 	}
 
 	public function get($id_employee){
@@ -30,7 +37,7 @@ class EmployeeMdl {
 		$query = "SELECT * FROM Employee  WHERE id='$id_employee'";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
-			die("No se pudeo hacer la consulta de insertar");
+			die("No se pudeo hacer la consulta de mostrar");
 			return false;
 		}
 		$row = $result->fetch_assoc();
@@ -65,7 +72,7 @@ class EmployeeMdl {
 	}
 
 	public function edit($employee, $id_employee){
-
+		
 		$name = $this->db_driver->real_escape_string($employee->name);
 		$last_name = $this->db_driver->real_escape_string($employee->last_name);
 		$RFC = $this->db_driver->real_escape_string($employee->RFC);
@@ -75,7 +82,7 @@ class EmployeeMdl {
 		$municipality = $this->db_driver->real_escape_string($employee->municipality);
 		$no_external = $this->db_driver->real_escape_string($employee->no_external);
 		$no_internal = $this->db_driver->real_escape_string($employee->no_internal);
-		$phone = $employee->phones;
+		$phone = $this->db_driver->real_escape_string($employee->phones);
 
 
 		$query   =	"UPDATE Employee
@@ -97,7 +104,7 @@ class EmployeeMdl {
 		$query = "DELETE  FROM Employee  WHERE id='$id_employee'";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
-			die("No se pudeo hacer la consulta de insertar");
+			die("No se pudeo hacer la consulta de eliminar");
 			return false;
 		}
 		return true;

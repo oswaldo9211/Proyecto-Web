@@ -61,20 +61,21 @@ class ClientCtrl extends CtrlEstandar{
 		$clients =$this->model->get_all();
 		$section = file_get_contents('Views/Client/show_all.html');;
 		$info = "";
-		foreach ($clients as $client) {
-			$info .= "<tr>
-		         		<td> $client[name] $client[last_name] </td>
-		         		<td> $client[RFC] </td>
-		         		<td> $client[email] </td>
-		         		<td>
-		         			<a href='index.php?ctrl=client&act=details&id=$client[id]'><i class='icon-view'></i></a>
-		         			<a href='index.php?ctrl=client&act=edit&id=$client[id]'><i class='icon-edit'></i></a>";
-		    if($this->isAdmin()){
-				$info .=   "<a href='index.php?ctrl=client&act=delete&id=$client[id]'><i class='icon-remove'></i></a>";
-			}
-				$info .="</td>
-	      			</tr>";
-	    }
+		if($clients)
+			foreach ($clients as $client) {
+				$info .= "<tr>
+			         		<td> $client[name] $client[last_name] </td>
+			         		<td> $client[RFC] </td>
+			         		<td> $client[email] </td>
+			         		<td>
+			         			<a href='index.php?ctrl=client&act=details&id=$client[id]'><i class='icon-view'></i></a>
+			         			<a href='index.php?ctrl=client&act=edit&id=$client[id]'><i class='icon-edit'></i></a>";
+			    if($this->isAdmin()){
+					$info .=   "<a href='index.php?ctrl=client&act=delete&id=$client[id]'><i class='icon-remove'></i></a>";
+				}
+					$info .="</td>
+		      			</tr>";
+		    }
 
 	    $dicc = array('{info}' => $info);
 	    $section = strtr($section, $dicc);
@@ -90,11 +91,13 @@ class ClientCtrl extends CtrlEstandar{
 			$this->template($section);
 		}
 		else{
-			$name = $_POST['name'];
-			$last_name = $_POST['last_name'];
-			$RFC = $_POST['RFC'];
-			$email = $_POST['email'];
-			$phone = $_POST['phone'];
+			require_once("Controllers/Validaciones.php");
+			$name = validateName($_POST['name']);
+			$last_name = validateName($_POST['last_name']);
+			$RFC = validateRFC($_POST['RFC']);
+			$email = validateEmail($_POST['email']);
+			$phone = validatePhone($_POST['phone']);
+
 
 			$client = new Client($name, $last_name, $RFC, $email, $phone);
 			$result =$this->model->create($client);
@@ -181,11 +184,12 @@ class ClientCtrl extends CtrlEstandar{
 		}
 		else{
 			$id_client= $_GET['id'];
-			$name = $_POST['name'];
-			$last_name = $_POST['last_name'];
-			$RFC = $_POST['RFC'];
-			$email = $_POST['email'];
-			$phone = $_POST['phone'];
+			require_once("Controllers/Validaciones.php");
+			$name = validateName($_POST['name']);
+			$last_name = validateName($_POST['last_name']);
+			$RFC = validateRFC($_POST['RFC']);
+			$email = validateEmail($_POST['email']);
+			$phone = validatePhone($_POST['phone']);
 
 			$client = new Client($name, $last_name, $RFC, $email, $phone);
 
