@@ -1,20 +1,19 @@
 #Desarrolladores
-Oswaldo Martinez
-De La Cruz Marco
+De La Cruz Marco Antonio
+Martinez fonseca Oswaldo
 
-#usr HibHub 
--turing08
--oswaldo9211
+#Usuarios gitHub 
+*turing08
+*oswaldo9211
 
 
-#Proyecto Web 2014B
 #Descripcion del proyecto
-
-# Inventario vehicular e inspecciones
+Proyecto Web 2014B
+Inventario vehicular e inspecciones
 
 #Pagina
 
-pagina url: 
+pagina url: http://drcar.zz.vc/index.php
 
 ## Descripción general
 Se requiere llevar control de inspecciones vehiculares cuantos estos ingresan al taller.

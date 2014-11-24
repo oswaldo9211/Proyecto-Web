@@ -3,15 +3,19 @@
 
             <header class="header">
               <div class="container">
+              	<div class='breadcrumb'>
+					  <a href="index.php" class="">Tablero</a> <span class="divider">/</span>
+					  <a href="index.php?ctrl=piece" class="">Piezas</a> <span class="divider">/</span>
+				</div>
                 <h1>Nueva Pieza</span></h1>
-                <span id="message"></span>
+                <div id="message"></div>
               </div>
             </header>
             <section>				
                 <div id="container" >
                     <div id="wrapper">
                     	<!--Conenerdor-->
-					    <form method="post" action="index.php?ctrl=piece&act=create">
+					    <form method="post" id="form" action="index.php?ctrl=piece&act=create">
 					    	<hr>
 							<div class="input">
 								<label for="name">Nombre*</label>
@@ -26,3 +30,5 @@
 					</div>
 				</div>
             </section>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="assets/js/piece.js"></script>

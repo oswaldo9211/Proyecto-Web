@@ -34,7 +34,7 @@ class LocationMdl {
 
 	public function get($id_location){
 
-		$query = "SELECT * FROM Location  WHERE id='$id_location'";
+		$query = "SELECT * FROM Location  WHERE id_location='$id_location'";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
 			die("No se pudeo hacer la consulta de mostrar");
@@ -48,11 +48,11 @@ class LocationMdl {
 	public function create($location){
 		$name = $this->db_driver->real_escape_string($location->name);
 
-		$query   =	"INSERT INTO Location (name)
+		$query   =	"INSERT INTO Location (location_name)
 								   VALUES('$name')";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
-			die("No se pudeo hacer la consulta de insertar");
+			//die("No se pudeo hacer la consulta de insertar");
 			return false;
 		}
 		if($result)
@@ -65,10 +65,9 @@ class LocationMdl {
 
 		$name = $this->db_driver->real_escape_string($location->name);
 
-		$query   =	"UPDATE Location set name = '$name' WHERE id='$id_location'";
+		$query   =	"UPDATE Location set location_name = '$name' WHERE id_location='$id_location'";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
-			die("No se pudeo hacer la consulta de editar");
 			return false;
 		}
 		if($result)
@@ -78,13 +77,34 @@ class LocationMdl {
 	}
 
 	public function delete($id_location){
-		$query = "DELETE  FROM Location  WHERE id='$id_location'";
+		$query = "DELETE  FROM Location  WHERE id_location='$id_location'";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
 			die("No se pudeo hacer la consulta de eliminar");
 			return false;
 		}
 		return true;
+	}
+
+	public function searchLocation($location_name)
+	{
+		$location_name = $this->db_driver->real_escape_string($location_name);
+
+		$query = "SELECT * FROM Location WHERE location_name='$location_name'";
+
+		$result = $this ->db_driver-> query($query);
+		if($this->db_driver->errno){
+			return false;
+		}
+		else{
+			if($result->num_rows<=0){
+				return false;
+			}
+			else{
+				$row = $result->fetch_assoc();
+				return $row;
+			}
+		}
 	}
 
 }

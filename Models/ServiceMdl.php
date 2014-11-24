@@ -15,8 +15,8 @@ class ServiceMdl {
 
 
 	public function get_all(){
-		$query = "SELECT Location.name, Servicio.* FROM Location INNER JOIN Servicio on Location.id=Servicio.ubicacion";
-
+		$query = "SELECT Location.location_name, Service.* FROM Location 
+					INNER JOIN Service on Location.id_location=Service.id_location";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
 			die("No se pudeo hacer la consulta de mostrar todos {$this->db_driver->error}");
@@ -35,7 +35,8 @@ class ServiceMdl {
 
 	public function get($id_service){
 
-		$query = "SELECT Location.name, Servicio.* FROM Location INNER JOIN Servicio on Location.id=Servicio.ubicacion WHERE idservicio='$id_service'";
+		$query = "SELECT Location.location_name, Service.* FROM Location 
+				    INNER JOIN Service on Location.id_location=Service.id_location WHERE id_service='$id_service'";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
 			die("No se pudeo hacer la consulta de mostrar");
@@ -50,12 +51,12 @@ class ServiceMdl {
 		$name = $this->db_driver->real_escape_string($service->name);
 		$id_location = $this->db_driver->real_escape_string($service->id_location);
 
-		$query   =	"INSERT INTO Servicio
-					(nombre, ubicacion)
+		$query   =	"INSERT INTO Service
+					(service_name, id_location)
 					VALUES('$name','$id_location')";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
-			die("No se pudeo hacer la consulta de insertar");
+			//die("No se pudeo hacer la consulta de insertar");
 			return false;
 		}
 		if($result)
@@ -69,13 +70,11 @@ class ServiceMdl {
 		$name = $this->db_driver->real_escape_string($service->name);
 		$id_location = $this->db_driver->real_escape_string($service->id_location);
 
-
-		$query   =	"UPDATE Servicio
-					set nombre = '$name', ubicacion = '$id_location'
-					WHERE idservicio='$id_service'";
+		$query   =	"UPDATE Service
+					set service_name = '$name', id_location = '$id_location'
+					WHERE id_service='$id_service'";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
-			die("No se pudeo hacer la consulta de editar");
 			return false;
 		}
 		if($result)
@@ -85,7 +84,7 @@ class ServiceMdl {
 	}
 
 	public function delete($id_service){
-		$query = "DELETE  FROM Servicio  WHERE idservicio='$id_service'";
+		$query = "DELETE  FROM Service  WHERE id_service='$id_service'";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
 			die("No se pudeo hacer la consulta de eliminar");
@@ -94,6 +93,26 @@ class ServiceMdl {
 		return true;
 	}
 
+	public function searchService($service_name)
+	{
+		$service_name = $this->db_driver->real_escape_string($service_name);
+
+		$query = "SELECT * FROM Service WHERE service_name='$service_name'";
+
+		$result = $this ->db_driver-> query($query);
+		if($this->db_driver->errno){
+			return false;
+		}
+		else{
+			if($result->num_rows<=0){
+				return false;
+			}
+			else{
+				$row = $result->fetch_assoc();
+				return $row;
+			}
+		}
+	}
 }
 
 ?>

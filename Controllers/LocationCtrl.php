@@ -2,7 +2,7 @@
 
 /**
 	*Oswaldo Marinez Fonseca
-Controlador  de Ubicaciones
+Controller Locations
 */
 
 require('Controllers/CtrlEstandar.php');
@@ -25,41 +25,54 @@ class LocationCtrl extends CtrlEstandar{
 				if($this->isAdmin())
 					$this->create();
 				else
-					echo "No tienes permisos";
+					require('Views/error.html');
 				break;
 			case 'delete':
 				if($this->isAdmin())
 					$this->delete();
 				else
-					echo "No tienes permisos";
+					require('Views/error.html');
 				break;
 			case 'details':
 				if($this->isAdmin())
 					$this->details();
 				else
-					echo "No tienes permisos";
+					require('Views/error.html');
 				break;
 			case 'edit':
 				if($this->isAdmin())
 					$this->edit();
 				else
-					echo "No tienes permisos";
+					require('Views/error.html');
 				break;
 			case 'show_all':
 				if($this->isAdmin())
 					$this->show_all();
 				else
-					echo "No tienes permisos";
+					require('Views/error.html');
 				break;
 			case 'get_all':
 				if($this->isAdmin())
 					$this->get_all();
 				else
-					echo "No tienes permisos";
+					require('Views/error.html');
+				break;
+			case 'validate':
+				if($this->isAdmin())
+					$this->validate();
+				else
+					header('Location:  index.php');
 				break;
 		    default:
 		    	header('Location:  index.php');
 		}
+	}
+
+	private function validate(){
+		if($this->model->searchLocation($_POST['name']))
+			echo json_encode("La ubicacion ya existe");
+		else
+			echo json_encode(true);
 	}
 
 	private function get_all(){
@@ -68,18 +81,18 @@ class LocationCtrl extends CtrlEstandar{
 	}
 
 	private function show_all(){
-		//get all employees to display
+		//get all locations to display
 		$locations =$this->model->get_all();
 		$section = file_get_contents('Views/Location/show_all.html');
 		$info = "";
 		if($locations)
 			foreach ($locations as $location) {
 				$info .= "<tr>
-			         		<td> $location[name]</td>
+			         		<td> $location[location_name]</td>
 			         		<td>
-			         			<a href='index.php?ctrl=location&act=details&id=$location[id]'><i class='icon-view'></i></a>
-			         			<a href='index.php?ctrl=location&act=edit&id=$location[id]'><i class='icon-edit'></i></a>
-								<a href='index.php?ctrl=location&act=delete&id=$location[id]'><i class='icon-remove'></i></a>
+			         			<a href='index.php?ctrl=location&act=details&id=$location[id_location]'><i class='icon-view'></i></a>
+			         			<a href='index.php?ctrl=location&act=edit&id=$location[id_location]'><i class='icon-edit'></i></a>
+								<a href='index.php?ctrl=location&act=delete&id=$location[id_location]'><i class='icon-remove'></i></a>
 							</td>
 		      			</tr>";
 		    }
@@ -91,8 +104,6 @@ class LocationCtrl extends CtrlEstandar{
 	}
 	
 	private function create(){
-		//include('Controllers/validacionesCtrl.php');
-		//Validate variables
 		if(empty($_POST)){
 			$section = file_get_contents('Views/Location/create.html');
 			$this->template($section);
@@ -105,12 +116,10 @@ class LocationCtrl extends CtrlEstandar{
 			$result =$this->model->create($location);
 
 			if($result){
-				//require('Views/Created.html');
-				$this->show_all();
+				$this->show_message("success", "La ubicacion se creo exitosamente");
 			}
 			else{
-				echo 'no se inserto';
-				//require('Views/Error.html');
+				$this->show_message("danger", "No se creo, no puede haber duplicados en el nombre");
 			}
 		}
 	}
@@ -125,7 +134,7 @@ class LocationCtrl extends CtrlEstandar{
 			if($location){
 
 				$this->model->delete($id_location);
-				$this->show_all();
+				$this->show_message("success", "La ubicacion se elimino exitosamente");
 
 			}
 			else{
@@ -144,7 +153,7 @@ class LocationCtrl extends CtrlEstandar{
 
 				$section = file_get_contents('Views/Location/details.html');
 
-			    $dicc = array('{nombre}' => $location['name']
+			    $dicc = array('{nombre}' => $location['location_name']
 			    	);
 			    $section = strtr($section, $dicc);
 				$this->template($section);
@@ -166,8 +175,8 @@ class LocationCtrl extends CtrlEstandar{
 
 				$section = file_get_contents('Views/Location/edit.html');
 
-			    $dicc = array('{id}' => $location['id']
-			    	         ,'{nombre}' => $location['name']
+			    $dicc = array('{id}' => $location['id_location']
+			    	         ,'{nombre}' => $location['location_name']
 			    	);
 			    $section = strtr($section, $dicc);
 				$this->template($section);
@@ -186,12 +195,10 @@ class LocationCtrl extends CtrlEstandar{
 			$result =$this->model->edit($location, $id_location);
 
 			if($result){
-				//require('Views/Created.html');
-				$this->show_all();
+				$this->show_message("success", "La ubicacion se edito exitosamente");
 			}
 			else{
-				echo 'no se edito';
-				//require('Views/Error.html');
+				$this->show_message("danger", "No se edito, no puede haber duplicados en el nombre");
 			}
 		}
 	}
@@ -204,6 +211,11 @@ class LocationCtrl extends CtrlEstandar{
 		echo $header. $section . $footer;
 	}
 	
+	private function show_message($tipo, $message){
+		require_once('include/Message.php');
+		$this->show_all();
+		Message($tipo, $message);
+	}
 }
 
 ?>

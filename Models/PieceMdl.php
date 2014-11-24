@@ -15,7 +15,7 @@ class PieceMdl {
 
 
 	public function get_all(){
-		$query = "SELECT * FROM Pieza";
+		$query = "SELECT * FROM Piece";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
 			die("No se pudeo hacer la consulta de mostrar todos");
@@ -34,7 +34,7 @@ class PieceMdl {
 
 	public function get($id_piece){
 
-		$query = "SELECT * FROM Pieza  WHERE idpieza='$id_piece'";
+		$query = "SELECT * FROM Piece  WHERE id_piece='$id_piece'";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
 			die("No se pudeo hacer la consulta de mostrar");
@@ -48,7 +48,7 @@ class PieceMdl {
 	public function create($name){
 		$name = $this->db_driver->real_escape_string($name);
 
-		$query   =	"INSERT INTO Pieza (nombre) VALUES('$name')";
+		$query   =	"INSERT INTO Piece (piece_name) VALUES('$name')";
 
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
@@ -66,10 +66,10 @@ class PieceMdl {
 		$name = $this->db_driver->real_escape_string($name);
 
 
-		$query   =	"UPDATE Pieza set nombre = '$name' WHERE idpieza='$id_piece'";
+		$query   =	"UPDATE Piece set piece_name = '$name' WHERE id_piece='$id_piece'";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
-			die("No se pudeo hacer la consulta de editar");
+			//die("No se pudeo hacer la consulta de editar");
 			return false;
 		}
 		if($result)
@@ -79,13 +79,34 @@ class PieceMdl {
 	}
 
 	public function delete($id_piece){
-		$query = "DELETE  FROM Pieza  WHERE idpieza='$id_piece'";
+		$query = "DELETE  FROM Piece  WHERE id_piece='$id_piece'";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
 			die("No se pudeo hacer la consulta de eliminar");
 			return false;
 		}
 		return true;
+	}
+
+	public function searchPiece($piece_name)
+	{
+		$piece_name = $this->db_driver->real_escape_string($piece_name);
+
+		$query = "SELECT * FROM Piece WHERE piece_name='$piece_name'";
+
+		$result = $this ->db_driver-> query($query);
+		if($this->db_driver->errno){
+			return false;
+		}
+		else{
+			if($result->num_rows<=0){
+				return false;
+			}
+			else{
+				$row = $result->fetch_assoc();
+				return $row;
+			}
+		}
 	}
 
 }

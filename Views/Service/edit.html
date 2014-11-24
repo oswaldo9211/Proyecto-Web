@@ -1,7 +1,11 @@
             <header class="header">
             	<div class="container" >
+            		<div class='breadcrumb'>
+					  <a href="index.php" class="">Tablero</a> <span class="divider">/</span>
+					  <a href="index.php?ctrl=service&act=show_all" class="">Servicios</a> <span class="divider">/</span>
+					</div>
 	                <h1>Editar Servicio</h1>
-	                <span id="menssage"></span>
+	                <div id="message"></div>
             	</div>
             </header>
             <section>				
@@ -28,21 +32,4 @@
 					</form>
             </section>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-
-<script type="text/javascript">
-	$.ajax({
-		url:'index.php?ctrl=location&act=get_all',
-		dataType: 'json',
-		success: function(json){
-			var select = document.getElementById("locations");
-			for(i in json){
-				var texto = document.createTextNode(json[i].name);
-				var option = document.createElement('option');
-				option.setAttribute('value',json[i].id);
-				option.appendChild(texto);
-				select.appendChild(option);
-			}
-			console.log(json);
-		}
-	});
-</script>
+<script type="text/javascript" src="assets/js/service.js"></script>

@@ -2,7 +2,7 @@
 
 /**
 	*Oswaldo Marinez Fonseca
-Controlador  de Servicio
+Controller  de Service
 */
 
 require('Controllers/CtrlEstandar.php');
@@ -25,51 +25,64 @@ class ServiceCtrl extends CtrlEstandar{
 				if($this->isAdmin())
 					$this->create();
 				else
-					echo "No tienes permisos";
+					require('Views/error.html');
 				break;
 			case 'delete':
 				if($this->isAdmin())
 					$this->delete();
 				else
-					echo "No tienes permisos";
+					require('Views/error.html');
 				break;
 			case 'details':
 				if($this->isAdmin())
 					$this->details();
 				else
-					echo "No tienes permisos";
+					require('Views/error.html');
 				break;
 			case 'edit':
 				if($this->isAdmin())
 					$this->edit();
 				else
-					echo "No tienes permisos";
+					require('Views/error.html');
 				break;
 			case 'show_all':
 				if($this->isAdmin())
 					$this->show_all();
 				else
-					echo "No tienes permisos";
+					require('Views/error.html');
+				break;
+			case 'validate':
+				if($this->isAdmin())
+					$this->validate();
+				else
+					header('Location:  index.php');
 				break;
 		    default:
 		    	header('Location:  index.php');
 		}
 	}
 
+	private function validate(){
+		if($this->model->searchService($_POST['name']))
+			echo json_encode("El servicio ya existe");
+		else
+			echo json_encode(true);
+	}
+
 	private function show_all(){
-		//get all employees to display
+		//get all services to display
 		$services =$this->model->get_all();
 		$section = file_get_contents('Views/Service/show_all.html');;
 		$info = "";
 		if($services)
 			foreach ($services as $service) {
 				$info .= "<tr>
-			         		<td> $service[nombre] </td>
-			         		<td> $service[name] </td>
+			         		<td> $service[service_name] </td>
+			         		<td> $service[location_name] </td>
 			         		<td>
-			         			<a href='index.php?ctrl=service&act=details&id=$service[idservicio]'><i class='icon-view'></i></a>
-			         			<a href='index.php?ctrl=service&act=edit&id=$service[idservicio]'><i class='icon-edit'></i></a>
-								<a href='index.php?ctrl=service&act=delete&id=$service[idservicio]'><i class='icon-remove'></i></a>
+			         			<a href='index.php?ctrl=service&act=details&id=$service[id_service]'><i class='icon-view'></i></a>
+			         			<a href='index.php?ctrl=service&act=edit&id=$service[id_service]'><i class='icon-edit'></i></a>
+								<a href='index.php?ctrl=service&act=delete&id=$service[id_service]'><i class='icon-remove'></i></a>
 							</td>
 		      			</tr>";
 		    }
@@ -81,8 +94,6 @@ class ServiceCtrl extends CtrlEstandar{
 	}
 	
 	private function create(){
-		//include('Controllers/validacionesCtrl.php');
-		//Validate variables
 		if(empty($_POST)){
 			$section = file_get_contents('Views/Service/create.html');
 			$this->template($section);
@@ -97,12 +108,10 @@ class ServiceCtrl extends CtrlEstandar{
 			$result =$this->model->create($service);
 
 			if($result){
-				//require('Views/Created.html');
-				$this->show_all();
+				$this->show_message("success", "El servicio creo exitosamente");
 			}
 			else{
-				echo 'no se inserto';
-				//require('Views/Error.html');
+				$this->show_message("danger", "No se creo, no puede haber duplicados en el nombre");
 			}
 		}
 	}
@@ -117,7 +126,7 @@ class ServiceCtrl extends CtrlEstandar{
 			if($service){
 
 				$this->model->delete($id_service);
-				$this->show_all();
+				$this->show_message("success", "El servicio se elimino exitosamente");
 
 			}
 			else{
@@ -136,8 +145,8 @@ class ServiceCtrl extends CtrlEstandar{
 
 				$section = file_get_contents('Views/Service/details.html');
 
-			    $dicc = array('{nombre}' => $service['nombre']
-			    			 ,'{ubicacion}' => $service['name']
+			    $dicc = array('{nombre}' => $service['service_name']
+			    			 ,'{ubicacion}' => $service['location_name']
 			    	);
 			    $section = strtr($section, $dicc);
 				$this->template($section);
@@ -159,9 +168,9 @@ class ServiceCtrl extends CtrlEstandar{
 
 				$section = file_get_contents('Views/Service/edit.html');
 
-			    $dicc = array('{id}' => $service['idservicio']
-			    	         ,'{nombre}' => $service['nombre']
-			    			 ,'{ubicacion}' => $service['ubicacion']
+			    $dicc = array('{id}' => $service['id_service']
+			    	         ,'{nombre}' => $service['service_name']
+			    			 ,'{ubicacion}' => $service['location_name']
 			    	);
 			    $section = strtr($section, $dicc);
 				$this->template($section);
@@ -181,12 +190,10 @@ class ServiceCtrl extends CtrlEstandar{
 			$result =$this->model->edit($service, $id_service);
 
 			if($result){
-				//require('Views/Created.html');
-				$this->show_all();
+				$this->show_message("success", "El servicio se edito correctamente");
 			}
 			else{
-				echo 'no se edito';
-				//require('Views/Error.html');
+				$this->show_message("danger", "No se edito no puede haber duplicados en el nombre");
 			}
 		}
 	}
@@ -197,6 +204,12 @@ class ServiceCtrl extends CtrlEstandar{
 		$dicc = array('{user}' => $this->getUserName());
 	    $header = strtr($header, $dicc);
 		echo $header. $section . $footer;
+	}
+
+	private function show_message($tipo, $message){
+		require_once('include/Message.php');
+		$this->show_all();
+		Message($tipo, $message);
 	}
 	
 }
