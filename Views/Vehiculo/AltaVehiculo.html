@@ -5,9 +5,9 @@
 <span id="message"></span>
 </div>
 </header>
-            <section>				
-                <div id="container" >
-                    <div id="wrapper">
+<section>				
+<div id="container" >
+<div id="wrapper">
 
 <form method="post" action="?ctrl=Vehiculo&Act={Act}">
 
@@ -19,14 +19,14 @@
 			<label for="vin">VIN</label>
 			<input type="text" id="vin" name="vin" onKeyUp="Mayusculas(this)"  required />
 		</div>
-		<div  class="input">
-			<label for="marca">Marca</label>
-			<input type="text" name="marca" id='marca' required/ >
-		</div>
-		<div class="input">
+		
+		<div class="input" >
 		<label for="modelo">Modelo</label>
-         <input type="text" name="modelo" id="modelo" >
-
+		<select id='modelo'  name="modelo">
+					<option selected value='0'>Selecciona Un modelo</option>
+				{modelos}
+			</select>
+		</div>
 		<div class="input">
 			<label for="des">Descripcion</label>
 			<input type="text" name="des" id="des" />

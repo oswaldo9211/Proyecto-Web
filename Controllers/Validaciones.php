@@ -4,25 +4,30 @@
 **/
 
 
-function ValidarVIN($VIN=''){
+function ValidarVIN($VIN='',&$ok){
+	/**
+	*La ley exige que todos los fabricantes de automóviles emitan un número único de 17 dígitos 
+	*para todos los vehículos producidos. El VIN esta formado de números del 0 al 9 y de todas
+	*letras del alfabeto
+	*/
 	if($VIN != "")
 		{
-			if(preg_match("/^(^(\d+)$)/i", $VIN))
-			{
+			//if(preg_match("/^(^(\d+)$)/i", $VIN))
+			//{
 				return true;
-			}
-			else
-			{
-				echo " Sintaxis error  VIN incorrecto  favor de seguir el formato solicitado (solo digitos)";
-				return false;
-			}
+		//	}
+		//	else
+		//	{
+			//	$ok['error'] .= "<th> Sintaxis error  VIN incorrecto  favor de seguir el formato solicitado (solo digitos)</th>";
+		//		return false;
+		//	}
 		}
 		else
-			echo "</br> el VIN es un campo obligatorio";
+			$ok['error'] .= "<th> el VIN es un campo obligatorio</th>";
 		return false;
 }
 
-function ValidarModelo($modelo)
+function ValidarModelo($modelo,&$ok)
 {
 	if($modelo != "")
 		{
@@ -32,17 +37,17 @@ function ValidarModelo($modelo)
 			}
 			else
 			{
-				echo " Sintaxis error modelo incorrecto  favor de seguir el formato solicitado (solo letras sin espacios)";
+				$ok['error'].= "<th> Sintaxis error modelo incorrecto  favor de seguir el formato solicitado (solo letras sin espacios)</th>";
 				return false;
 			}
 			return true;
 		}
 		else
-			echo "</br> el modelo es un campo obligatorio";
+			$ok['error'].= "<th> el modelo es un campo obligatorio </th>";
 		return false;
 }
 
-function ValidarMarca($marca)
+function ValidarMarca($marca,&$ok)
 {
 	if($marca != "")
 		{
@@ -52,13 +57,13 @@ function ValidarMarca($marca)
 			}
 			else
 			{
-				echo " Sintaxis error marca incorrecto  favor de seguir el formato solicitado (letra * o letra* - letra*)";
+				$ok['error'].= "<th> Sintaxis error marca incorrecto  favor de seguir el formato solicitado (letra+ o letra* - letra*)</th>";
 				return false;
 			}
 			return true;
 		}
 		else
-			echo "</br> la marca es un campo obligatorio";
+			$ok['error'].= "<th> la marca es un campo obligatorio</th>";
 		return false;
 }
 

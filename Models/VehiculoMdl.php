@@ -1,5 +1,3 @@
-
-
 <?php
 /**
 *@Antonio De La Cruz
@@ -39,7 +37,7 @@ class VehiculoMdl
 	public function Inset($tabla,$campos, $values)
 	{
 		$sql  = " INSERT INTO  ".$tabla." (".$campos.") VALUES(".$values." )";
-		//echo $sql;
+		echo $sql;
 		$this->db_driver->query($sql);
 
 		if($this->db_driver->errno){
@@ -72,6 +70,18 @@ class VehiculoMdl
 		$result= $this->db_driver->query($sql);
 	   	if($this->db_driver->errno){
 			//die("No se pudo hacer la consulta al insertar ".$this->db_driver->error);
+			return false;
+		}
+		else
+			return true;
+	}
+
+	public function UpdateVehiculo($sql,&$ok)
+	{
+		echo "<br>",$sql;
+		$result= $this->db_driver->query($sql);
+	   	if($this->db_driver->errno){
+			$ok['error'] = "No se pudo hacer la consulta al insertar ".$this->db_driver->error;
 			return false;
 		}
 		else

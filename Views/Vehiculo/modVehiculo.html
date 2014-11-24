@@ -5,17 +5,23 @@
 			<input type="text" id="idvehiculo" name="idvehiculo" value="{id}" onKeyUp="Mayusculas(this)" readonly="" />
 		</div>
 		<div class="input">
+			<label for="cliente">Cliente</label>
+			<select id='cliente' name="cliente">
+				<option selected=""   value="0">{cliente}</option>
+				{clientes}
+			</select>
+		</div>
+		<div class="input">
 			<label for="vin">VIN</label>
 			<input type="text" id="vin" name="vin" onKeyUp="Mayusculas(this)"  value="{vin}" r/>
 		</div>
-		<div  class="input">
-			<label for="marca">Marca</label>
-			<input type="text" name="marca" id='marca' value="{marca}" / >
+		<div class="input" >
+			<label for='modelo'>Modelo</label>
+			<select id='modelo'  name="modelo">
+					<option selected value='0'>{model}</option>
+				{modelos}
+			</select>
 		</div>
-		<div class="input">
-		<label for="modelo">Modelo</label>
-         <input type="text" name="modelo" id="modelo"  value="{modelo}" />
-
 		<div class="input">
 			<label for="des">Descripcion</label>
 			<input type="text" name="des" id="des" value="{des}" />

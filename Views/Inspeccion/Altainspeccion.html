@@ -1,14 +1,24 @@
 
 <header class="header">
 <div class="container">
-<h1><span>Nuevo Inspeccion</span></h1>
+<h1><span>Nueva Inspeccion</span></h1>
 <span id="message"></span>
 </div>
 </header>
 <form action="?ctrl=inspeccion&Act=Alta" method="POST">
 <div class="buuton">
 <button id='nuevo' name="Guardar" value="Guardar">Guardar</button>
+</div>	
+<!--
+<div class="input">
+<label for="cliente">Cliente</label>
+<select id='cliente' name="cliente">
+<option selected=""   value="0">Seleccione un Cliente</option>
+{clientes}
+</select>
 </div>
+-->
+
 
 <!-- <section class="section">				
                 <div class="container">
@@ -85,7 +95,12 @@
 				</td>
 				-->
 				<td>
-					<label>Vehiculo</label> <input type="text" id='vehiculo' name="vehiculo" />
+				<label>Vehiculo</label>
+				<select id='vehiculo' name="vehiculo">
+					<option selected value='0'>Seleccione un Vehiculo</option>
+					{vehiculos}
+				</select>
+					
 				</td>
 			</tr>
 				</tfoot>

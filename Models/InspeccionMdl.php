@@ -36,21 +36,22 @@ class InspeccionMdl
 		//echo "SQL 38", $sql;
 		$result = $this->db_driver->query($sql);
 		if($this->db_driver->errno ){
-			$ok['errno']=1;
+			
 			$ok['error'] .= "No se puedo optener la consulta ". $this->db_driver->error;
 			
 		}
 		return $result;
 	}
 	
-	public function Inset($tabla,$campos, $values)
+	public function Inset($tabla,$campos, $values,&$ok)
 	{
 		$sql  = " INSERT INTO  ".$tabla." (".$campos.") VALUES(".$values." )";
 		echo $sql;
 		$result=$this->db_driver->query($sql);
 
 		if($this->db_driver->errno){
-			die("No se pudo hacer la consulta al insertar ".$this->db_driver->error);
+			$ok['errno'] = 1;
+			$ok['error'] .= "No se pudo hacer la consulta al insertar ".$this->db_driver->error;
 			return false;
 		}
 		else
@@ -75,7 +76,7 @@ class InspeccionMdl
 	public function del_Rows($tabla,$condicion)
 	{
 		$sql = "DELETE FROM $tabla $condicion";
-		//var_dump($sql);
+		var_dump($sql);
 		$result= $this->db_driver->query($sql);
 	   	if($this->db_driver->errno){
 			//die("No se pudo hacer la consulta al insertar ".$this->db_driver->error);
@@ -107,10 +108,10 @@ class InspeccionMdl
 	}
 	public function UpdateEstado($id,$estado,&$ok)
 	{
-		$sql =" UPDATE Inspeccion
-				SET estatus = '$estado'
-				WHERE idinspeccion = $id";
-				echo "here :", $sql;
+		$sql =" UPDATE Inspection
+				SET    status = '$estado'
+				WHERE id_inspection = $id";
+				echo "114: ", $sql;
 		$result= $this->db_driver->query($sql);
 	   	if($this->db_driver->errno){
 			//die("No se pudo hacer la consulta al insertar ".$this->db_driver->error);
@@ -121,9 +122,9 @@ class InspeccionMdl
 	}
 	public function UpdateVehiculo($id,$vehiculo,&$ok)
 	{
-		$sql =" UPDATE Inspeccion
-				SET    idvehiculo = '$vehiculo'
-				WHERE  idinspeccion = $id";
+		$sql =" UPDATE Inspection
+				SET    id_vehicle = '$vehiculo'
+				WHERE  id_inspection = $id";
 				echo "here :", $sql;
 		$result= $this->db_driver->query($sql);
 	   	if($this->db_driver->errno){
@@ -135,9 +136,9 @@ class InspeccionMdl
 	}
 	public function UpdateUsrCancelar($id,$usr_id,&$ok)
 	{
-		$sql =" UPDATE Inspeccion
-				SET    usr_idcancelacion = '$usr_id'
-				WHERE  idinspeccion = $id";
+		$sql =" UPDATE Inspection
+				SET    id_usercancel = '$usr_id'
+				WHERE  id_inspection = $id";
 				echo "here :", $sql;
 		$result= $this->db_driver->query($sql);
 	   	if($this->db_driver->errno){

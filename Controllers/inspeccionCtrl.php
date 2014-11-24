@@ -10,9 +10,10 @@ class InspeccionCtrl
 	private $fTemplate;
 	private $Inspe;
 	public  $model;
-	public $ok  = array();
+	public $ok  = array("error" => '', "errno" => 0);
 	function __construct()
 	{
+		require_once('include/funtios.php');
 		require_once('Models/InspeccionMdl.php');
 		$this->model = new  InspeccionMdl(); 
 	}
@@ -27,24 +28,13 @@ class InspeccionCtrl
 	{
 		# code...
 	}
-	public function getFile( $nameFile, $vars)
-	{
-
-		//echo ": ",$nameFile, ': ',var_dump($vars);
-		require_once('include/Template.php');
-		$FileTemplate = new Template();
-		$FileTemplate->setTemplate($nameFile);
-		if(count($vars) > 0)
-			$FileTemplate->setvars($vars);
-		return $FileTemplate->show();
-	}
 	public function DefaultIns()
 	{
 		$dataHeader = array();
 		$dataFooter = array();
 		$data       = array('ListaInspeccion' => '');
 		$Inspeccion = new InspeccionCtrl();
-		$result= $this->model->getRow('Inspeccion', ' * ',  ' WHERE estatus="ENPROCESO" ',$this->ok);
+		$result= $this->model->getRow('Inspection', ' * ',  ' WHERE status="process" ',$this->ok);
 
 		if($result!=  false)
 		{
@@ -52,17 +42,17 @@ class InspeccionCtrl
 			while ( $Lista = $result->fetch_assoc()) {
 				$data['ListaInspeccion'].= '<tr>';
 				$data['ListaInspeccion'].= '<td>';
-				$data['ListaInspeccion'].= $Lista{'fecha'} ;
+				$data['ListaInspeccion'].= $Lista{'date'} ;
 				$data['ListaInspeccion'].= '</td>';
 				$data['ListaInspeccion'].= '<td>';
-				$data['ListaInspeccion'].= $Lista{'estatus'} ;
+				$data['ListaInspeccion'].= $Lista{'status'} ;
 				$data['ListaInspeccion'].= '</td>';
 				$data['ListaInspeccion'].= '<td>';
-				$data['ListaInspeccion'].= $Lista{'idvehiculo'};
+				$data['ListaInspeccion'].= $Lista{'id_vehicle'};
 				$data['ListaInspeccion'].= '</td>';
-				$data['ListaInspeccion'] .="<td><a href='?ctrl=inspeccion&Act=Ver&idV=$Lista[idinspeccion]'><i class='icon-view'></i></a>";
-				$data['ListaInspeccion'] .="<a href='?ctrl=inspeccion&Act=Edit&idV=$Lista[idinspeccion]'><i class='icon-edit'></i></a>";
-				$data['ListaInspeccion'] .="<a href='?ctrl=inspeccion&Act=Delete&idV=$Lista[idinspeccion]'><i class='icon-remove'></i></a> </td>";
+				$data['ListaInspeccion'] .="<td><a href='?ctrl=inspeccion&Act=Ver&idV=$Lista[id_inspection]'><i class='icon-view'></i></a>";
+				$data['ListaInspeccion'] .="<a href='?ctrl=inspeccion&Act=Edit&idV=$Lista[id_inspection]'><i class='icon-edit'></i></a>";
+				$data['ListaInspeccion'] .="<a href='?ctrl=inspeccion&Act=Delete&idV=$Lista[id_inspection]'><i class='icon-remove'></i></a> </td>";
 				$data['ListaInspeccion'].= '</tr>';
 				
 			}
@@ -75,17 +65,17 @@ class InspeccionCtrl
 			$data['ListaInspeccion'].= '</tr>';
 		}
 		
-		echo  $Inspeccion->getFile('header',$dataHeader) . $Inspeccion->getFile('Inspeccion/defaultInspeccion',$data). $Inspeccion->getFile('footer',$dataFooter);
+		echo  getFile('header',$dataHeader) . getFile('Inspeccion/defaultInspeccion',$data).  getFile('footer',$dataFooter);
 	}
 
 	public function getPiezas(&$data)
 	{
 		$data{'Piezas'} ='';
-		$result =$this->model->getRow('Pieza',' * ', ' ', $this->ok);
+		$result =$this->model->getRow('Piece',' * ', ' ', $this->ok);
 		if($result!= false && $result->num_rows > 0)
 		{
 			foreach ($result as $key => $value) {
-				$data{'Piezas'} .= "<option  id='".$value{'idpieza'}."' value='".$value{'idpieza'}."'>".$value{'nombre'}." </option>";
+				$data{'Piezas'} .= "<option  id='".$value{'id_piece'}."' value='".$value{'id_piece'}."'>".$value{'piece_name'}." </option>";
 			}
 		}
 
@@ -94,57 +84,85 @@ class InspeccionCtrl
 	public function getServicios(&$data)
 	{
 		$data{'Servicios'} ='';
-		$result =$this->model->getRow('Servicio',' * ', ' ', $this->ok);
+		$result =$this->model->getRow('Service',' * ', ' ', $this->ok);
+		//var_dump($result);
 		if($result!= false && $result->num_rows > 0)
 		{
 
 			foreach ($result as $key => $value) {
-				$data{'Servicios'} .= "<option  id='".$value{'idservicio'}."' value='".$value{'idservicio'}."'>".$value{'nombre'}." </option>";
+				$data{'Servicios'} .= "<option  id='".$value{'id_service'}."' value='".$value{'id_service'}."'>".$value{'service_name'}." </option>";
 			}
 		}	
 	}
+
+	public function getClientes(&$data)
+	{
+		$data['clientes'] ='';
+		$resultCs = $this->model->getRow('Client','*'," WHERE   1 ", $this->ok);
+					if($resultCs!= false  && $resultCs->num_rows > 0)
+						foreach ($resultCs as $key => $Clies) {
+								$data['clientes'] .= "<option  value='$Clies[id_client]'>$Clies[client_name] </option>";
+						}
+	}
+
+	public function getVehiculos(&$data)
+	{
+		$data['vehiculos'] ='';
+		$resultCs = $this->model->getRow('Vehicle','*'," WHERE   1 ", $this->ok);
+					if($resultCs!= false  && $resultCs->num_rows > 0)
+						foreach ($resultCs as $key => $Vehi) {
+								$data['vehiculos'] .= "<option  value='$Vehi[id_vehicle]'> $Vehi[vin] </option>";
+						}
+	}
+
 	public function Alta()
 	{
 		$dataHeader = array('' => '' );
 		$dataFooter = array('' => '' );
 		$data       = array('error' => '' );
-		if(isset($_POST['Guardar'])   ){
+		$Inspeccion = new InspeccionCtrl();
+
+		if(isset($_POST['Guardar'])   )
+		{
 			if( isset($_POST['servicio']) && $_POST['servicio'] != 0  && isset($_POST['pieza']) && $_POST['pieza'] != 0)
 			{
 				$cont= 1;
 				$band=1;
-				$campos = 'idinspeccion,fecha,usr_id,usr_idcancelacion,idvehiculo,estatus';
+				$campos = "id_inspection,date,status,id_vehicle,id_user";
 				$hoy = getdate();
 				$data['FechaEmision'] = $hoy['year'] . '-' .$hoy['mon'] . '-' . $hoy['mday'];
 				if(isset($_POST['vehiculo']) &&  $_POST['vehiculo'] != 0)
 					$vehiculo= $_POST['vehiculo'];
 				else
-					$vehiculo= 0;
+					$vehiculo= 10;
 
-				$IdInspeccion =$this->model->getMaxid( 'idinspeccion' ,'Inspeccion');
+				$IdInspeccion =$this->model->getMaxid( 'id_inspection' ,'Inspection');
 				//var_dump($IdInspeccion);
-				$values = "$IdInspeccion,'$data[FechaEmision]',25,0,$vehiculo,'ENPROCESO'";
+				$values = "$IdInspeccion,'$data[FechaEmision]','process',$vehiculo,1";
 				if($IdInspeccion!= false)
-					$result=$this->model->Inset('Inspeccion',$campos, $values);
+					$result=$this->model->Inset('Inspection',$campos, $values,$this->ok);
 				if($result != false )
 					if(isset($_POST['pieza']) && isset($_POST['severidad']) && isset($_POST['servicio']) && isset($_POST['observaciones']))
 					{
-						$campos = "	idinspeccion,idpieza,severidad,idservicio,observaciones";
-						$values = "$IdInspeccion,$_POST[pieza] , $_POST[severidad] , $_POST[servicio] , '$_POST[observaciones]' ";
-					    $this->model->Inset('Inspeccionn',$campos, $values);
+						$campos = "	id_inspection,id_piece,id_service,severity,observations";
+						$values = " $IdInspeccion,$_POST[pieza] ,  $_POST[servicio] ,$_POST[severidad]  , '$_POST[observaciones]' ";
+					    $this->model->Inset('InspectionDetails',$campos, $values,$this->ok);
 						//echo '<br> Pieza ' , $_POST['pieza'], " severidad " ,$_POST['severidad'] , " servicio ", $_POST['servicio'], " observaciones ", $_POST['observaciones'];
 						while ( $band ==1  && $cont < 10) {
 							if(isset($_POST['pieza'.$cont.'']))
 							{
-								$values = "$IdInspeccion,".$_POST['pieza'.$cont.'']." ,".$_POST['severidad'.$cont.'']." , ".$_POST['servicio'.$cont.'']." , '".$_POST['observaciones'.$cont.'']."' ";
-								$this->model->Inset('Inspeccionn',$campos, $values);
-								//echo '<br> Pieza ' ,$_POST['pieza'.$cont.''], " severidad " ,$_POST['severidad'.$cont.''] , " servicio ", $_POST['servicio'.$cont.''], " observaciones ", $_POST['observaciones'.$cont.''];
+								$values = "$IdInspeccion,".$_POST['pieza'.$cont.'']."  , ".$_POST['servicio'.$cont.'']." ,".$_POST['severidad'.$cont.'']."  , '".$_POST['observaciones'.$cont.'']."' ";
+								$this->model->Inset('InspectionDetails',$campos, $values,$this->ok);
 							}
 							else 
 								$band=0;
 							$cont ++;
 						}
+						if($this->ok['errno'] == 0)
 						header("Location: ?ctrl=inspeccion");
+							//var_dump($this->ok );
+					else
+						$data['error'] .= "No se inserto la inspeccion por que SQL precento una inconsistencia  : SQL:". $this->ok['error']; 
 					}
 			}
 			else
@@ -152,10 +170,11 @@ class InspeccionCtrl
 			
 		}
 		
-		$Inspeccion = new InspeccionCtrl();
 		$Inspeccion->getPiezas($data);
 		$Inspeccion->getServicios($data);
-		echo  $Inspeccion->getFile('header',$dataHeader) . $Inspeccion->getFile('Inspeccion/Altainspeccion',$data). $Inspeccion->getFile('footer',$dataFooter);
+		$Inspeccion->getClientes($data);
+		$Inspeccion->getVehiculos($data);
+		echo  getFile('header',$dataHeader) . getFile('Inspeccion/Altainspeccion',$data). getFile('footer',$dataFooter);
 	}
 
 	public function getInspeccionModificar(&$data,$id)
@@ -163,36 +182,34 @@ class InspeccionCtrl
 			$data['VerInspeccion'] = '';
 			$data['VerInspeccionDetalle'] = '';
 			$data['id']=$id;
-			$result = $this->model->getRow('Inspeccion', '*', " WHERE idinspeccion = $id ", $this->ok);
+			$result = $this->model->getRow('Inspection', '*', " WHERE id_inspection = $id ", $this->ok);
 			
 			if($result != false && $result->num_rows > 0){
 				foreach ($result as $key => $value) {
-					//var_dump($value);
 					$data['VerInspeccion'] .= '<tr>';
 					$data['VerInspeccion'] .= '<td>';
-					$data['VerInspeccion'] .= $value{'idinspeccion'};
+					$data['VerInspeccion'] .= $value{'id_inspection'};
 					$data['VerInspeccion'] .= '</td>';
 					$data['VerInspeccion'] .= '<td>';
-					$data['VerInspeccion'] .= "<input  type='text' name='fecha' value='$value[fecha]' eadonly=''/> ";
+					$data['VerInspeccion'] .= "<input  type='text' name='fecha' value='$value[date]' eadonly=''/> ";
 					$data['VerInspeccion'] .= '</td>';
 					$data['VerInspeccion'] .= '<td>';
-					$data['VerInspeccion'] .= "<input type='text' name='usr_id'  value='$value[usr_id]'readonly=''/>";
+					$data['VerInspeccion'] .= "<input type='text' name='usr_id'  value='$value[id_user]'readonly=''/>";
 					$data['VerInspeccion'] .= '</td>';
 					$data['VerInspeccion'] .= '<td>';
 					$data['VerInspeccion'] .= "<select id='idvehiculo'  name='idvehiculo'>
-													<option selected value='$value[idvehiculo]'>$value[idvehiculo]</option>";
-					$resultV = $this->model->getRow('vehiculo', '*', "  ", $this->ok);
+													<option selected value='$value[id_vehicle]'>$value[id_vehicle]</option>";
+					$resultV = $this->model->getRow('Vehicle', '*', "  ", $this->ok);
 					if($resultV != false  && $resultV->num_rows > 0)
 						foreach ($resultV as $key => $vehiculo) {
-							$data['VerInspeccion'] .= "<option value='$vehiculo[vehiculo_id]'>$vehiculo[vin] </option >";
+							$data['VerInspeccion'] .= "<option value='$vehiculo[id_vehicle]'>$vehiculo[vin] </option >";
 						}						
 					$data['VerInspeccion']	.=  "</select>";
 					$data['VerInspeccion'] .= '</td>';
 					$data['VerInspeccion'] .= '<td>';
 					//$data['VerInspeccion'] .= "<input type='text' name='estatus' value='$value[estatus]'/>";
 					$data['VerInspeccion'] .= "<select id='estatus'  name='estatus'>
-													<option selected value='$value[estatus]'>$value[estatus]</option>
-													<option value='ENPROCESO'>ENPROCESO </option >
+													<option selected value='$value[status]'>$value[status]</option>
 													<option value='CANCELAR'>CANCELAR </option >
 													<option value='CONCLUIDO'>CONCLUIDO </option >
 											  </select>";
@@ -204,7 +221,7 @@ class InspeccionCtrl
 					$data['VerInspeccion'] .= '</tr>';
 				}
 				$data['VerInspeccion'] .= '<tr><th  align="center" colspan ="6">Detalles</th></tr>';
-				$result = $this->model->getRow('Inspeccionn', '*', " WHERE idinspeccion = $id ", $this->ok);
+				$result = $this->model->getRow('InspectionDetails', '*', " WHERE id_inspection = $id ", $this->ok);
 				//var_dump($result);
 				$cont=1;//indice que maneja el numero de invd
 				if($result != false && $result->num_rows > 0){
@@ -213,36 +230,36 @@ class InspeccionCtrl
 						$data['VerInspeccionDetalle'] .= '<tr>';
 						$data['VerInspeccionDetalle'] .= '<td>';
 						//$data['VerInspeccionDetalle'] .= "<input type='text' name='idpieza' value='$value[idpieza]' />";
-						if($value['idpieza'] != 0)
-							$resultP = $this->model->getRow('Pieza', '*', " WHERE idpieza = $value[idpieza]  ", $this->ok);
+						if($value['id_piece'] != 0)
+							$resultP = $this->model->getRow('Piece', '*', " WHERE id_piece = $value[id_piece]  ", $this->ok);
 							if($resultP != false  && $resultP->num_rows > 0){
 								foreach ($resultP as $key => $Pieza) {
-									$data['VerInspeccionDetalle'] .= "<input type='text' name='idpieza' value='$Pieza[nombre]' readonly=''/>";
+									$data['VerInspeccionDetalle'] .= "<input type='text' name='idpieza' value='$Pieza[piece_name]' readonly=''/>";
 								}
 							}
 						else{
-							$data['VerInspeccionDetalle'] .= "<input type='text' name='idpieza' value='$value[idpieza]' />";
+							$data['VerInspeccionDetalle'] .= "<input type='text' name='idpieza' value='$value[id_piece]' />";
 						}
 
 						$data['VerInspeccionDetalle'] .= '</td>';
 						$data['VerInspeccionDetalle'] .= '<td>';
-						$data['VerInspeccionDetalle'] .= "<input type='text' name='severidad' value='$value[severidad] ' />";;
+						$data['VerInspeccionDetalle'] .= "<input type='text' name='severidad' value='$value[severity] ' />";;
 						$data['VerInspeccionDetalle'] .= '</td>';
 						$data['VerInspeccionDetalle'] .= '<td>';
 						//$data['VerInspeccionDetalle'] .= "<input type='text' name='idservicio' value='$value[idservicio] ' />";;
-						if($value['idservicio'] != 0)
-							$resultS = $this->model->getRow('Servicio', '*', " WHERE idservicio = $value[idservicio]  ", $this->ok);
+						if($value['id_service'] != 0)
+							$resultS = $this->model->getRow('Service', '*', " WHERE idservicio = $value[id_service]  ", $this->ok);
 							if($resultS != false  && $resultS->num_rows > 0){
 								foreach ($resultS as $key => $Ser) {	
-									$data['VerInspeccionDetalle'] .= "<input type='text' name='idservicio' value='$Ser[nombre]' readonly=''/>";
+									$data['VerInspeccionDetalle'] .= "<input type='text' name='idservicio' value='$Ser[name]' readonly=''/>";
 								}
 							}
 						else{
-							$data['VerInspeccionDetalle'] .= "<input type='text' name='idpieza' value='$value[idpieza]' />";
+							$data['VerInspeccionDetalle'] .= "<input type='text' name='idpieza' value='$value[id_piece]' />";
 						}
 						$data['VerInspeccionDetalle'] .= '</td>';
 						$data['VerInspeccionDetalle'] .= '<td>';
-						$data['VerInspeccionDetalle'] .= "<input type='text' name='observaciones' value='$value[observaciones] ' />";;
+						$data['VerInspeccionDetalle'] .= "<input type='text' name='observaciones' value='$value[observations] ' />";;
 						$data['VerInspeccionDetalle'] .= '</td>';
 						$data['VerInspeccionDetalle'] .= '</tr>';
 						}
@@ -254,25 +271,36 @@ class InspeccionCtrl
 		$data['VerInspeccion'] = '';
 		$data['VerInspeccionDetalle'] = '';
 		
-		$result = $this->model->getRow('Inspeccion', '*', " WHERE idinspeccion = $id ", $this->ok);
+		$result = $this->model->getRow('Inspection', '*', " WHERE id_inspection = $id ", $this->ok);
 		if($result != false && $result->num_rows > 0){
 			foreach ($result as $key => $value) {
 				//var_dump($value);
 				$data['VerInspeccion'] .= '<tr>';
 				$data['VerInspeccion'] .= '<td>';
-				$data['VerInspeccion'] .= $value{'idinspeccion'};
+				$data['VerInspeccion'] .= $value{'id_inspection'};
 				$data['VerInspeccion'] .= '</td>';
 				$data['VerInspeccion'] .= '<td>';
-				$data['VerInspeccion'] .= $value{'fecha'};
+				$data['VerInspeccion'] .= $value{'date'};
 				$data['VerInspeccion'] .= '</td>';
+				$resultC  = $this->model->getRow('User', ' *', " WHERE id_user = $value[id_user]", $thi->ok);
+				if($resultC != false && $resultC->num_rows > 0)
+				{
+					$UserNombre = $resultC->fetch_assoc();
+					//var_dump($ClienteNombre{'client_name'});
+					$data['VerInspeccion'] .=  "<td>" .$UserNombre{'user_name'} . "</td>";
+				}
+				//$data['VerInspeccion'] .= $value{'id_user'};
+				$resultV  = $this->model->getRow('Vehicle', ' *', " WHERE id_vehicle = $value[id_vehicle]", $this->ok);
+				if($resultV != false && $resultV->num_rows > 0)
+				{
+					$Vin = $resultC->fetch_assoc();
+					if($Vin['vin']==NULL)
+						$data['VerInspeccion'] .=  "<td> No se selcciono </td>";
+					else
+						$data['VerInspeccion'] .=  "<td>" .$Vin{'vin'} . "</td>";
+				}
 				$data['VerInspeccion'] .= '<td>';
-				$data['VerInspeccion'] .= $value{'usr_id'};
-				$data['VerInspeccion'] .= '</td>';
-				$data['VerInspeccion'] .= '<td>';
-				$data['VerInspeccion'] .= $value{'idvehiculo'};
-				$data['VerInspeccion'] .= '</td>';
-				$data['VerInspeccion'] .= '<td>';
-				$data['VerInspeccion'] .= $value{'estatus'};
+				$data['VerInspeccion'] .= $value{'status'};
 				$data['VerInspeccion'] .= '</td>';
 				//$data['VerInspeccion'] .= '<td>';
 			    //$data['VerInspeccion'] .= "<button name='procesar'>PROCESAR</buuton>";
@@ -280,23 +308,23 @@ class InspeccionCtrl
 				$data['VerInspeccion'] .= '</tr>';
 			}
 			$data['VerInspeccion'] .= '<tr><th  align="center" colspan ="6">Detalles</th></tr>';
-			$result = $this->model->getRow('Inspeccionn', '*', " WHERE idinspeccion = $id ", $this->ok);
+			$result = $this->model->getRow('InspectionDetails', '*', " WHERE id_inspection = $id ", $this->ok);
 			//var_dump($result);
 			if($result != false && $result->num_rows > 0){
 			foreach ($result as $key => $value) {
 				//var_dump($value);
 				$data['VerInspeccionDetalle'] .= '<tr>';
 				$data['VerInspeccionDetalle'] .= '<td>';
-				$data['VerInspeccionDetalle'] .= $value{'idpieza'};
+				$data['VerInspeccionDetalle'] .= $value{'id_piece'};
 				$data['VerInspeccionDetalle'] .= '</td>';
 				$data['VerInspeccionDetalle'] .= '<td>';
-				$data['VerInspeccionDetalle'] .= $value{'severidad'};
+				$data['VerInspeccionDetalle'] .= $value{'severity'};
 				$data['VerInspeccionDetalle'] .= '</td>';
 				$data['VerInspeccionDetalle'] .= '<td>';
-				$data['VerInspeccionDetalle'] .= $value{'idservicio'};
+				$data['VerInspeccionDetalle'] .= $value{'id_service'};
 				$data['VerInspeccionDetalle'] .= '</td>';
 				$data['VerInspeccionDetalle'] .= '<td>';
-				$data['VerInspeccionDetalle'] .= $value{'observaciones'};
+				$data['VerInspeccionDetalle'] .= $value{'observations'};
 				$data['VerInspeccionDetalle'] .= '</td>';
 				$data['VerInspeccionDetalle'] .= '</tr>';
 			}
@@ -311,7 +339,7 @@ class InspeccionCtrl
 		if (isset($_GET['idV']) && $_GET['idV'] != 0) {
 			$Inspeccion = new InspeccionCtrl();
 			$Inspeccion->getInspeccion($data,$_GET['idV']);
-			echo  $Inspeccion->getFile('header',$dataHeader) . $Inspeccion->getFile('Inspeccion/Verinspeccion',$data). $Inspeccion->getFile('footer',$dataFooter);
+			echo getFile('header',$dataHeader) . getFile('Inspeccion/Verinspeccion',$data). getFile('footer',$dataFooter);
 		}
 	}
 	public function Modificacion()
@@ -319,18 +347,17 @@ class InspeccionCtrl
 		$dataHeader = array('' => '' );
 		$dataFooter = array('' => '' );
 		$data       = array('area' => '', 'error'  => '');
-		$result = $this->model->getRow('Area' , '*', ' ', $this->ok);
+		$result = $this->model->getRow('Location' , '*', ' ', $this->ok);
 		if($result !=false  && $result->num_rows > 0)
 			foreach ($result as $key => $Area) {
-				$data['area'] .=  "<option value='$Area[idarea]'> $Area[nombre] </option >";
+				$data['area'] .=  "<option value='$Area[id_location]'> $Area[location_name] </option >";
 
 			}
-		if(isset($_POST['procesar']) && isset($_POST['estatus']) && $_POST['estatus'] != 'ENPROCESO' )
+			//var_dump($_POST['estatus']);
+		if(isset($_POST['procesar']) && isset($_POST['estatus']) && $_POST['estatus'] != 'process' )
 		{
 			$band=0;
-			if(isset($_POST['idvehiculo'])  && $_POST['idvehiculo']!= 0)
-				var_dump($_POST['idvehiculo']);
-			else
+			if(!isset($_POST['idvehiculo']) )
 			{
 				$data['error'] .= "Necesita escojer un vehiculo para procesar la solicitud";
 				$band=1;
@@ -341,35 +368,45 @@ class InspeccionCtrl
 				$band=1;
 			}
 
-			if($band ==0  && isset($_GET['idV']) && $_GET['idV'] != 0  && $_POST['estatus'] == 'CONCLUIDO'){
-				$estado = $this->model->UpdateEstado($_GET['idV'],'AFECTADO',$this->ok);
+
+			if($band ==0  && isset($_GET['idV']) && $_GET['idV'] != 0  && ($_POST['estatus'] == 'CONCLUIDO'  || $_POST['estatus'] == 'affected') ){
+				$estado = $this->model->UpdateEstado($_GET['idV'],'affected',$this->ok);
 				if($estado != false)
 				{
 					$upvehiculo = $this->model->UpdateVehiculo($_GET['idV'],$_POST['idvehiculo'],$this->ok);
 					if($upvehiculo != false){
-						$campos = 'mov,fechaemision,area,areaDestino,observaciones,estatus,hora,usr_id,idvehiculo';
+						$campos = 'movement,inv_date,service,`service_ destination`,observations,status,id_vehicle,id_user';
 						$hoy = getdate();
 						$data['FechaEmision'] = $hoy['year'] . '-' .$hoy['mon'] . '-' . $hoy['mday'];
 						$data['hora'] = $hoy['hours']. ':' . $hoy['minutes']. ':'. $hoy['seconds'];
-						$values = "'Entrada','$data[FechaEmision]','inspeccion','$_POST[area]','Entrada de inspeccion','PENDIENTE','$data[hora]',25, $_POST[idvehiculo]";
-						$resultInv=$this->model->Inset('inv',$campos, $values);
+						$fecha =$data['FechaEmision'] . " " . $data['hora'];
+						$values = "'in','$data[FechaEmision]','Inspeccion','$_POST[area]','Entrada de inspeccion','slope',$_POST[idvehiculo],1";
+						$resultInv=$this->model->Inset('Inventory',$campos, $values,$this->ok);
 						if($resultInv != false) header("Location: ?ctrl=inspeccion");
+						else
+							$data['error'] = $this->ok['error'];
 					}
 				}
 			}
 			elseif ( isset($_GET['idV']) && $_GET['idV'] != 0  && $_POST['estatus'] == 'CANCELAR') {
-				$estado = $this->model->UpdateEstado($_GET['idV'],'CANCELADO',$this->ok);
-				$usrCancelar = $this->model->UpdateUsrCancelar($_GET['idV'],25, $this->ok );
+				$estado = $this->model->UpdateEstado($_GET['idV'],'cancel',$this->ok);
+				$usrCancelar = $this->model->UpdateUsrCancelar($_GET['idV'],1, $this->ok );
 				if($estado != false  && $usrCancelar!= false)
 				{
 					 header("Location: ?ctrl=inspeccion");
 				}
+				else
+				{
+					$data['error'] = $this->ok['error'];
+					//var_dump($data['error']);
+				}
 			}
 		}
+
 		if (isset($_GET['idV']) && $_GET['idV'] != 0) {
 			$Inspeccion = new InspeccionCtrl();
 			$Inspeccion->getInspeccionModificar($data,$_GET['idV']);
-			echo  $Inspeccion->getFile('header',$dataHeader) . $Inspeccion->getFile('Inspeccion/Modinspeccion',$data). $Inspeccion->getFile('footer',$dataFooter);
+			echo  getFile('header',$dataHeader) . getFile('Inspeccion/Modinspeccion',$data). getFile('footer',$dataFooter);
 		}
 	}
 
@@ -379,9 +416,9 @@ class InspeccionCtrl
 			if($_GET['idV'] != ''){
 				$idIns = $_GET['idV'];
 			}
-			$result=$this->model->del_Rows('Inspeccion', ' WHERE  idinspeccion = '.$idIns.'');
+			$result=$this->model->UpdateEstado($idIns,'cancel',$this->ok);
 			if ($result!= false) {
-				$result=$this->model->del_Rows('Inspeccionn', ' WHERE  idinspeccion = '.$idIns.'');
+				$result=$this->model->UpdateEstado($idIns,'cancel',$this->ok);
 				if($result != false)
 				header('Location: index.php?ctrl=inspeccion');
 			}
