@@ -118,6 +118,8 @@ class VehiculoCtrl
 		$this->data['modelo'] =  '';
 		$this->data['des'] = '';
 		$this->data['color'] = '';
+		$dataHeader = array();
+		$dataFooter  = array( );
 		$this->nameFile='/Vehiculo/verVehiculo';
 		$this->data['Act'] ='Ver';
 		if(isset($_GET['idV']))
@@ -133,9 +135,11 @@ class VehiculoCtrl
 					$this->data['des'] = $Ver{ "descripcion"};
 					$this->data['color'] = $Ver{ "color"};
 			}
-		$this->fTemplate->setTemplate($this->nameFile);
-		$this->fTemplate->setVars($this->data);
-		echo $this->fTemplate->show();
+		//$this->fTemplate->setTemplate($this->nameFile);
+		//$this->fTemplate->setVars($this->data);
+		//echo $this->fTemplate->show();
+		require_once('include/funtios.php');
+		echo  getFile('header',$dataHeader) . getFile($this->nameFile,$this->data). getFile('footer',$dataFooter);
 	}
 	public  function Alta(){
 		//require('Views/VehicleAlta.html');
@@ -218,6 +222,8 @@ class VehiculoCtrl
 		$this->data['color'] = '';
 		$this->nameFile='/Vehiculo/modVehiculo';
 		$this->data['Act'] ='Edit';
+		$dataHeader = array();
+		$dataFooter  = array( );
 		$Ver ='';
 		if(isset($_GET['idV']))
 			if($_GET['idV']!= '')
@@ -235,9 +241,7 @@ class VehiculoCtrl
 						$this->data['color'] = $Ver{ "color"};
 					}
 			}
-		$this->fTemplate->setTemplate($this->nameFile);
-		$this->fTemplate->setVars($this->data);
-		echo $this->fTemplate->show();
+		
 		if(isset($_POST['Edit'])){
 
 			if(isset($_POST['modelo'])){	
@@ -268,6 +272,7 @@ class VehiculoCtrl
 									   $this->modelo,$this->caracteristicas,
 									   $this->color))
 				{
+					echo "string";
 		         	header('Location: index.php?ctrl=Vehiculo');
 		        }
 		        else
@@ -275,8 +280,9 @@ class VehiculoCtrl
 			}
 			else
 				echo 'Los campos son obligatorios para modificar';
-
 	 }
+	 require_once('include/funtios.php');
+		echo  getFile('header',$dataHeader) . getFile($this->nameFile,$this->data). getFile('footer',$dataFooter);
 	}
 	
 

@@ -1,0 +1,55 @@
+<form method="post" action="?ctrl=inspeccion&Act=Edit&idV={id}">
+
+<section>				
+<div id="container" >
+<div id="wrapper">
+<div class="table-responsive">
+<div class="datagrid">
+	<table class='table table-hover'>
+		<thead>
+		<tr><th colspan="5">{error}</th></tr>
+		<tr>
+		<th>Inspeccion</th>
+		<th>Fecha</th>
+		<th>Usuario </th>
+		<th>Vehiculo</th>
+		<th>Estatus</th>
+		<!--
+		<th><button id='modificar' name='modificar' >Modificar</button></th>
+		-->
+		</tr>
+		{VerInspeccion}
+		</thead>
+		<tbody>
+			<tr>
+				<th>Area</th>
+				<th>
+					<select id='area'  name='area'>
+						<option selected value='patio'>Seleccione un Area</option>";
+						{area}
+					</select>
+				</th>
+			</tr>
+			<tr>
+				<th>Pieza</th>
+				<th>Severidad</th>
+				<th>Servicio</th>
+				<th>Observaciones</th>
+			</tr>
+			{VerInspeccionDetalle}
+		
+		</tbody>
+
+		<tfoot>
+			<tr>
+				<th><button name='procesar' id='procesar' >Procesar</button></th>
+			</tr>
+		</tfoot>
+
+		</table>		
+</div>
+</div>
+</div>
+</div>  
+</section>
+</form>

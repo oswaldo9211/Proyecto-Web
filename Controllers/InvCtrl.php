@@ -49,23 +49,7 @@ class InspeccionCtrl
 		if($result!=  false)
 		{
 
-			while ( $Lista = $result->fetch_assoc()) {
-				$data['ListaInspeccion'].= '<tr>';
-				$data['ListaInspeccion'].= '<td>';
-				$data['ListaInspeccion'].= $Lista{'fecha'} ;
-				$data['ListaInspeccion'].= '</td>';
-				$data['ListaInspeccion'].= '<td>';
-				$data['ListaInspeccion'].= $Lista{'estatus'} ;
-				$data['ListaInspeccion'].= '</td>';
-				$data['ListaInspeccion'].= '<td>';
-				$data['ListaInspeccion'].= $Lista{'idvehiculo'};
-				$data['ListaInspeccion'].= '</td>';
-				$data['ListaInspeccion'] .="<td><a href='?ctrl=inspeccion&Act=Ver&idV=$Lista[idinspeccion]'><i class='icon-view'></i></a>";
-				$data['ListaInspeccion'] .="<a href='?ctrl=inspeccion&Act=Edit&idV=$Lista[idinspeccion]'><i class='icon-edit'></i></a>";
-				$data['ListaInspeccion'] .="<a href='?ctrl=inspeccion&Act=Delete&idV=$Lista[idinspeccion]'><i class='icon-remove'></i></a> </td>";
-				$data['ListaInspeccion'].= '</tr>';
-				
-			}
+		
 		}
 		else
 		{
@@ -75,7 +59,7 @@ class InspeccionCtrl
 			$data['ListaInspeccion'].= '</tr>';
 		}
 		
-		echo  $Inspeccion->getFile('header',$dataHeader) . $Inspeccion->getFile('Inspeccion/defaultInspeccion',$data). $Inspeccion->getFile('footer',$dataFooter);
+		echo  $Inspeccion->getFile('header',$dataHeader) . $Inspeccion->getFile('Inv/defaultInv',$data). $Inspeccion->getFile('footer',$dataFooter);
 	}
 
 	public function getPiezas(&$data)

@@ -16,15 +16,8 @@ class VehiculoMdl
 
 	public function __construct()
 	{
-		$this->Vehicle = array('VIN' => 4040,
-		                 'Marca'=>'Renault',
-		                 'Modelo'=>'Clio',
-		                 'Color'=>'Rojo',
-		                 'Car'=>'1898 - 1900 Una idea que nace en una cabañaLa aventura de la marca francesa comienza cuando la Sociedad Renault Frères da sus primeros pasos en 1898');
-		include_once('connection.php');
-		$conexion = getConnectionData();
-		//var_dump($conexion);
-		$this ->db_driver = new mysqli($conexion["SERVER"] , $conexion['USER'], $conexion["PASSWORD"], $conexion["DATABASE"]);
+		require('config.ini');
+		$this ->db_driver = new mysqli($servidor, $user, $password, $nombre);
 		if($this->db_driver->connect_errno){
 			die("No se pudo conectar porque {$this->db_driver->connect_error}");
 		}

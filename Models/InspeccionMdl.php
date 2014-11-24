@@ -13,14 +13,21 @@ class InspeccionMdl
 
 	public function __construct()
 	{
-		include_once('connection.php');
-		$conexion = getConnectionData();
-		//var_dump($conexion);
-		$this ->db_driver = new mysqli($conexion["SERVER"] , $conexion['USER'], $conexion["PASSWORD"], $conexion["DATABASE"]);
+		require('config.ini');
+		$this ->db_driver = new mysqli($servidor, $user, $password, $nombre);
 		if($this->db_driver->connect_errno){
 			die("No se pudo conectar porque {$this->db_driver->connect_error}");
 		}
 
+	}
+
+	public function getMaxid($id, $table){
+		$sql = "Select Max(".$id.") as id from ".$table."";
+		$rs = $this->db_driver->query($sql);
+		$rsql = $rs->fetch_assoc();
+		$lid = $rsql["id"];
+		$lid = !empty($lid) ? $lid : 1;
+		return $lid+1;
 	}
 
 	public function getRow($tabla, $campos, $condicion,&$ok){
@@ -35,18 +42,19 @@ class InspeccionMdl
 		}
 		return $result;
 	}
+	
 	public function Inset($tabla,$campos, $values)
 	{
 		$sql  = " INSERT INTO  ".$tabla." (".$campos.") VALUES(".$values." )";
-		//echo $sql;
-		$this->db_driver->query($sql);
+		echo $sql;
+		$result=$this->db_driver->query($sql);
 
 		if($this->db_driver->errno){
 			die("No se pudo hacer la consulta al insertar ".$this->db_driver->error);
 			return false;
 		}
 		else
-			return true;
+			return  true;
 
 	}
 
@@ -96,6 +104,48 @@ class InspeccionMdl
 	}
 	public function ShowAll($tabla){
 		return $this->Vehicle;
+	}
+	public function UpdateEstado($id,$estado,&$ok)
+	{
+		$sql =" UPDATE Inspeccion
+				SET estatus = '$estado'
+				WHERE idinspeccion = $id";
+				echo "here :", $sql;
+		$result= $this->db_driver->query($sql);
+	   	if($this->db_driver->errno){
+			//die("No se pudo hacer la consulta al insertar ".$this->db_driver->error);
+			return false;
+		}
+		else
+			return true;
+	}
+	public function UpdateVehiculo($id,$vehiculo,&$ok)
+	{
+		$sql =" UPDATE Inspeccion
+				SET    idvehiculo = '$vehiculo'
+				WHERE  idinspeccion = $id";
+				echo "here :", $sql;
+		$result= $this->db_driver->query($sql);
+	   	if($this->db_driver->errno){
+			//die("No se pudo hacer la consulta al insertar ".$this->db_driver->error);
+			return false;
+		}
+		else
+			return true;
+	}
+	public function UpdateUsrCancelar($id,$usr_id,&$ok)
+	{
+		$sql =" UPDATE Inspeccion
+				SET    usr_idcancelacion = '$usr_id'
+				WHERE  idinspeccion = $id";
+				echo "here :", $sql;
+		$result= $this->db_driver->query($sql);
+	   	if($this->db_driver->errno){
+			//die("No se pudo hacer la consulta al insertar ".$this->db_driver->error);
+			return false;
+		}
+		else
+			return true;
 	}
 	/*	public function createVehicle($vin,$brand,$type,$model){
 		$this->vin   = $vin;

@@ -1,7 +1,4 @@
 <form method="post" action="?ctrl=inspeccion">
-<div class="buuton">
-<button id='nuevo' name="Act"  value='Alta'>Nuevo</button>
-</div>
 
 <section>				
 <div id="container" >
@@ -11,16 +8,22 @@
 	<table class='table table-hover'>
 		<thead>
 		<tr>
+		<th>Inspeccion</th>
 		<th>Fecha</th>
-		<th>Estatus</th>
+		<th>Usuario </th>
 		<th>Vehiculo</th>
-
-
+		<th>Estatus</th>
 		</tr>
+		{VerInspeccion}
 		</thead>
 		<tbody>
-		
-			{ListaInspeccion}
+			<tr>
+				<th>Pieza</th>
+				<th>Severidad</th>
+				<th>Servicio</th>
+				<th>Observaciones</th>
+			</tr>
+			{VerInspeccionDetalle}
 		
 		</tbody>
 
@@ -31,4 +34,3 @@
 </div>  
 </section>
 </form>
-

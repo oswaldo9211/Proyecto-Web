@@ -40,6 +40,10 @@ switch($ctrl){
 		require('Controllers/inspeccionCtrl.php');
 		$ctrl = new InspeccionCtrl();
 	break;
+	case 'Inv':
+		require('Controllers/InvCtrl.php');
+		$ctrl = new InspeccionCtrl();
+	break;
 	case 'piece':
 		require('Controllers/PieceCtrl.php');
 		$ctrl = new PieceCtrl();
