@@ -18,7 +18,7 @@ class UserMdl {
 		$user = $this->db_driver->real_escape_string($user);
 		$pass = $this->db_driver->real_escape_string($pass);
 
-		$query = "SELECT * FROM Usuario WHERE usuario='$user' and password='$pass'";
+		$query = "SELECT * FROM User WHERE user_name='$user' and password='$pass'";
 
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
@@ -41,17 +41,15 @@ class UserMdl {
 	{
 		$email = $this->db_driver->real_escape_string($email);
 
-		$query = "SELECT * FROM Usuario WHERE email='$email'";
+		$query = "SELECT * FROM User WHERE user_email='$email'";
 
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
-			$this->db_driver->close();
-			die("No se pudeo hacer la consulta del login de email");
+			//die("No se pudeo hacer la consulta del login de email");
 			return false;
 		}
 		else{
 			if($result->num_rows<=0){
-				$this->db_driver->close();
 				return false;
 			}
 			else{
@@ -61,15 +59,36 @@ class UserMdl {
 		}
 	}
 
-	public function actionUser($idUsuario, $token, $accion)
+	public function searchUser($user_name)
 	{
-		$idUsuario = $this->db_driver->real_escape_string($idUsuario);
-		$token = $this->db_driver->real_escape_string($token);
-		$accion = $this->db_driver->real_escape_string($accion);
+		$user_name = $this->db_driver->real_escape_string($user_name);
 
-		$query   =	"INSERT INTO AccionUsuario
-								(idUsuario,token, accion)
-								VALUES('$idUsuario','$token', '$accion')";
+		$query = "SELECT * FROM User WHERE user_name='$user_name'";
+
+		$result = $this ->db_driver-> query($query);
+		if($this->db_driver->errno){
+			return false;
+		}
+		else{
+			if($result->num_rows<=0){
+				return false;
+			}
+			else{
+				$row = $result->fetch_assoc();
+				return $row;
+			}
+		}
+	}
+
+	public function actionUser($id_user, $token, $action)
+	{
+		$id_user = $this->db_driver->real_escape_string($id_user);
+		$token = $this->db_driver->real_escape_string($token);
+		$action = $this->db_driver->real_escape_string($action);
+
+		$query   =	"INSERT INTO ActionUser
+								(id_user,token, action)
+								VALUES('$id_user','$token', '$action')";
 
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno)
@@ -81,9 +100,9 @@ class UserMdl {
 
 	public function changePass($token)
 	{
-		$user = $this->db_driver->real_escape_string($token);
+		$token = $this->db_driver->real_escape_string($token);
 
-		$query = "SELECT * FROM AccionUsuario WHERE token='$token'";
+		$query = "SELECT * FROM ActionUser WHERE token='$token'";
 		$result = $this ->db_driver-> query($query);
 
 		if($this->db_driver->errno){
@@ -97,19 +116,19 @@ class UserMdl {
 			}
 			else{
 				$row = $result->fetch_assoc();
-				$query = "DELETE FROM AccionUsuario WHERE token='$token'";
+				$query = "DELETE FROM ActionUser WHERE token='$token'";
 				$result = $this ->db_driver-> query($query);
-				$row = $this->getUsuario($row['idUsuario']);
+				$row = $this->getUsuario($row['id_user']);
 				$this->db_driver->close();
 				return $row;
 			}
 		}
 	}
 
-	public function getUsuario($idUsuario)
+	public function getUsuario($id_user)
 	{
-		$idUsuario = $this->db_driver->real_escape_string($idUsuario);
-		$query = "SELECT * FROM Usuario WHERE idUsuario='$idUsuario'";
+		$id_user = $this->db_driver->real_escape_string($id_user);
+		$query = "SELECT * FROM User WHERE id_user='$id_user'";
 
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
@@ -128,10 +147,11 @@ class UserMdl {
 		}
 	}
 
-	public function changePassword($usuario, $password)
+	public function changePassword($user, $password)
 	{
+		$user = $this->db_driver->real_escape_string($user);
 		$password = $this->db_driver->real_escape_string($password);
-		$query = "UPDATE Usuario SET  password='$password' WHERE usuario='$usuario'";
+		$query = "UPDATE User SET  password='$password' WHERE user_name='$user'";
 		$result = $this ->db_driver-> query($query);
 
 		if($this->db_driver->errno){
@@ -146,7 +166,7 @@ class UserMdl {
 	}
 
 	public function get_all(){
-		$query = "SELECT * FROM Usuario";
+		$query = "SELECT * FROM User WHERE status='high'";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
 			die("No se pudeo hacer la consulta de mostrar todos");
@@ -165,7 +185,7 @@ class UserMdl {
 
 	public function get($id_user){
 
-		$query = "SELECT * FROM Usuario  WHERE idUsuario='$id_user'";
+		$query = "SELECT * FROM User  WHERE id_user='$id_user'";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
 			die("No se pudeo hacer la consulta de mostrar");
@@ -176,18 +196,28 @@ class UserMdl {
 	}
 
 
-	public function create($user){
+	public function create($user, $option, $join){
 		$name = $this->db_driver->real_escape_string($user->name);
 		$password = $this->db_driver->real_escape_string($user->password);
 		$email = $this->db_driver->real_escape_string($user->email);
 		$rol = $this->db_driver->real_escape_string($user->rol);
+		$status = $this->db_driver->real_escape_string('high');
+		$join = $this->db_driver->real_escape_string($join);
 
-		$query   =	"INSERT INTO Usuario
-					(usuario, password, email, rol)
-					VALUES('$name','$password', '$email', '$rol')";
+		if($join == ''){
+			$query   =	"INSERT INTO User
+						(user_name, password, user_email, rol, status)
+						VALUES('$name','$password', '$email', '$rol', '$status')";
+		}
+		else{
+			$query   =	"INSERT INTO User
+						(user_name, password, user_email, rol, status, $option)
+						VALUES('$name','$password', '$email', '$rol', '$status', '$join')";
+		}
+
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
-			die("No se pudeo hacer la consulta de insertar");
+			die("No se pudeo hacer la consulta de insertar {$this->db_driver->error}");
 			return false;
 		}
 		if($result)
@@ -196,20 +226,28 @@ class UserMdl {
 			return false;
 	}
 
-	public function edit($user, $id_user){
+	public function edit($user, $id_user, $option, $join){
 
 		$name = $this->db_driver->real_escape_string($user->name);
 		$password = $this->db_driver->real_escape_string($user->password);
 		$email = $this->db_driver->real_escape_string($user->email);
 		$rol = $this->db_driver->real_escape_string($user->rol);
-
-
-		$query   =	"UPDATE Usuario
-					set usuario = '$name', password = '$password', email = '$email', rol = '$rol'
-					WHERE idUsuario='$id_user'";
+		$join = $this->db_driver->real_escape_string($join);
+		if($join == ''){
+			$query   =	"UPDATE User
+						set user_name = '$name', password = '$password', user_email = '$email', rol = '$rol'
+						WHERE id_user='$id_user'";
+		}
+		else{
+			echo 'entro aca';
+			$query   =	"UPDATE User
+						set user_name = '$name', password = '$password', user_email = '$email', rol = '$rol', $option = '$join'
+						WHERE id_user='$id_user'";
+		}
 		$result = $this ->db_driver-> query($query);
+
 		if($this->db_driver->errno){
-			die("No se pudeo hacer la consulta de editar");
+			//die("No se pudeo hacer la consulta de editar {$this->db_driver->error}");
 			return false;
 		}
 		if($result)
@@ -219,7 +257,7 @@ class UserMdl {
 	}
 
 	public function delete($id_user){
-		$query = "DELETE  FROM Usuario  WHERE idUsuario='$id_user'";
+		$query   =	"UPDATE User set status = 'down' WHERE id_user='$id_user'";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
 			die("No se pudeo hacer la consulta de eliminar");

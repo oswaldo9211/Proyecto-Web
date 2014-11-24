@@ -3,15 +3,20 @@
 
             <header class="header">
               <div class="container">
+              	<div class='breadcrumb'>
+					  <a href="index.php" class="">Tablero</a> <span class="divider">/</span>
+					  <a href="index.php?ctrl=user&act=show_all" class="">Usuarios</a> <span class="divider">/</span>
+				</div>
                 <h1>Nuevo Usuario</span></h1>
-                <span id="message"></span>
+
+                <div id="message"></div>
               </div>
             </header>
             <section>				
                 <div id="container" >
                     <div id="wrapper">
                     	<!--Conenerdor-->
-					    <form method="post" action="index.php?ctrl=user&act=create">
+					    <form method="post" id="form"ction="index.php?ctrl=user&act=create">
 					    	<hr>
 							<div class="input">
 								<label for="name">Nombre*</label>
@@ -32,15 +37,21 @@
 							<div class="input">
 								<label for="rol">Rol*</label>
 								<select name="rol" id="rol" required>
-								    <option value="">Selecciona un opcion</option>
+								    <option value="" selected>Selecciona una opcion</option>
 								    <option value="admin">Administrador</option>
 									<option value="client">Cliente</option>
-									<option value="employee" >Empleado</option>
+									<option value="employee">Empleado</option>
+								</select> 
+							</div>
+							<div class="input">
+								<label for="join">Ligar</label>
+								<select name="join" id="join">
+								    <option value="" selected>Selecciona una opcion</option>
 								</select> 
 							</div>
 							<hr>
 							<div class="input">
-								<button id="create"class="btn btn-primary" type="submit">Crear</button>		
+								<button id="submit"class="btn btn-primary" type="submit">Crear</button>		
 								<a href="index.php?ctrl=user&act=show_all" class="btn btn-primary">Cancelar</a>
 							</div>
 							<br/>
@@ -48,3 +59,6 @@
 					</div>
 				</div>
             </section>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="assets/js/user.js"></script>

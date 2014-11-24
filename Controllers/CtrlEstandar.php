@@ -39,7 +39,7 @@
 			if ($user == null){
 				return false;
 			}
-			$_SESSION['user'] = $user['idUsuario'];
+			$_SESSION['user'] = $user['id_user'];
 			$_SESSION['type'] = $user['rol'];
 			$_SESSION['username'] = $username;
 			return true;
@@ -54,9 +54,9 @@
 		}
 
 		function loguear($usuario){
-			$_SESSION['user'] = $usuario['idUsuario'];
+			$_SESSION['user'] = $usuario['id_user'];
 			$_SESSION['type'] = $usuario['rol'];
-			$_SESSION['username'] = $usuario['usuario'];
+			$_SESSION['username'] = $usuario['user_name'];
 		}
 	}
 ?>

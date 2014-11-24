@@ -1,14 +1,18 @@
             <header class="header">
             	<div class="container" >
+            		<div class='breadcrumb'>
+					  <a href="index.php" class="">Tablero</a> <span class="divider">/</span>
+					  <a href="index.php?ctrl=user&act=show_all" class="">Usuarios</a> <span class="divider">/</span>
+					</div>
 	                <h1>Editar Usuario</h1>
-	                <span id="menssage"></span>
+	                <div id="message"></div>
             	</div>
             </header>
             <section>				
                 <div class="container" >
                     <div id="wrapper">
                     	<!--Conenerdor-->
-					    <form method="post" action="index.php?ctrl=user&act=edit&id={id}">
+					    <form method="post" id="edit" action="index.php?ctrl=user&act=edit&id={id}">
 					    	<hr>
 							<div class="input">
 									<label for="name">Nombre*</label>
@@ -20,7 +24,7 @@
 								</div>
 								<div class="input">
 									<label for="password_confirm">Confirmar Contraseña*</label>
-									<input type="password" id="password_confirm" title="8 caracteres minimos y sin espacios" required/>
+									<input type="password" id="password_confirm" name="password_confirm" title="8 caracteres minimos y sin espacios" required/>
 								</div>
 								<div class="input">
 									<label for="email">Email*</label>
@@ -29,16 +33,25 @@
 								<div class="input">
 									<label for="rol">Rol*</label>
 									<select name="rol" id="rol" required>
-									    <option value="{rol}">{rolName}</option>
+									     <option value="" selected>Selecciona una opcion</option>
 									    <option value="admin">Administrador</option>
 										<option value="client">Cliente</option>
 										<option value="employee" >Empleado</option>
 									</select>
 								</div>
+								<div class="input">
+									<label for="join">Ligar</label>
+									<select name="join" id="join">
+									    <option value = "" selected>Selecciona una opcion</option>
+									</select> 
+								</div>
 						<div class="input">
-								<button id="crear"class="btn btn-primary" type="submit">Actualizar</button>		
+								<button id="submit"class="btn btn-primary" type="submit">Actualizar</button>		
 								<a href="index.php?ctrl=user&act=show_all" class="btn btn-primary">Cancelar</a>
 						</div>
 						</br>
 					</form>
             </section>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="assets/js/user.js"></script>

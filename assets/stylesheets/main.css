@@ -89,7 +89,7 @@ div.input > label{
 			margin: 10px 0;
 
 		}
-		div.input > #crear{
+		div.input > #crear, div.input > #submit{
 			margin-left: 35%;
 		}
 
@@ -111,3 +111,29 @@ div.input > label{
 			border-style: inset;
 			border-width: 1px;
 		}
+
+
+/**surfbar*/
+.breadcrumb{
+	max-width: auto;
+	max-height: 35px;
+	padding:8px 15px;
+	margin:0 0 20px;
+	list-style:none;
+	background-color:#F7F7F7;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;border-radius:4px;
+}
+.breadcrumb>a{
+	display:inline-block;
+	*display:inline;
+	*zoom:1;
+	text-shadow:0 1px 0 #C7CCF0;
+}
+.divider{
+	padding:0 5px;
+	color: #9E8C8C;
+}
+.breadcrumb>.active{
+	color:#999999;
+}

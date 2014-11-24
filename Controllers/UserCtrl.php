@@ -2,7 +2,7 @@
 
 /**
 	*Oswaldo Marinez Fonseca
-Controlador Generico cambiar todos por instrucciones de alta y baja
+Controlador Usuarios cambiar todos por instrucciones de usuarios
 */
 
 require('Controllers/CtrlEstandar.php');
@@ -39,31 +39,31 @@ class UserCtrl extends CtrlEstandar{
 				if($this->isAdmin())
 					$this->create();
 				else
-					echo "No tienes permisos";
+					require('Views/error.html');
 				break;
 			case 'delete':
 				if($this->isAdmin())
 					$this->delete();
 				else
-					echo "No tienes permisos";
+					require('Views/error.html');
 				break;
 			case 'details':
 				if($this->isAdmin())
 					$this->details();
 				else
-					echo "No tienes permisos";
+					require('Views/error.html');
 				break;
 			case 'edit':
 				if($this->isAdmin())
 					$this->edit();
 				else
-					echo "No tienes permisos";
+					require('Views/error.html');
 				break;
 			case 'show_all':
 				if($this->isAdmin())
 					$this->show_all();
 				else
-					echo "No tienes permisos";
+					require('Views/error.html');
 				break;
 			case 'recoverPass':
 				if($this->isLogged())
@@ -84,11 +84,25 @@ class UserCtrl extends CtrlEstandar{
 				else
 					header('Location:  index.php');
 				break;
+			case 'validate':
+				if($this->isAdmin())
+					$this->validate();
+				else
+					header('Location:  index.php');
+				break;
 		    default:
 		    	header('Location:  index.php');
 		}
 	}
 
+	private function validate(){
+		if($this->model->searchUser($_POST['name']))
+			echo json_encode("El usuario ya existe");
+		else if ($this->model->searchEmail($_POST['email']))
+			echo json_encode("El email ya existe");
+		else
+			echo json_encode(true);
+	}
 	private function index(){
 		//Si es admin mostrar otra vista
 		$section = file_get_contents('Views/index.html');
@@ -105,8 +119,8 @@ class UserCtrl extends CtrlEstandar{
 				header('Location:  index.php');
 			else{
 				require_once('Views/login.html');
-				require_once('Views/Message.php');
-				Messsage("menssage","error","La contrase\u00f1a o el nombre del usuario no son correctos");
+				require_once('include/Message.php');
+				Message("danger", "La contraseña o el nombre del usuario no son correctos");
 			}
 		}
 	}
@@ -121,8 +135,7 @@ class UserCtrl extends CtrlEstandar{
 			$result= $this->model->changePassword($this->getUserName(), md5($password));
 			if($result){
 				//Si es admin mostrar otra vista
-				$section = file_get_contents('Views/index.html');
-				$this->template($section);
+				$this->index();
 			}else{
 				require_once('Views/error.html');//error
 			}
@@ -156,7 +169,6 @@ class UserCtrl extends CtrlEstandar{
 					require_once('Views/login.html');
 					require_once('mailer/Mail.php');
 					require('config.ini');
-					require_once('Views/Message.php');
 					require_once('Models/User.php');
 
 					$mail = new Mail();
@@ -164,19 +176,21 @@ class UserCtrl extends CtrlEstandar{
 					//The token is created for recovering the password
 					$token = sha1(rand(0,999).rand(999,9999).rand(1,300));
 
-					$this->model->actionUser((int)$result['idUsuario'], $token, "recoverPass");
+					$this->model->actionUser((int)$result['id_user'], $token, "recoverPass");
 
 					$enlace = $SERVER . "index.php?ctrl=usuario&act=recoverPass&token=".$token;
 
 					$contentMail = file_get_contents('Views/Mailer/password_reset_instructions.html');
 
-					$dicc = array('{nombre}' => $result['usuario'] , 
-								  '{enlace}' => $enlace 
+					$dicc = array('{nombre}' => $result['user_name'] , 
+								  '{enlace}' => $enlace,
+								  '{server}' => $SERVER. "index.php"
 						);
 					$contentMail = strtr($contentMail, $dicc);
 
-					if($mail->correo($result['email'], "Olvido su Password?", $contentMail)){
-						Messsage("menssage", "exito", "Las instrucciones para reestablecer su contraseña le han sido enviadas Por favor cheque su correo electrónico");
+					if($mail->correo($result['user_email'], "Olvido su Password?", $contentMail)){
+						require_once('include/Message.php');
+						Message("success", "Las instrucciones para reestablecer su contraseña le han sido enviadas. Por favor cheque su correo electrónico");
 					}
 				}
 				else{
@@ -197,16 +211,14 @@ class UserCtrl extends CtrlEstandar{
 		if($users)
 			foreach ($users as $user) {
 				$info .= "<tr>
-			         		<td> $user[usuario]</td>
-			         		<td> $user[email] </td>
+			         		<td> $user[user_name]</td>
+			         		<td> $user[user_email] </td>
 			         		<td> $user[rol] </td>
 			         		<td>
-			         			<a href='index.php?ctrl=user&act=details&id=$user[idUsuario]'><i class='icon-view'></i></a>
-			         			<a href='index.php?ctrl=user&act=edit&id=$user[idUsuario]'><i class='icon-edit'></i></a>";
-			    if($this->isAdmin()){
-					$info .=   "<a href='index.php?ctrl=user&act=delete&id=$user[idUsuario]'><i class='icon-remove'></i></a>";
-				}
-					$info .="</td>
+			         			<a href='index.php?ctrl=user&act=details&id=$user[id_user]'><i class='icon-view'></i></a>
+			         			<a href='index.php?ctrl=user&act=edit&id=$user[id_user]'><i class='icon-edit'></i></a>
+								<a href='index.php?ctrl=user&act=delete&id=$user[id_user]'><i class='icon-remove'></i></a>
+							</td>
 		      			</tr>";
 		    }
 
@@ -228,18 +240,17 @@ class UserCtrl extends CtrlEstandar{
 			$password_confirm = md5(validatePass($_POST['password_confirm']));
 			$email = validateEmail($_POST['email']);
 			$rol = validateName($_POST['rol']);
+			$join = isset($_POST['join']) ? $_POST['join'] : NULL;
 
+			$option = $rol == 'admin' ? 'id_employee' : ($rol == 'employee' ? 'id_employee' : ($rol == 'client' ? 'id_client' : NULL));
 
 			$user = new User($name, $password, $email, $rol);
-			$result =$this->model->create($user);
-
+			$result =$this->model->create($user, $option, $join);
 			if($result){
-				//require('Views/Created.html');
-				$this->show_all();
+				$this->show_message("success", "El usuario creo exitosamente");
 			}
 			else{
-				echo 'no se inserto';
-				//require('Views/Error.html');
+				$this->show_message("danger", "No se creo, no puede haber duplicados en el nombre o el correo");
 			}
 		}
 	}
@@ -252,10 +263,8 @@ class UserCtrl extends CtrlEstandar{
 			$id_user = $_GET['id'];
 			$user =$this->model->get($id_user);
 			if($user){
-
 				$this->model->delete($id_user);
-				$this->show_all();
-
+				$this->show_message("success", "El usuario se elimino exitosamente");
 			}
 			else{
 				echo 'no existe el usuario';
@@ -274,9 +283,9 @@ class UserCtrl extends CtrlEstandar{
 
 				$section = file_get_contents('Views/User/details.html');
 
-			    $dicc = array('{nombre}' => $user['usuario']
+			    $dicc = array('{nombre}' => $user['user_name']
 			    			 ,'{password}' => '****'
-			    			 ,'{email}' => $user['email']
+			    			 ,'{email}' => $user['user_email']
 			    			 ,'{rol}' => $user['rol']
 			    	);
 			    $section = strtr($section, $dicc);
@@ -300,20 +309,18 @@ class UserCtrl extends CtrlEstandar{
 
 				$section = file_get_contents('Views/User/edit.html');
 
-				$rolName = $user['rol'] == 'admin' ? 'Administrador' : ($user['rol'] == 'employee' ? 'Empleado' : 'Cliente');
+				//$rolName = $user['rol'] == 'admin' ? 'Administrador' : ($user['rol'] == 'employee' ? 'Empleado' : 'Cliente');
 
-			    $dicc = array('{id}' => $user['idUsuario']
-			    			 ,'{nombre}' => $user['usuario']
+			    $dicc = array('{id}' => $user['id_user']
+			    			 ,'{nombre}' => $user['user_name']
 			    			 ,'{password}' => $user['password']
-			    			 ,'{email}' => $user['email']
-			    			 ,'{rol}' => $user['rol']
-			    			 ,'{rolName}' => $rolName
+			    			 ,'{email}' => $user['user_email']
 			    	);
 			    $section = strtr($section, $dicc);
 				$this->template($section);
 			}
 			else{
-				echo 'no existe ese empleado para editarlo';
+				echo 'no existe ese usuario para editarlo';
 			}
 		}
 		else{
@@ -324,18 +331,18 @@ class UserCtrl extends CtrlEstandar{
 			$password_confirm = md5(validatePass($_POST['password_confirm']));
 			$email = validateEmail($_POST['email']);
 			$rol = validateName($_POST['rol']);
+			$join = isset($_POST['join']) ? $_POST['join'] : NULL;
+
+			$option = $rol == 'admin' ? 'id_employee' : ($rol == 'employee' ? 'id_employee' : ($rol == 'client' ? 'id_client' : NULL));
 
 			$user = new User($name, $password, $email, $rol);
 
-			$result =$this->model->edit($user, $id_user);
-
+			$result =$this->model->edit($user, $id_user, $option, $join);
 			if($result){
-				//require('Views/Created.html');
-				$this->show_all();
+				$this->show_message("success", "El usuario se edito correctamente");
 			}
 			else{
-				echo 'no se edito';
-				//require('Views/Error.html');
+				$this->show_message("danger", "No se edito no puede haber duplicados en el nombre o el correo");
 			}
 		}
 	}
@@ -349,9 +356,9 @@ class UserCtrl extends CtrlEstandar{
 			$section = file_get_contents('Views/User/profile.html');
 
 
-		    $dicc = array('{nombre}' => $user['usuario']
+		    $dicc = array('{nombre}' => $user['user_name']
 		    			 ,'{password}' => '*****'
-		    			 ,'{email}' => $user['email']
+		    			 ,'{email}' => $user['user_email']
 		    			 ,'{rol}' => $user['rol']
 		    	);
 		    $section = strtr($section, $dicc);
@@ -369,6 +376,12 @@ class UserCtrl extends CtrlEstandar{
 	    $header = strtr($header, $dicc);
 	    
 		echo $header . $section . $footer;
+	}
+
+	private function show_message($tipo, $message){
+		require_once('include/Message.php');
+		$this->show_all();
+		Message($tipo, $message);
 	}
 	
 }
