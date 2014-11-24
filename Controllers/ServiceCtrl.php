@@ -65,7 +65,7 @@ class ServiceCtrl extends CtrlEstandar{
 			foreach ($services as $service) {
 				$info .= "<tr>
 			         		<td> $service[nombre] </td>
-			         		<td> $service[ubicacion] </td>
+			         		<td> $service[name] </td>
 			         		<td>
 			         			<a href='index.php?ctrl=service&act=details&id=$service[idservicio]'><i class='icon-view'></i></a>
 			         			<a href='index.php?ctrl=service&act=edit&id=$service[idservicio]'><i class='icon-edit'></i></a>
@@ -136,8 +136,8 @@ class ServiceCtrl extends CtrlEstandar{
 
 				$section = file_get_contents('Views/Service/details.html');
 
-			    $dicc = array('{nombre}' => $service['name']
-			    			 ,'{ubicacion}' => $service['ubicacion']
+			    $dicc = array('{nombre}' => $service['nombre']
+			    			 ,'{ubicacion}' => $service['name']
 			    	);
 			    $section = strtr($section, $dicc);
 				$this->template($section);

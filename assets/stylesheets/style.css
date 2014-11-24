@@ -29,6 +29,18 @@
     font-style: normal;
 
 }
+
+@font-face {
+    font-family: 'BebasNeueRegular';
+    src: url('fonts/BebasNeue-webfont.eot');
+    src: url('fonts/BebasNeue-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/BebasNeue-webfont.woff') format('woff'),
+         url('fonts/BebasNeue-webfont.ttf') format('truetype'),
+         url('fonts/BebasNeue-webfont.svg#BebasNeueRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
 a.hiddenanchor{
 	display: none;
 }
@@ -111,7 +123,7 @@ input {
 
 /* all the input except submit and checkbox */
 #wrapper input:not([type="checkbox"]){
-	width: 92%;
+	width: 85%;
 	margin-top: 4px;
 	padding: 10px 5px 10px 32px;	
 	border: 1px solid rgb(178, 178, 178);
@@ -139,6 +151,10 @@ input {
 	        box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.9) inset;
 } 
 
+
+#wrappeer input:not([type="checkbox"]){
+	width: 76%;
+}
 /** the magic icon trick ! **/
 [data-icon]:after {
     content: attr(data-icon);

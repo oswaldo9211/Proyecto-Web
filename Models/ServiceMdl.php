@@ -15,10 +15,11 @@ class ServiceMdl {
 
 
 	public function get_all(){
-		$query = "SELECT * FROM Servicio";
+		$query = "SELECT Location.name, Servicio.* FROM Location INNER JOIN Servicio on Location.id=Servicio.ubicacion";
+
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
-			die("No se pudeo hacer la consulta de mostrar todos");
+			die("No se pudeo hacer la consulta de mostrar todos {$this->db_driver->error}");
 			return false;
 		}
 		if($result->num_rows<=0){
@@ -34,7 +35,7 @@ class ServiceMdl {
 
 	public function get($id_service){
 
-		$query = "SELECT * FROM Servicio  WHERE idservicio='$id_service'";
+		$query = "SELECT Location.name, Servicio.* FROM Location INNER JOIN Servicio on Location.id=Servicio.ubicacion WHERE idservicio='$id_service'";
 		$result = $this ->db_driver-> query($query);
 		if($this->db_driver->errno){
 			die("No se pudeo hacer la consulta de mostrar");

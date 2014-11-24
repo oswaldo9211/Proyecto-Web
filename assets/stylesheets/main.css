@@ -75,6 +75,9 @@ background-color: #A9ABCA;
 		content: url("https://cdn2.iconfinder.com/data/icons/diagona/icon/16/101.png");
 }
 
+div.changePass > a{
+	margin-left: 35%;
+}
 
 div.input > label{
 			width: 35%;
@@ -92,7 +95,7 @@ div.input > label{
 
 		hr {
 			margin-left: 35%;
-			width: 45%;
+			max-width: 45%;
 			margin: 20px 0;
 			margin-left: 85%;
 			border: 0;

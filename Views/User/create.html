@@ -1,0 +1,50 @@
+        <style type="text/css">
+    	</style>
+
+            <header class="header">
+              <div class="container">
+                <h1>Nuevo Usuario</span></h1>
+                <span id="message"></span>
+              </div>
+            </header>
+            <section>				
+                <div id="container" >
+                    <div id="wrapper">
+                    	<!--Conenerdor-->
+					    <form method="post" action="index.php?ctrl=user&act=create">
+					    	<hr>
+							<div class="input">
+								<label for="name">Nombre*</label>
+								<input type="text" id="name" name="name" placeholder="usuario" pattern="[A-Za-záéóúíñ0-9\s]*"title="Letras y numeros" required/>
+							</div>
+							<div class="input">
+								<label for="password">Contraseña*</label>
+								<input type="password" id="password" name="password" placeholder="ejem. X8df!90EO" pattern="[^\s]{8,}"  title="8 caracteres minimos y sin espacios" required/>
+							</div>
+							<div class="input">
+								<label for="password_confirm">Confirmar Contraseña*</label>
+								<input type="password" id="password_confirm" name="password_confirm" placeholder="ejem. X8df!90EO" pattern="[^\s]{8,}" title="8 caracteres minimos y sin espacios" required/>
+							</div>
+							<div class="input">
+								<label for="email">Email*</label>
+								<input type="email" id="email" name="email" placeholder="mysupermail@gmail.com" required/>
+							</div>
+							<div class="input">
+								<label for="rol">Rol*</label>
+								<select name="rol" id="rol" required>
+								    <option value="">Selecciona un opcion</option>
+								    <option value="admin">Administrador</option>
+									<option value="client">Cliente</option>
+									<option value="employee" >Empleado</option>
+								</select> 
+							</div>
+							<hr>
+							<div class="input">
+								<button id="create"class="btn btn-primary" type="submit">Crear</button>		
+								<a href="index.php?ctrl=user&act=show_all" class="btn btn-primary">Cancelar</a>
+							</div>
+							<br/>
+						</form>
+					</div>
+				</div>
+            </section>

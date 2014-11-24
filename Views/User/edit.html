@@ -1,0 +1,44 @@
+            <header class="header">
+            	<div class="container" >
+	                <h1>Editar Usuario</h1>
+	                <span id="menssage"></span>
+            	</div>
+            </header>
+            <section>				
+                <div class="container" >
+                    <div id="wrapper">
+                    	<!--Conenerdor-->
+					    <form method="post" action="index.php?ctrl=user&act=edit&id={id}">
+					    	<hr>
+							<div class="input">
+									<label for="name">Nombre*</label>
+									<input type="text" id="name" name="name" value="{nombre}" pattern="[A-Za-záéóúíñ0-9\s]*"title="Letras y numeros" required/>
+								</div>
+								<div class="input">
+									<label for="password">Contraseña*</label>
+									<input type="password" id="password" name="password" pattern="[^\s]{8,}"  title="8 caracteres minimos y sin espacios" required/>
+								</div>
+								<div class="input">
+									<label for="password_confirm">Confirmar Contraseña*</label>
+									<input type="password" id="password_confirm" title="8 caracteres minimos y sin espacios" required/>
+								</div>
+								<div class="input">
+									<label for="email">Email*</label>
+									<input type="email" id="email" name="email" value="{email}" required/>
+								</div>
+								<div class="input">
+									<label for="rol">Rol*</label>
+									<select name="rol" id="rol" required>
+									    <option value="{rol}">{rolName}</option>
+									    <option value="admin">Administrador</option>
+										<option value="client">Cliente</option>
+										<option value="employee" >Empleado</option>
+									</select>
+								</div>
+						<div class="input">
+								<button id="crear"class="btn btn-primary" type="submit">Actualizar</button>		
+								<a href="index.php?ctrl=user&act=show_all" class="btn btn-primary">Cancelar</a>
+						</div>
+						</br>
+					</form>
+            </section>

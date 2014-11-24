@@ -122,7 +122,7 @@ function validateEmail($email)
 function validateText($texto)
 {
 	if($texto != ""){
-		if(preg_match("/^([a-zA-ZáéóíúñÑ\s.]+$)/i", $texto)){
+		if(preg_match("/^([a-zA-ZáéóíúñÑ\s\.]+$)/i", $texto)){
 			return $texto;
 		}
 		else{
@@ -195,6 +195,38 @@ function validateNumber($number)
 		else
 		{
 			echo "</br> RFC incorrecto Sintaxis invalida";
+			return null;
+		}
+	}
+	else{
+		return null;
+	}
+}
+
+function validatePass($password)
+{
+	if($password != ""){
+		if(preg_match("/^([^\s]{8,}$)/i", $password)){
+			return $password;
+		}
+		else{
+			echo "</br> Texto incorrecto Sintaxis invalida";
+			return null;
+		}
+	}
+	else{
+		return null;
+	}
+}
+
+function validateNameUser($name)
+{
+	if($name != ""){
+		if(preg_match("/^([a-zA-ZáéóíúñÑ\s0-9]+$)/i", $name)){
+			return $name;
+		}
+		else{
+			echo "</br> Texto incorrecto Sintaxis invalida";
 			return null;
 		}
 	}

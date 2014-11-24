@@ -9,13 +9,19 @@
 		}
 
 		function isAdmin(){
-			if( isset($_SESSION['type']) && $_SESSION['type'] == '100' )
+			if( isset($_SESSION['type']) && $_SESSION['type'] == 'admin' )
 				return true;
 			return false;
 		}
 
 		function isUser(){
-			if( isset($_SESSION['type']) && ($_SESSION['type'] == '1' || $_SESSION['type'] == '100'))
+			if( isset($_SESSION['type']) && ($_SESSION['type'] == 'admin' || $_SESSION['type'] == 'employee'))
+				return true;
+			return false;
+		}
+
+		function isClient(){
+			if( isset($_SESSION['type']) && ($_SESSION['type'] == 'admin' || $_SESSION['type'] == 'client'))
 				return true;
 			return false;
 		}
@@ -27,20 +33,24 @@
 			setcookie(session_name(), '', time()-3600);
 		}
 
-		function login($usuario, $pass){
+		function login($username, $pass){
 			$model =new UserMdl();
-			$result = $model->login($usuario, md5($pass));
-			if ($result == null){
+			$user = $model->login($username, md5($pass));
+			if ($user == null){
 				return false;
 			}
-			$_SESSION['user'] = $result['idUsuario'];
-			$_SESSION['type'] = $result['rol'];
-			$_SESSION['username'] = $usuario;
+			$_SESSION['user'] = $user['idUsuario'];
+			$_SESSION['type'] = $user['rol'];
+			$_SESSION['username'] = $username;
 			return true;
 		}
 
 		function getUserName(){
 			return $_SESSION['username'];
+		}
+
+		function getIdUser(){
+			return $_SESSION['user'];
 		}
 
 		function loguear($usuario){

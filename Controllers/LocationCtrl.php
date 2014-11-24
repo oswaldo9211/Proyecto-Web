@@ -51,15 +51,26 @@ class LocationCtrl extends CtrlEstandar{
 				else
 					echo "No tienes permisos";
 				break;
+			case 'get_all':
+				if($this->isAdmin())
+					$this->get_all();
+				else
+					echo "No tienes permisos";
+				break;
 		    default:
 		    	header('Location:  index.php');
 		}
 	}
 
+	private function get_all(){
+		$locations =$this->model->get_all();
+		echo json_encode($locations);
+	}
+
 	private function show_all(){
 		//get all employees to display
 		$locations =$this->model->get_all();
-		$section = file_get_contents('Views/Location/show_all.html');;
+		$section = file_get_contents('Views/Location/show_all.html');
 		$info = "";
 		if($locations)
 			foreach ($locations as $location) {

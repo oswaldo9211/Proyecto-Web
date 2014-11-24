@@ -1,19 +1,16 @@
 <?php
 class User {
-	public $id_usuario;
-    public $usuario;
+    public $name;
     public $password;
     public $email;
     public $rol;
       
-    public function __construct($id_usuario, $usuario, $password, $email, $rol)    
+    public function __construct($name, $password, $email, $rol)    
     {    
-        $this->id_usuario = $id_usuario;
-        $this->usuario = $usuario;
+        $this->name = $name;
         $this->password = $password;  
         $this->email = $email;    
         $this->rol = $rol;
     }   
 } 
-
-?> 
+ 

@@ -145,6 +145,89 @@ class UserMdl {
 			return false;
 	}
 
+	public function get_all(){
+		$query = "SELECT * FROM Usuario";
+		$result = $this ->db_driver-> query($query);
+		if($this->db_driver->errno){
+			die("No se pudeo hacer la consulta de mostrar todos");
+			return false;
+		}
+		if($result->num_rows<=0){
+				return false;
+		}
+		else{
+			while ($row = $result->fetch_array()){
+				$rows[] = $row;
+			}
+			return $rows;
+		}
+	}
+
+	public function get($id_user){
+
+		$query = "SELECT * FROM Usuario  WHERE idUsuario='$id_user'";
+		$result = $this ->db_driver-> query($query);
+		if($this->db_driver->errno){
+			die("No se pudeo hacer la consulta de mostrar");
+			return false;
+		}
+		$row = $result->fetch_assoc();
+		return $row;
+	}
+
+
+	public function create($user){
+		$name = $this->db_driver->real_escape_string($user->name);
+		$password = $this->db_driver->real_escape_string($user->password);
+		$email = $this->db_driver->real_escape_string($user->email);
+		$rol = $this->db_driver->real_escape_string($user->rol);
+
+		$query   =	"INSERT INTO Usuario
+					(usuario, password, email, rol)
+					VALUES('$name','$password', '$email', '$rol')";
+		$result = $this ->db_driver-> query($query);
+		if($this->db_driver->errno){
+			die("No se pudeo hacer la consulta de insertar");
+			return false;
+		}
+		if($result)
+			return true;
+		else
+			return false;
+	}
+
+	public function edit($user, $id_user){
+
+		$name = $this->db_driver->real_escape_string($user->name);
+		$password = $this->db_driver->real_escape_string($user->password);
+		$email = $this->db_driver->real_escape_string($user->email);
+		$rol = $this->db_driver->real_escape_string($user->rol);
+
+
+		$query   =	"UPDATE Usuario
+					set usuario = '$name', password = '$password', email = '$email', rol = '$rol'
+					WHERE idUsuario='$id_user'";
+		$result = $this ->db_driver-> query($query);
+		if($this->db_driver->errno){
+			die("No se pudeo hacer la consulta de editar");
+			return false;
+		}
+		if($result)
+			return true;
+		else
+			return false;
+	}
+
+	public function delete($id_user){
+		$query = "DELETE  FROM Usuario  WHERE idUsuario='$id_user'";
+		$result = $this ->db_driver-> query($query);
+		if($this->db_driver->errno){
+			die("No se pudeo hacer la consulta de eliminar");
+			return false;
+		}
+		return true;
+	}
+
 }
 
 ?>

@@ -10,7 +10,8 @@ require('Controllers/CtrlEstandar.php');
 class UserCtrl extends CtrlEstandar{
 	private $model;
 	function __construct(){
-		require('Models/UserMdl.php');
+		require_once('Models/UserMdl.php');
+		require('Models/User.php');
 		$this->model =new UserMdl();
 		
 	}
@@ -27,32 +28,42 @@ class UserCtrl extends CtrlEstandar{
 				header('Location:  index.php');
 				break;
 			case 'index':
-			//validate permisos
-			if($this->isLogged())
-				$this->index();
-			else{
-				$this->loguearte();
-			}
+				//validate permisos
+				if($this->isLogged())
+					$this->index();
+				else{
+					$this->loguearte();
+				}
 			break;
 			case 'create':
-				//Validar permisos en cada uno de estas
-				//if($this->isAdmin())
-				//	$this->create();
-				//else
-				//	echo "No tienes permisos";
-				$this->delete();
+				if($this->isAdmin())
+					$this->create();
+				else
+					echo "No tienes permisos";
 				break;
 			case 'delete':
-				//Validate User and permissions
-				$this->delete();
+				if($this->isAdmin())
+					$this->delete();
+				else
+					echo "No tienes permisos";
 				break;
 			case 'details':
-				//Validate User and permissions
-				$this->details();
+				if($this->isAdmin())
+					$this->details();
+				else
+					echo "No tienes permisos";
 				break;
 			case 'edit':
-				//Validate User and permissions
-				$this->edit();
+				if($this->isAdmin())
+					$this->edit();
+				else
+					echo "No tienes permisos";
+				break;
+			case 'show_all':
+				if($this->isAdmin())
+					$this->show_all();
+				else
+					echo "No tienes permisos";
 				break;
 			case 'recoverPass':
 				if($this->isLogged())
@@ -64,6 +75,12 @@ class UserCtrl extends CtrlEstandar{
 			case 'changePass':
 				if($this->isLogged())
 					$this->changePass();
+				else
+					header('Location:  index.php');
+				break;
+			case 'profile':
+				if($this->isLogged())
+					$this->profile();
 				else
 					header('Location:  index.php');
 				break;
@@ -172,18 +189,177 @@ class UserCtrl extends CtrlEstandar{
 	}
 
 
+	private function show_all(){
+		//get all users to display
+		$users =$this->model->get_all();
+		$section = file_get_contents('Views/User/show_all.html');;
+		$info = "";
+		if($users)
+			foreach ($users as $user) {
+				$info .= "<tr>
+			         		<td> $user[usuario]</td>
+			         		<td> $user[email] </td>
+			         		<td> $user[rol] </td>
+			         		<td>
+			         			<a href='index.php?ctrl=user&act=details&id=$user[idUsuario]'><i class='icon-view'></i></a>
+			         			<a href='index.php?ctrl=user&act=edit&id=$user[idUsuario]'><i class='icon-edit'></i></a>";
+			    if($this->isAdmin()){
+					$info .=   "<a href='index.php?ctrl=user&act=delete&id=$user[idUsuario]'><i class='icon-remove'></i></a>";
+				}
+					$info .="</td>
+		      			</tr>";
+		    }
 
+	    $dicc = array('{info}' => $info);
+	    $section = strtr($section, $dicc);
+
+		$this->template($section);
+	}
+	
 	private function create(){
+		if(empty($_POST)){
+			$section = file_get_contents('Views/User/create.html');
+			$this->template($section);
+		}
+		else{
+			require_once("Controllers/Validaciones.php");
+			$name = validateNameUser($_POST['name']);
+			$password = md5(validatePass($_POST['password']));
+			$password_confirm = md5(validatePass($_POST['password_confirm']));
+			$email = validateEmail($_POST['email']);
+			$rol = validateName($_POST['rol']);
 
+
+			$user = new User($name, $password, $email, $rol);
+			$result =$this->model->create($user);
+
+			if($result){
+				//require('Views/Created.html');
+				$this->show_all();
+			}
+			else{
+				echo 'no se inserto';
+				//require('Views/Error.html');
+			}
+		}
 	}
+
 	private function delete(){
+		if(empty($_GET['id'])){
+			$this->show_all();
+		}
+		else{
+			$id_user = $_GET['id'];
+			$user =$this->model->get($id_user);
+			if($user){
 
+				$this->model->delete($id_user);
+				$this->show_all();
+
+			}
+			else{
+				echo 'no existe el usuario';
+			}
+		}
 	}
+
 	private function details(){
+		if(empty($_GET['id'])){
+			$this->show_all();
+		}
+		else{
+			$id_user= $_GET['id'];
+			$user =$this->model->get($id_user);
+			if($user){
+
+				$section = file_get_contents('Views/User/details.html');
+
+			    $dicc = array('{nombre}' => $user['usuario']
+			    			 ,'{password}' => '****'
+			    			 ,'{email}' => $user['email']
+			    			 ,'{rol}' => $user['rol']
+			    	);
+			    $section = strtr($section, $dicc);
+				$this->template($section);
+			}
+			else{
+				echo 'no existe ese usuario';
+			}
+		}
 
 	}
-	private function edit(){
 
+	private function edit(){
+		if(empty($_GET['id'])){
+			$this->show_all();
+		}
+		else if(empty($_POST)){
+			$id_user= $_GET['id'];
+			$user =$this->model->get($id_user);
+			if($user){
+
+				$section = file_get_contents('Views/User/edit.html');
+
+				$rolName = $user['rol'] == 'admin' ? 'Administrador' : ($user['rol'] == 'employee' ? 'Empleado' : 'Cliente');
+
+			    $dicc = array('{id}' => $user['idUsuario']
+			    			 ,'{nombre}' => $user['usuario']
+			    			 ,'{password}' => $user['password']
+			    			 ,'{email}' => $user['email']
+			    			 ,'{rol}' => $user['rol']
+			    			 ,'{rolName}' => $rolName
+			    	);
+			    $section = strtr($section, $dicc);
+				$this->template($section);
+			}
+			else{
+				echo 'no existe ese empleado para editarlo';
+			}
+		}
+		else{
+			$id_user= $_GET['id'];
+			require_once("Controllers/Validaciones.php");
+			$name = validateNameUser($_POST['name']);
+			$password = md5(validatePass($_POST['password']));
+			$password_confirm = md5(validatePass($_POST['password_confirm']));
+			$email = validateEmail($_POST['email']);
+			$rol = validateName($_POST['rol']);
+
+			$user = new User($name, $password, $email, $rol);
+
+			$result =$this->model->edit($user, $id_user);
+
+			if($result){
+				//require('Views/Created.html');
+				$this->show_all();
+			}
+			else{
+				echo 'no se edito';
+				//require('Views/Error.html');
+			}
+		}
+	}
+
+
+	private function profile(){
+		$id_user= $this->getIdUser();
+		$user =$this->model->get($id_user);
+		if($user){
+
+			$section = file_get_contents('Views/User/profile.html');
+
+
+		    $dicc = array('{nombre}' => $user['usuario']
+		    			 ,'{password}' => '*****'
+		    			 ,'{email}' => $user['email']
+		    			 ,'{rol}' => $user['rol']
+		    	);
+		    $section = strtr($section, $dicc);
+			$this->template($section);
+		}
+		else{
+			echo 'no hay Perfil';
+		}
 	}
 
 	private function template($section){

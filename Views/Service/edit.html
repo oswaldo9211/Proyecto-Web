@@ -16,7 +16,9 @@
 							</div>
 							<div class="input">
 								<label for="location">Ubicacion*</label>
-								<input type="text" id="location" name="location" value="{ubicacion}" pattern="[0-9]+"/>
+								<select name="location" id="locations" required>
+								    <option value=''>Selecciona un opcion</option>
+								</select> 
 							</div>
 						<div class="input">
 								<button id="crear"class="btn btn-primary" type="submit">Actualizar</button>		
@@ -25,3 +27,22 @@
 						</br>
 					</form>
             </section>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script type="text/javascript">
+	$.ajax({
+		url:'index.php?ctrl=location&act=get_all',
+		dataType: 'json',
+		success: function(json){
+			var select = document.getElementById("locations");
+			for(i in json){
+				var texto = document.createTextNode(json[i].name);
+				var option = document.createElement('option');
+				option.setAttribute('value',json[i].id);
+				option.appendChild(texto);
+				select.appendChild(option);
+			}
+			console.log(json);
+		}
+	});
+</script>
