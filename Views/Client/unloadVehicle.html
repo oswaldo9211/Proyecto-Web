@@ -1,0 +1,75 @@
+        <style type="text/css">
+        div.input > #file{
+            margin-left: 30%;
+            max-width: 30%;
+        }
+        </style>
+
+            <header class="header">
+              <div class="container">
+                <div class='breadcrumb'>
+                      <a href="index.php" class="">Tablero</a> <span class="divider">/</span>
+                      <a href="index.php?ctrl=client&act=show_all" class="">Clientes</a>
+                </div>
+                <h1>Carga Masiva de Vehiculos</span></h1>
+                <div id="message"></div>
+              </div>
+            </header>
+            <section>               
+                <div id="container" >
+                    <div id="wrapper">
+                        <!--Conenerdor-->
+                        <form method="post" id="form">
+                            <hr>
+                            <div class="input">
+                                <label for="file">Archivo:  </label>
+                                <input id="file" type="file" name="file" required/>
+                                <input type="hidden" name="MAX_FILE_SIZE" value="20000" />
+                            </div>
+                            <div class="input">
+                                <button id="crear"class="btn btn-primary" type="submit">Cargar</button>      
+                                <a href="index.php?ctrl=client" class="btn btn-primary">Cancelar</a>
+                            </div>
+                            <br/>
+                        </form>
+                    </div>
+                </div>
+            </section>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#form").submit(function(){
+            if(document.getElementById( "alert")){
+                var alert = document.getElementById( "alert");
+                alert.parentNode.removeChild(alert);
+            }
+            var datos = new FormData();
+            datos.append('file',$('#file')[0].files[0]);
+            $.ajax({
+                type:"post",
+                dataType:"json",
+                url:"index.php?ctrl=client&act=unload",
+                contentType:false,
+                data:datos,
+                processData:false,
+                    }).done(function(respuesta){
+                    var message = document.getElementById( "message");
+                    var div = document.createElement('div');
+                    div.setAttribute('class', 'alert alert-success alert-dismissable');
+                    div.setAttribute('id', 'alert');
+                    var button = document.createElement('button');
+                    button.setAttribute('type','button');
+                    button.setAttribute('class','close');
+                    button.setAttribute('data-dismiss','alert');
+                    var textoboton = document.createTextNode('x');
+                    button.appendChild(textoboton);
+                    var texto = document.createTextNode("Se Cargo Exitosamente");
+                    div.appendChild(button);
+                    div.appendChild(texto);
+                    message.appendChild(div);
+                //$('#abc_frame').attr('src', respuesta.mensaje);
+             });
+        return false;
+        });
+    });
+</script>
