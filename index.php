@@ -56,6 +56,14 @@ switch($ctrl){
 		require('Controllers/ServiceCtrl.php');
 		$ctrl = new ServiceCtrl();
 	break;
+	case 'brand':
+		require('Controllers/BrandCtrl.php');
+		$ctrl = new BrandCtrl();
+	break;
+	case 'model':
+		require('Controllers/ModelCtrl.php');
+		$ctrl = new ModelCtrl();
+	break;
 	default:
 		require('Controllers/UserCtrl.php');
 		$ctrl = new UserCtrl();

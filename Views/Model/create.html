@@ -1,0 +1,41 @@
+        <style type="text/css">
+    	</style>
+
+            <header class="header">
+              <div class="container">
+              	<div class='breadcrumb'>
+					  <a href="index.php" class="">Tablero</a> <span class="divider">/</span>
+					  <a href="index.php?ctrl=model&act=show_all" class="">Modelos</a> <span class="divider">/</span>
+				</div>
+                <h1>Nuevo Modelo</span></h1>
+                <div id="message"></div>
+              </div>
+            </header>
+            <section>				
+                <div id="container" >
+                    <div id="wrapper">
+                    	<!--Conenerdor-->
+					    <form method="post" id="form" action="index.php?ctrl=model&act=create">
+					    	<hr>
+							<div class="input">
+								<label for="name">Nombre*</label>
+								<input type="text" id="name" name="name" placeholder="Civic" pattern="[A-Za-záéóúíñ\s]*"required/>
+							</div>
+							<div class="input">
+								<label for="brand">Marca*</label>
+								<select name="brand" id="brand" required>
+								    <option value=''>Selecciona un opcion</option>
+								</select> 
+							</div>
+							<hr>
+							<div class="input">
+								<button id="crear"class="btn btn-primary" type="submit">Crear</button>		
+								<a href="index.php?ctrl=model" class="btn btn-primary">Cancelar</a>
+							</div>
+							<br/>
+						</form>
+					</div>
+				</div>
+            </section>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="assets/js/model.js"></script>
