@@ -63,9 +63,27 @@ class ClientCtrl extends CtrlEstandar{
 				else
 					header('Location:  index.php');
 				break;
+			case 'unloadVehicles':
+				if($this->isAdmin())
+					$this->unloadVehicles();
+				else
+					header('Location:  index.php');
+				break;
+			case 'unload':
+				if($this->isAdmin()){
+					require('include/unloadVehicles.php');
+				}
+				else
+					header('Location:  index.php');
+				break;
 		    default:
 		    	header('Location:  index.php');
 		}
+	}
+
+	private function unloadVehicles(){
+		$section = file_get_contents('Views/Client/unloadVehicle.html');;
+		$this->template($section);
 	}
 
 	private function validate(){
