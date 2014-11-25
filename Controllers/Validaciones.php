@@ -177,14 +177,7 @@ function validateAdressNumber($number)
 function validateRFC($RFC)
 {
 	if($RFC != ""){
-		if(preg_match("/^([A-Z]?[A-Z]{3}[0-9]{6}[A-Za-z0-9]{3}$)/i", $RFC)){
-			return $RFC;
-		}
-		else
-		{
-			echo "</br> RFC incorrecto Sintaxis invalida";
-			return null;
-		}
+		return $RFC;
 	}
 	else{
 		return null;

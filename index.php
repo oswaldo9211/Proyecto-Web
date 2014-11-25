@@ -68,7 +68,7 @@ switch($ctrl){
 		require('Controllers/ModelCtrl.php');
 		$ctrl = new ModelCtrl();
 	break;
-	case 'reportes':
+	case 'Reporte':
 		require('Controllers/ReporteCtrl.php');
 		$ctrl = new ReporteCtrl();
 	break;
