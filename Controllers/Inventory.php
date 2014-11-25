@@ -72,6 +72,7 @@ class InventoryCtrl  extends CtrlEstandar
 			 		require('Views/error.html');
 			 	break;
 			 default:
+			 if($this->isUser())
 			 	$this->Inventory->DefaultIns();
 			 	break;
 			 }

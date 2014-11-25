@@ -5,7 +5,9 @@
 * Marco 
 *Ctrl de inspecciones, generar nueva inspección y concluirla
 */
-class InspeccionCtrl
+require('Controllers/CtrlEstandar.php');
+
+class InspeccionCtrl extends CtrlEstandar
 {
 	private $fTemplate;
 	private $Inspe;
@@ -32,6 +34,7 @@ class InspeccionCtrl
 	{
 		$dataHeader = array();
 		$dataFooter = array();
+		$dataHeader{'user'} = $_SESSION['username'];
 		$data       = array('ListaInspeccion' => '');
 		$Inspeccion = new InspeccionCtrl();
 		$result= $this->model->getRow('Inspection', ' * ',  ' WHERE status="process" ',$this->ok);
@@ -48,7 +51,13 @@ class InspeccionCtrl
 				$data['ListaInspeccion'].= $Lista{'status'} ;
 				$data['ListaInspeccion'].= '</td>';
 				$data['ListaInspeccion'].= '<td>';
-				$data['ListaInspeccion'].= $Lista{'id_vehicle'};
+				$rs= $this->model->getRow('Vehicle', "*","WHERE id_vehicle = $Lista[id_vehicle]",$this->ok);
+				if($rs!= false && $rs->num_rows > 0){
+					$Ver = $rs->fetch_assoc();
+					//var_dump($Ver);
+					$data['ListaInspeccion'].= $Ver{'vin'};
+				}
+				else	$data['ListaInspeccion'].= $Lista{'id_vehicle'};
 				$data['ListaInspeccion'].= '</td>';
 				$data['ListaInspeccion'] .="<td><a href='?ctrl=inspeccion&Act=Ver&idV=$Lista[id_inspection]'><i class='icon-view'></i></a>";
 				$data['ListaInspeccion'] .="<a href='?ctrl=inspeccion&Act=Edit&idV=$Lista[id_inspection]'><i class='icon-edit'></i></a>";
@@ -108,7 +117,7 @@ class InspeccionCtrl
 	public function getVehiculos(&$data)
 	{
 		$data['vehiculos'] ='';
-		$resultCs = $this->model->getRow('Vehicle','*'," WHERE   1 ", $this->ok);
+		$resultCs = $this->model->getRow('Vehicle','*'," WHERE   status='high'  ", $this->ok);
 					if($resultCs!= false  && $resultCs->num_rows > 0)
 						foreach ($resultCs as $key => $Vehi) {
 								$data['vehiculos'] .= "<option  value='$Vehi[id_vehicle]'> $Vehi[vin] </option>";
@@ -124,6 +133,7 @@ class InspeccionCtrl
 
 		if(isset($_POST['Guardar'])   )
 		{
+
 			if( isset($_POST['servicio']) && $_POST['servicio'] != 0  && isset($_POST['pieza']) && $_POST['pieza'] != 0)
 			{
 				$cont= 1;
@@ -132,11 +142,21 @@ class InspeccionCtrl
 				$hoy = getdate();
 				$data['FechaEmision'] = $hoy['year'] . '-' .$hoy['mon'] . '-' . $hoy['mday'];
 				if(isset($_POST['vehiculo']) &&  $_POST['vehiculo'] != 0)
+				{
 					$vehiculo= $_POST['vehiculo'];
+					$rsV = $this->model->getRow('Inspection',"*", "WHERE id_vehicle=$_POST[vehiculo] AND status ='process' ",$this->ok );
+					if($rsV!= false && $rsV->num_rows > 0){
+						$band=0;
+						$data['error'] = 'EL vehiculo ya esta en cola de espera en Inspeccion';
+					}
+				}
 				else
-					$vehiculo= 10;
-
-				$IdInspeccion =$this->model->getMaxid( 'id_inspection' ,'Inspection');
+				{
+					$data['error'] = "Debe un vehiculo";
+					$band=0;
+				}
+				if($band==1){
+					$IdInspeccion =$this->model->getMaxid( 'id_inspection' ,'Inspection');
 				//var_dump($IdInspeccion);
 				$values = "$IdInspeccion,'$data[FechaEmision]','process',$vehiculo,1";
 				if($IdInspeccion!= false)
@@ -164,6 +184,8 @@ class InspeccionCtrl
 					else
 						$data['error'] .= "No se inserto la inspeccion por que SQL precento una inconsistencia  : SQL:". $this->ok['error']; 
 					}
+				}
+				
 			}
 			else
 				$data['error'] = "Debe de seleccionar una pieza y/o  un servicio";
@@ -179,6 +201,7 @@ class InspeccionCtrl
 
 	public function getInspeccionModificar(&$data,$id)
 	{
+
 			$data['VerInspeccion'] = '';
 			$data['VerInspeccionDetalle'] = '';
 			$data['id']=$id;
@@ -197,9 +220,8 @@ class InspeccionCtrl
 					$data['VerInspeccion'] .= "<input type='text' name='usr_id'  value='$value[id_user]'readonly=''/>";
 					$data['VerInspeccion'] .= '</td>';
 					$data['VerInspeccion'] .= '<td>';
-					$data['VerInspeccion'] .= "<select id='idvehiculo'  name='idvehiculo'>
-													<option selected value='$value[id_vehicle]'>$value[id_vehicle]</option>";
-					$resultV = $this->model->getRow('Vehicle', '*', "  ", $this->ok);
+					$data['VerInspeccion'] .= "<select id='idvehiculo'  name='idvehiculo'>";
+					$resultV = $this->model->getRow('Vehicle', '*', " WHERE id_vehicle = $value[id_vehicle] ", $this->ok);
 					if($resultV != false  && $resultV->num_rows > 0)
 						foreach ($resultV as $key => $vehiculo) {
 							$data['VerInspeccion'] .= "<option value='$vehiculo[id_vehicle]'>$vehiculo[vin] </option >";
@@ -336,6 +358,7 @@ class InspeccionCtrl
 		$dataHeader = array('' => '' );
 		$dataFooter = array('' => '' );
 		$data       = array('' => '' );
+		$dataHeader{'user'} = $_SESSION['username'];
 		if (isset($_GET['idV']) && $_GET['idV'] != 0) {
 			$Inspeccion = new InspeccionCtrl();
 			$Inspeccion->getInspeccion($data,$_GET['idV']);
@@ -346,6 +369,7 @@ class InspeccionCtrl
 	{
 		$dataHeader = array('' => '' );
 		$dataFooter = array('' => '' );
+		$dataHeader{'user'} = $_SESSION['username'];
 		$data       = array('area' => '', 'error'  => '');
 		$result = $this->model->getRow('Location' , '*', ' ', $this->ok);
 		if($result !=false  && $result->num_rows > 0)
@@ -439,22 +463,28 @@ class InspeccionCtrl
 
 		 switch($Act) {
 			 case 'Alta':
+			 if($this->isAdmin())
 			 $this->Inspe->Alta();
 			 	break;
 			 case 'Edit':
+			 if($this->isAdmin())
 			 	$this->Inspe->Modificacion();
 				 break;
 			 case 'Consulta':
+			 if($this->isAdmin())
 			 	$this->Inspe->Consulta();
 			 	break;
 			 case 'Delete':
+			 if($this->isAdmin())
 			 	$this->Inspe->Baja();
 			 	break;
 			 case 'Ver':
+			  if($this->isUser())
 			 	$this->Inspe->Ver();
 			 	break;
 				 break;
 			 default:
+			  if($this->isUser())
 			 	$this->Inspe->DefaultIns();
 			 	break;
 			 }

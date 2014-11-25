@@ -5,7 +5,9 @@
 *@Antonio De La Cruz
 *Vehicle controller class
 */
-class VehiculoCtrl
+require('Controllers/CtrlEstandar.php');
+
+class VehiculoCtrl  extends CtrlEstandar
 {
 	private $VIN;
 	private $marca;
@@ -32,6 +34,7 @@ class VehiculoCtrl
 
 
 	public function run(){
+		$this->dataHeader{'user'} = $_SESSION['username'];
 		$this->VE = new VehiculoCtrl();
 		$Act ='';
 		//var_dump($_SESSION);
@@ -40,32 +43,42 @@ class VehiculoCtrl
 		elseif (isset($_POST['Act'])){
 			$Act = $_POST['Act'];
 		}
-
-		$dataHeader = array('' => '' );
-		$dataFooter = array('' => '' );
-		$data       = array('' => '' );
 		 switch($Act) {
 			 case 'Alta':
-			 $this->VE->Alta();
+			  if($this->isAdmin())
+			 	$this->VE->Alta();
+			 else
+			 	require('Views/error.html');
 			 	break;
 			 case 'Edit':
-			 	$this->VE->Modificacion();
+			  	 if($this->isAdmin())
+			 		$this->VE->Modificacion();
+			 	else
+			 		require('Views/error.html');
 				 break;
 			 case 'Consulta':
 			 	$this->VE->Consulta();
 			 	break;
 			 case 'Delete':
+			 if($this->isAdmin())
 			 	$this->VE->Baja();
+			 else
+			 	require('Views/error.html');
 			 	break;
 			 case 'Ver':
-			 	$this->VE->Ver();
+				 if($this->isUser())
+				 	$this->VE->Ver();
+				 else
+				 	require('Views/error.html');
 			 	break;
 				 break;
 			 default:
-			 	$this->nameFile = '/Vehiculo/defaultVehicle';
-			 	$this->data['VehiculosLista'] ='';
-				$this->VE->init($this->data);
-			 	echo  getFile('header',$dataHeader) . getFile('/Vehiculo/defaultVehicle',$this->data) . getFile('footer',$dataFooter);
+			 	 if($this->isUser()){
+			 		$this->nameFile = '/Vehiculo/defaultVehicle';
+				 	$this->data['VehiculosLista'] ='';
+					$this->VE->init($this->data);
+				 	echo  getFile('header',$this->dataHeader) . getFile('/Vehiculo/defaultVehicle',$this->data) . getFile('footer',$this->dataFooter);
+			 	}
 			 	break;
 			 }
 	}
@@ -78,6 +91,7 @@ class VehiculoCtrl
 		if($result!= false  &&  $result->num_rows > 0){
 			
 			while ($vehiculos=$result->fetch_assoc()) {	
+				$data['estatus'] = $vehiculos['status'];
 				$data['VehiculosLista'] .='<tr >';
 				$resultC  = $this->model->getRow('Client', ' *', " WHERE id_client = $vehiculos[id_client]", $thi->ok);
 				if($resultC != false && $resultC->num_rows > 0)
@@ -281,6 +295,7 @@ class VehiculoCtrl
 				$result=$this->model->getRow(' Vehicle ',' * ', "WHERE  id_vehicle =$_GET[idV] ",$this->ok);
 				if($result != false  && $result->num_rows > 0)
 					$Ver = $result->fetch_assoc();
+					$this->data['estatus'] = $Ver['status'];
 					$this->data['id'] = $Ver{ "id_vehicle"};
 					$this->data['vin'] = $Ver{ "vin"};
 					$resulM = $this->model->getRow('Model', '*' , "WHERE id_model = $Ver[id_model] ",$this->ok);
@@ -419,20 +434,11 @@ class VehiculoCtrl
 	public  function Baja(){
 		if(isset($_GET['idV']))
 		{
-			if(ValidarVIN($_GET['idV'],$this->ok)){
-				$this->VIN = $_GET['idV'];
-			}
-			$result=$this->model->del_Rows('Vehicle', ' WHERE  id_vehicle = '.$this->VIN.'');
+			$result = $this->model->UpdateEstado($_GET['idV'],'down',$this->ok);
 			if ($result!= false) {
 				header('Location: index.php?ctrl=Vehiculo');
-				
 			}
 		}
-		else
-			if($this->VIN == NULL  )
-			{
-				echo 'Se Necesita el VIN para consultar';
-			}
 	}
 }
 
