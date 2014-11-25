@@ -104,8 +104,11 @@ class UserCtrl extends CtrlEstandar{
 			echo json_encode(true);
 	}
 	private function index(){
-		//Si es admin mostrar otra vista
-		$section = file_get_contents('Views/index.html');
+		//views for different user
+		if($this->isAdmin())
+			$section = file_get_contents('Views/index.html');
+		else if ($this->isUser())
+			$section = file_get_contents('Views/indexEmployee.html');
 		$this->template($section);
 		
 	}
@@ -370,7 +373,11 @@ class UserCtrl extends CtrlEstandar{
 	}
 
 	private function template($section){
-		$header = file_get_contents('Views/header.html');
+		//views for different user
+		if($this->isAdmin())
+			$header = file_get_contents('Views/header.html');
+		else if ($this->isUser())
+			$header = file_get_contents('Views/headerEmployee.html');
 		$footer = file_get_contents('Views/footer.html');
 		$dicc = array('{user}' => $this->getUserName());
 	    $header = strtr($header, $dicc);

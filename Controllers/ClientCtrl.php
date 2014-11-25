@@ -229,11 +229,16 @@ class ClientCtrl extends CtrlEstandar{
 	}
 
 	private function template($section){
-		$header = file_get_contents('Views/header.html');
+		//views for different user
+		if($this->isAdmin())
+			$header = file_get_contents('Views/header.html');
+		else if ($this->isUser())
+			$header = file_get_contents('Views/headerEmployee.html');
 		$footer = file_get_contents('Views/footer.html');
 		$dicc = array('{user}' => $this->getUserName());
 	    $header = strtr($header, $dicc);
-		echo $header. $section . $footer;
+	    
+		echo $header . $section . $footer;
 	}
 
 	private function show_message($tipo, $message){
