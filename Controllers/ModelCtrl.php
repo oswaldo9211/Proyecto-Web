@@ -50,6 +50,14 @@ class ModelCtrl extends CtrlEstandar{
 				else
 					require('Views/error.html');
 				break;
+			case 'models':
+				if($this->isUser()){
+					$models = $this->model->models($_POST['brand']);
+					echo json_encode($models);
+				}
+				else
+					require('Views/error.html');
+				break;
 			case 'validate':
 				if($this->isAdmin())
 					$this->validate();
@@ -67,6 +75,7 @@ class ModelCtrl extends CtrlEstandar{
 		else
 			echo json_encode(true);
 	}
+
 
 	private function show_all(){
 		//get all models to display

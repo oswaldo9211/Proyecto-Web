@@ -1,0 +1,61 @@
+        <style type="text/css">
+    	</style>
+
+            <header class="header">
+              <div class="container">
+              	<div class='breadcrumb'>
+					  <a href="index.php" class="">Tablero</a> <span class="divider">/</span>
+					  <a href="index.php?ctrl=vehicle&act=show_all" class="">Vehiculos</a> <span class="divider">/</span>
+				</div>
+                <h1>Nuevo Vehiculo</span></h1>
+                 <div id="message"></div>
+              </div>
+            </header>
+            <section>				
+                <div id="container" >
+                    <div id="wrapper">
+                    	<!--Conenerdor-->
+					    <form method="post" id="form" action="index.php?ctrl=vehicle&act=create">
+					    	<hr>
+					    	<div class="input">
+								<label for="client">Cliente</label>
+								<select name="client" id="client" required>
+								    <option value=''>Selecciona el cliente</option>
+								</select> 
+							</div>
+							<div class="input">
+								<label for="VIN">VIN</label>
+								<input type="text" id="VIN" name="VIN" onKeyUp="Mayusculas(this)"  required />
+							</div>
+							<div class="input">
+								<label for="brand">Marca</label>
+								<select name="brand" id="brand" required>
+								    <option value=''>Selecciona un marca</option>
+								</select> 
+							</div>
+							<div class="input">
+								<label for="model">Modelo</label>
+								<select name="model" id="model" required>
+								    <option value=''>Selecciona un modelo</option>
+								</select> 
+							</div>
+							<div class="input">
+								<label for="des">Descripcion</label>
+								<input type="text" name="des" id="des" />
+							</div>
+							<div class="input">
+								<label for="color">Color </label>
+								<input type="color" name="color" id="color" />
+							</div>
+							<hr>
+							<div class="input">
+								<button id="crear"class="btn btn-primary" type="submit">Crear</button>		
+								<a href="index.php?ctrl=vehicle" class="btn btn-primary">Cancelar</a>
+							</div>
+							<br/>
+						</form>
+					</div>
+				</div>
+            </section>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="assets/js/vehicle.js"></script>

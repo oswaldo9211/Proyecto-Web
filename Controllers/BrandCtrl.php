@@ -51,7 +51,7 @@ class BrandCtrl extends CtrlEstandar{
 					require('Views/error.html');
 				break;
 			case 'get_all':
-				if($this->isAdmin())
+				if($this->isUser())
 					$this->get_all();
 				else
 					require('Views/error.html');

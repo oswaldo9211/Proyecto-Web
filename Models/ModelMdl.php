@@ -33,6 +33,25 @@ class ModelMdl {
 		}
 	}
 
+	public function models($id_brand){
+		$query = "SELECT Brand.brand, Model.* FROM Model 
+					INNER JOIN Brand on Model.id_brand=Brand.id_brand WHERE Model.id_brand='$id_brand'";
+		$result = $this ->db_driver-> query($query);
+		if($this->db_driver->errno){
+			die("No se pudeo hacer la consulta de mostrar todos {$this->db_driver->error}");
+			return false;
+		}
+		if($result->num_rows<=0){
+				return false;
+		}
+		else{
+			while ($row = $result->fetch_array()){
+				$rows[] = $row;
+			}
+			return $rows;
+		}
+	}
+
 	public function get($id_model){
 
 		$query = "SELECT Brand.brand, Model.* FROM Model 

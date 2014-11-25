@@ -68,6 +68,14 @@ switch($ctrl){
 		require('Controllers/ModelCtrl.php');
 		$ctrl = new ModelCtrl();
 	break;
+	case 'reportes':
+		require('Controllers/ReporteCtrl.php');
+		$ctrl = new ReporteCtrl();
+	break;
+	case 'vehicle':
+		require('Controllers/VehicleCtrl.php');
+		$ctrl = new VehicleCtrl();
+	break;
 	default:
 		require('Controllers/UserCtrl.php');
 		$ctrl = new UserCtrl();
