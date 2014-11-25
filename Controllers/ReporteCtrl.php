@@ -228,7 +228,7 @@ class ReporteCtrl  extends CtrlEstandar
 			if($_GET['id']==2)
 			{	$Reporte->getVehiculos($this->data);
 				if (isset($_POST['buscar'])) {
-					var_dump($_POST['vehiculo']);
+					//var_dump($_POST['vehiculo']);
 					$Reporte->allInspeccion($this->data,$_POST['vehiculo']);
 					//$Reporte->ExistenciaInventario($this->data);
 				}
@@ -238,7 +238,7 @@ class ReporteCtrl  extends CtrlEstandar
 			if($_GET['id']==3)
 			{	$Reporte->getVehiculos($this->data);
 				if (isset($_POST['buscar'])) {
-					var_dump($_POST['estado']);
+					//var_dump($_POST['estado']);
 					$Reporte->VehiculoPorestado($this->data,$_POST['estado']);
 					//$Reporte->allInspeccion($this->data,$_POST['vehiculo']);
 					//$Reporte->ExistenciaInventario($this->data);
