@@ -1,18 +1,18 @@
 <?php
 class Client {
-    public $name;
-	public $last_name;
+    public $razon_social;
 	public $RFC;
 	public $email;
 	public $phone;
+	public $cellphone;
 
-    public function __construct($name, $last_name, $RFC, $email, $phone)    
+    public function __construct($razon_social, $RFC, $email, $phone, $cellphone)    
     {    
-    	$this->name = $name;
-		$this->last_name = $last_name;
+    	$this->razon_social = $razon_social;
 		$this->RFC = $RFC;
 		$this->email = $email;
 		$this->phone = $phone;
+		$this->cellphone = $cellphone;
     }
 } 
 

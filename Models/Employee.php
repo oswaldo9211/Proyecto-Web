@@ -4,27 +4,24 @@ class Employee {
 	public $last_name;
 	public $RFC;
 	public $email;
-	public $phones;
-	public $street;
+	public $phone;
+	public $cellphone;
+	public $address;
 	public $colony;
-	public $municipality;
-	public $no_external;
-	public $no_internal;
+	public $city;
 
 
-
-    public function __construct($name, $last_name, $RFC, $email, $phones, $street, $colony, $municipality, $no_external, $no_internal)    
+    public function __construct($name, $last_name, $RFC, $email, $phone, $cellphone, $address, $colony, $city)    
     {    
     	$this->name = $name;
 		$this->last_name = $last_name;
 		$this->RFC = $RFC;
 		$this->email = $email;
-		$this->phones = $phones;
-		$this->street = $street;
+		$this->phone = $phone;
+		$this->cellphone = $cellphone;
+		$this->address = $address;
 		$this->colony = $colony;
-		$this->municipality = $municipality;
-		$this->no_external = $no_external;
-		$this->no_internal = $no_internal;
+		$this->city = $city;
     }
 } 
 

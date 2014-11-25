@@ -239,7 +239,6 @@ class UserMdl {
 						WHERE id_user='$id_user'";
 		}
 		else{
-			echo 'entro aca';
 			$query   =	"UPDATE User
 						set user_name = '$name', password = '$password', user_email = '$email', rol = '$rol', $option = '$join'
 						WHERE id_user='$id_user'";
