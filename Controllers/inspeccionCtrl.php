@@ -19,17 +19,6 @@ class InspeccionCtrl extends CtrlEstandar
 		require_once('Models/InspeccionMdl.php');
 		$this->model = new  InspeccionMdl(); 
 	}
-
-
-
-	public function init()
-	{
-		
-	}
-	public function showIns()
-	{
-		# code...
-	}
 	public function DefaultIns()
 	{
 		$dataHeader = array();
@@ -83,11 +72,14 @@ class InspeccionCtrl extends CtrlEstandar
 		$result =$this->model->getRow('Piece',' * ', ' ', $this->ok);
 		if($result!= false && $result->num_rows > 0)
 		{
-			foreach ($result as $key => $value) {
+			while( $value= $result->fetch_assoc()) {
 				$data{'Piezas'} .= "<option  id='".$value{'id_piece'}."' value='".$value{'id_piece'}."'>".$value{'piece_name'}." </option>";
 			}
 		}
-
+//we entrego el proyecto en la noche yo de todos modos  sabe que tenemos los comit de quien trabajo , doy la presentacion 
+		//yo solo como el erik
+		//ya lo que me diga de Modificacion te digo 
+		//imprime pvalue
 	}
 
 	public function getServicios(&$data)
@@ -98,7 +90,7 @@ class InspeccionCtrl extends CtrlEstandar
 		if($result!= false && $result->num_rows > 0)
 		{
 
-			foreach ($result as $key => $value) {
+			while ( $value = $result->fetch_assoc()) {
 				$data{'Servicios'} .= "<option  id='".$value{'id_service'}."' value='".$value{'id_service'}."'>".$value{'service_name'}." </option>";
 			}
 		}	
@@ -109,7 +101,7 @@ class InspeccionCtrl extends CtrlEstandar
 		$data['clientes'] ='';
 		$resultCs = $this->model->getRow('Client','*'," WHERE   1 ", $this->ok);
 					if($resultCs!= false  && $resultCs->num_rows > 0)
-						foreach ($resultCs as $key => $Clies) {
+						while ( $Clies = $resultCs->fetch_assoc()) {
 								$data['clientes'] .= "<option  value='$Clies[id_client]'>$Clies[client_name] </option>";
 						}
 	}
@@ -119,7 +111,7 @@ class InspeccionCtrl extends CtrlEstandar
 		$data['vehiculos'] ='';
 		$resultCs = $this->model->getRow('Vehicle','*'," WHERE   status='high'  ", $this->ok);
 					if($resultCs!= false  && $resultCs->num_rows > 0)
-						foreach ($resultCs as $key => $Vehi) {
+						while($Vehi =$resultCs->fetch_assoc() ) {
 								$data['vehiculos'] .= "<option  value='$Vehi[id_vehicle]'> $Vehi[vin] </option>";
 						}
 	}
@@ -149,10 +141,16 @@ class InspeccionCtrl extends CtrlEstandar
 						$band=0;
 						$data['error'] = 'EL vehiculo ya esta en cola de espera en Inspeccion';
 					}
+					//slope
+					$rsInv =$this->model->getRow('Inventory',"*", "WHERE id_vehicle=$_POST[vehiculo] AND status ='slope' ",$this->ok );
+					if($rsInv!= false && $rsInv->num_rows > 0){
+						$band=0;
+						$data['error'] = 'El vehiculo se encuentra en reparación';
+					}
 				}
 				else
 				{
-					$data['error'] = "Debe un vehiculo";
+					$data['error'] = "Debe selccionar un vehiculo";
 					$band=0;
 				}
 				if($band==1){
@@ -208,7 +206,7 @@ class InspeccionCtrl extends CtrlEstandar
 			$result = $this->model->getRow('Inspection', '*', " WHERE id_inspection = $id ", $this->ok);
 			
 			if($result != false && $result->num_rows > 0){
-				foreach ($result as $key => $value) {
+				while ($value= $result->fetch_assoc()) {
 					$data['VerInspeccion'] .= '<tr>';
 					$data['VerInspeccion'] .= '<td>';
 					$data['VerInspeccion'] .= $value{'id_inspection'};
@@ -223,7 +221,7 @@ class InspeccionCtrl extends CtrlEstandar
 					$data['VerInspeccion'] .= "<select id='idvehiculo'  name='idvehiculo'>";
 					$resultV = $this->model->getRow('Vehicle', '*', " WHERE id_vehicle = $value[id_vehicle] ", $this->ok);
 					if($resultV != false  && $resultV->num_rows > 0)
-						foreach ($resultV as $key => $vehiculo) {
+						while ( $vehiculo = $resultV->fetch_assoc()) {
 							$data['VerInspeccion'] .= "<option value='$vehiculo[id_vehicle]'>$vehiculo[vin] </option >";
 						}						
 					$data['VerInspeccion']	.=  "</select>";
@@ -247,7 +245,7 @@ class InspeccionCtrl extends CtrlEstandar
 				//var_dump($result);
 				$cont=1;//indice que maneja el numero de invd
 				if($result != false && $result->num_rows > 0){
-					foreach ($result as $key => $value) {
+					while ( $value = $result->fetch_assoc()) {
 						//var_dump($value);
 						$data['VerInspeccionDetalle'] .= '<tr>';
 						$data['VerInspeccionDetalle'] .= '<td>';
@@ -255,7 +253,7 @@ class InspeccionCtrl extends CtrlEstandar
 						if($value['id_piece'] != 0)
 							$resultP = $this->model->getRow('Piece', '*', " WHERE id_piece = $value[id_piece]  ", $this->ok);
 							if($resultP != false  && $resultP->num_rows > 0){
-								foreach ($resultP as $key => $Pieza) {
+								while ($Pieza = $resultP->fetch_assoc()) {
 									$data['VerInspeccionDetalle'] .= "<input type='text' name='idpieza' value='$Pieza[piece_name]' readonly=''/>";
 								}
 							}
@@ -272,7 +270,7 @@ class InspeccionCtrl extends CtrlEstandar
 						if($value['id_service'] != 0)
 							$resultS = $this->model->getRow('Service', '*', " WHERE idservicio = $value[id_service]  ", $this->ok);
 							if($resultS != false  && $resultS->num_rows > 0){
-								foreach ($resultS as $key => $Ser) {	
+								while ( $Ser = $resultS->fetch_assoc()) {	
 									$data['VerInspeccionDetalle'] .= "<input type='text' name='idservicio' value='$Ser[name]' readonly=''/>";
 								}
 							}
@@ -295,7 +293,7 @@ class InspeccionCtrl extends CtrlEstandar
 		
 		$result = $this->model->getRow('Inspection', '*', " WHERE id_inspection = $id ", $this->ok);
 		if($result != false && $result->num_rows > 0){
-			foreach ($result as $key => $value) {
+			while (  $value = $result->fetch_assoc()) {
 				//var_dump($value);
 				$data['VerInspeccion'] .= '<tr>';
 				$data['VerInspeccion'] .= '<td>';
@@ -333,7 +331,7 @@ class InspeccionCtrl extends CtrlEstandar
 			$result = $this->model->getRow('InspectionDetails', '*', " WHERE id_inspection = $id ", $this->ok);
 			//var_dump($result);
 			if($result != false && $result->num_rows > 0){
-			foreach ($result as $key => $value) {
+			while ( $value  = $result->fetch_assoc()) {
 				//var_dump($value);
 				$data['VerInspeccionDetalle'] .= '<tr>';
 				$data['VerInspeccionDetalle'] .= '<td>';
@@ -373,7 +371,7 @@ class InspeccionCtrl extends CtrlEstandar
 		$data       = array('area' => '', 'error'  => '');
 		$result = $this->model->getRow('Location' , '*', ' ', $this->ok);
 		if($result !=false  && $result->num_rows > 0)
-			foreach ($result as $key => $Area) {
+			while ($Area  = $result->fetch_assoc()) {
 				$data['area'] .=  "<option value='$Area[id_location]'> $Area[location_name] </option >";
 
 			}
@@ -406,7 +404,7 @@ class InspeccionCtrl extends CtrlEstandar
 						$fecha =$data['FechaEmision'] . " " . $data['hora'];
 						$values = "'in','$data[FechaEmision]','Inspeccion','$_POST[area]','Entrada de inspeccion','slope',$_POST[idvehiculo],1";
 						$resultInv=$this->model->Inset('Inventory',$campos, $values,$this->ok);
-						if($resultInv != false) header("Location: ?ctrl=inspeccion");
+						if($resultInv != false) header("Location: ?ctrl=inspeccion&M");
 						else
 							$data['error'] = $this->ok['error'];
 					}

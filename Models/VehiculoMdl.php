@@ -34,14 +34,14 @@ class VehiculoMdl
 		}
 		return $result;
 	}
-	public function Inset($tabla,$campos, $values)
+	public function Inset($tabla,$campos, $values,&$ok)
 	{
 		$sql  = " INSERT INTO  ".$tabla." (".$campos.") VALUES(".$values." )";
 		echo $sql;
 		$this->db_driver->query($sql);
 
 		if($this->db_driver->errno){
-			die("No se pudo hacer la consulta al insertar ".$this->db_driver->error);
+			$ok['error'] .= "No se pudo hacer la consulta al insertar ".$this->db_driver->error;
 			return false;
 		}
 		else
@@ -75,7 +75,20 @@ class VehiculoMdl
 		else
 			return true;
 	}
-
+	public function UpdateEstado($id,$estado,&$ok)
+	{
+		$sql =" UPDATE Vehicle
+				SET    status = '$estado'
+				WHERE id_vehicle = $id";
+		//echo "114: ", $sql;
+		$result= $this->db_driver->query($sql);
+	   	if($this->db_driver->errno){
+			//die("No se pudo hacer la consulta al insertar ".$this->db_driver->error);
+			return false;
+		}
+		else
+			return true;
+	}
 	public function UpdateVehiculo($sql,&$ok)
 	{
 		echo "<br>",$sql;

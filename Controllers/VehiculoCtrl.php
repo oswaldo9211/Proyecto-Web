@@ -87,7 +87,7 @@ class VehiculoCtrl  extends CtrlEstandar
 	{
 		$band= true;
 		$data['VehiculosLista'] ='';
-		$result = $this->model->getRow('Vehicle', ' * ', ' WHERE 1 ', $this->ok);
+		$result = $this->model->getRow('Vehicle', ' * ', ' WHERE status="high" ', $this->ok);
 		if($result!= false  &&  $result->num_rows > 0){
 			
 			while ($vehiculos=$result->fetch_assoc()) {	
@@ -107,7 +107,7 @@ class VehiculoCtrl  extends CtrlEstandar
 				$resulM = $this->model->getRow('Model', '*' , "WHERE id_model = $vehiculos[id_model] ",$this->ok);
 				if($resulM != false && $resulM->num_rows > 0)
 				{
-					foreach ($resulM as $key => $value) {
+					while ( $value = $resulM->fetch_assoc()) {
 						$data['VehiculosLista'] .="<td> $value[model] </td>";
 					}
 				}
@@ -147,27 +147,27 @@ class VehiculoCtrl  extends CtrlEstandar
 					$resulM = $this->model->getRow('Model', '*' , "WHERE id_model = $Ver[id_model] ",$this->ok);
 					if($resulM != false && $resulM->num_rows > 0)
 					{
-						foreach ($resulM as $key => $value) {
+						while ( $value = $resulM->fetch_assoc()) {
 							//$data['VehiculosLista'] .="<td> $value[model] </td>";
 							$this->data['model'] = $value['model'];
 						}
 					}
 					$resultMs = $this->model->getRow('Model','*',' WHERE  1', $this->ok);
 					if($resultMs!= false  && $result->num_rows > 0)
-						foreach ($resultMs as $key => $model) {
+						while ($model =$resultMs->fetch_assoc()) {
 							//var_dump($model);
 							$this->data['modelos'] .= "<option value='$model[id_model]'> $model[model]";
 							$this->data['modelos'] .= "</option>";
 						}
 					$resultC = $this->model->getRow('Client','*'," WHERE   id_client = $Ver[id_client] ", $this->ok);
 					if($resultC!= false  && $resultC->num_rows > 0)
-						foreach ($resultC as $key => $Clie) {
+						while ( $Clie = $resultC->fetch_assoc()) {
 							//var_dump($Clie);
 							$this->data['cliente'] = $Clie{'client_name'};
 						}
 					$resultCs = $this->model->getRow('Client','*'," WHERE   1 ", $this->ok);
 					if($resultCs!= false  && $resultCs->num_rows > 0)
-						foreach ($resultCs as $key => $Clies) {
+						while ( $Clies = $resultCs->fetch_assoc()) {
 							//echo $Clies{'client_name'};
 							if($this->data['cliente'] != $Clies{'client_name'} )
 							$this->data['clientes'] .= "<option  value='$Clies[id_client]'>$Clies[client_name] </option>";
@@ -301,7 +301,7 @@ class VehiculoCtrl  extends CtrlEstandar
 					$resulM = $this->model->getRow('Model', '*' , "WHERE id_model = $Ver[id_model] ",$this->ok);
 					if($resulM != false && $resulM->num_rows > 0)
 					{
-						foreach ($resulM as $key => $value) {
+						while ( $value = $resulM->fetch_assoc()) {
 							//$data['VehiculosLista'] .="<td> $value[model] </td>";
 							$this->data['model'] = $value['model'];
 						}
@@ -316,7 +316,7 @@ class VehiculoCtrl  extends CtrlEstandar
 					$resultC = $this->model->getRow('Client','*'," WHERE   id_client = $Ver[id_client] ", $this->ok);
 					
 					if($resultC!= false  && $resultC->num_rows > 0)
-						foreach ($resultC as $key => $Clie) {
+						while ( $Clie = $resultC->fetch_assoc()) {
 							//var_dump($Clie);
 							$this->data['cliente'] = $Clie{'client_name'};
 						}
@@ -331,7 +331,7 @@ class VehiculoCtrl  extends CtrlEstandar
 		$this->data['modelos'] ='';
 		$result = $this->model->getRow('Model','*',' WHERE  1', $this->ok);
 		if($result!= false  && $result->num_rows > 0)
-			foreach ($result as $key => $model) {
+			while ( $model = $result->fetch_assoc()) {
 				//var_dump($model);
 				$this->data['modelos'] .= "<option value='$model[id_model]'> $model[model]";
 				$this->data['modelos'] .= "</option>";
@@ -373,7 +373,7 @@ class VehiculoCtrl  extends CtrlEstandar
 				 $campos = " vin,color,description,id_model,id_client";
 				 $values = " '$this->VIN','$this->color',' $this->caracteristicas',$this->modelo,1";
 				 //$values = $this->VIN.",'".$this->color."','".$this->caracteristicas."',".$this->model."";
-				 $result = $this->model->Inset("Vehicle",$campos,$values);
+				 $result = $this->model->Inset("Vehicle",$campos,$values,$this->ok);
 				 /*echo '<br>';
 				 echo '<br>', $campos;
 				 echo '<br>', $values;*/

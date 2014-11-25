@@ -25,7 +25,7 @@ class InventoryCtrl  extends CtrlEstandar
 
 	public function Baja()
 	{
-		$rsUpdate = $this->model-> UpdateEstado($_GET['id'],'cancelX',$this->ok);
+		$rsUpdate = $this->model-> UpdateEstado($_GET['id'],'cancel',$this->ok);
 		if($rsUpdate  != false) header("Location: ?ctrl=Inventory");
 		else
 			$data['error'] = $this->ok['error'];	
@@ -121,10 +121,10 @@ class InventoryCtrl  extends CtrlEstandar
 				$this->data['servicios'] ='';
 				$rsS= $this->model->getRow('Service', '*', "WHERE  1", $this->ok);
 				if($rsS != false && $rsS->num_rows > 0){
-					foreach ($rsS as $key => $value) {
+					while($value = $rsS->fetch_assoc()) {
 						//var_dump($value);
 						if($value['id_location'] != $Inv['service_ destination'] ){
-							$this->data['servicios'] .= "<option value='$value[id_service]'>";
+							$this->data['servicios'] .= "<option value='$value[id_location]'>";
 							$this->data['servicios'] .= $value{'service_name'};
 							$this->data['servicios'] .= "</option>";
 						}
@@ -158,7 +158,7 @@ class InventoryCtrl  extends CtrlEstandar
 						
 						$fecha =$data['FechaEmision'] . " " . $data['hora'];
 						
-						$values = "'transfer','$data[FechaEmision]','$Inv[service]','$_POST[servicio]','$_POST[observaciones]','completed',$Inv[id_vehicle],1";
+						$values = "'transfer','$data[FechaEmision]','$Inv[service]','$_POST[servicio]','$_POST[observaciones]','slope',$Inv[id_vehicle],1";
 						$resultInv=$this->model->Inset('Inventory',$campos, $values,$this->ok);
 						if($resultInv != false) header("Location: ?ctrl=Inventory");
 						else
@@ -175,7 +175,7 @@ class InventoryCtrl  extends CtrlEstandar
 			}
 			else
 				$this->ok['error'] .= "Debe de escoger un area para poder mover el vehiculo";
-			
+				
 		}
 		$this->data['error'] = $this->ok['error'];
 		echo  getFile('header',$this->dataHeader) . getFile('Inventory/EditInventory',$this->data) . getFile('footer',$this->dataFooter);
@@ -205,12 +205,14 @@ class InventoryCtrl  extends CtrlEstandar
 	}
 	public function DefaultIns()
 	{
-		$this->dataHeader{'user'} = $_SESSION['username'];
+		if(array_key_exists('username', $_SESSION) )
+			$this->dataHeader{'user'} = $_SESSION['username'];
+		else header("Location: ?ctrl=Inventory");
 		$Inspeccion = new InventoryCtrl();
 		$result= $this->model->getRow('Inventory', ' * ',  ' WHERE status="slope" ',$this->ok);
 		if($result != false && $result->num_rows > 0){
-			foreach ($result as $key => $inv) {
-			//	echo "</br>: ",var_dump($inv);
+			while ($inv = $result->fetch_assoc()) {
+			// echo "</br>: ",var_dump($inv);
 				$this->data{'ListInventory'} .= "<tr>";
 				$this->data{'ListInventory'} .="<td>$inv[movement]</td>" ;
 				$this->data{'ListInventory'} .="<td>$inv[inv_date]</td>" ;
