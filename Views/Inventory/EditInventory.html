@@ -1,0 +1,61 @@
+<form method="post" action="?ctrl=Inventory&Act={Act}&id={id}">
+<div class="buuton">
+<button id='mover' name="mover">Mover</button>
+</div>
+<section>				
+<div id="container" >
+<div id="wrapper">
+<div class="table-responsive">
+<div class="datagrid">
+	<table class='table table-hover'>
+		<thead>
+		<tr>
+			<th colspan="5">
+				<span>{error}</span>
+			</th>
+		</tr>
+		<tr>
+		<th>Inventario </th>
+	    <!--<th>movimiento</th>-->
+		<th>fecha</th>
+		<th>origen</th>
+		<th>Ubicacion Actual</th>
+		<th>observacion</th>
+		<th>estatus</th>
+		<th>Vehiculo</th>
+		</tr>
+		</thead>
+		<tbody>
+		
+			{ListInventory}
+		
+		</tbody>
+		<tfoot>
+			<tr>
+			<th>
+				Mover A
+			</th>
+			<th colspan="2">
+				<select id='servicio' name="servicio">
+					<option selected value='0'>Selecciona un servicio</option>
+					{servicios}
+					<option value="Salida">Salida</option>
+					<option value="Cancelar">Cancelar</option>
+				</select>
+			</th>
+			<td colspan="2">
+				<div class="input">
+				<label>Observaciones</label>
+					<input type="text" name='observaciones' />
+				</div>
+			</td>
+			</tr>
+		</tfoot>
+		</table>		
+</div>
+</div>
+</div>
+</div>  
+</section>
+</form>
+

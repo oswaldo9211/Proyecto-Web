@@ -56,6 +56,10 @@ switch($ctrl){
 		require('Controllers/ServiceCtrl.php');
 		$ctrl = new ServiceCtrl();
 	break;
+	case 'Inventory':
+		require('Controllers/Inventory.php');
+		$ctrl = new InventoryCtrl();
+	break;
 	case 'brand':
 		require('Controllers/BrandCtrl.php');
 		$ctrl = new BrandCtrl();
