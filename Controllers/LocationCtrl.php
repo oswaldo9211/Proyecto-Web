@@ -11,7 +11,7 @@ class LocationCtrl extends CtrlEstandar{
 	private $model;
 	function __construct(){
 		require_once('Models/LocationMdl.php');
-		require('Models/location.php');
+		require('Models/Location.php');
 		$this->model =new LocationMdl();
 	}
 

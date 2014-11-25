@@ -61,18 +61,18 @@ background-color: #A9ABCA;
 
 
 .icon-view:before{ 
- 	content: url("http://www.veryicon.com/icon/png/Application/asp.net/view.png");
+ 	content: url("../images/view.png");
 	font-family: FontAwesome;
 	
 }
 
 .icon-edit:before{ 
- 	content: url("http://upload.wikimedia.org/wikipedia/commons/a/a7/GeoGebra_icon_edit.png");
+ 	content: url("../images/edit.png");
 	font-family: FontAwesome;
 }
 .icon-remove:before{
 	font-family: FontAwesome;
-		content: url("https://cdn2.iconfinder.com/data/icons/diagona/icon/16/101.png");
+		content: url("../images/delete.png");
 }
 
 div.changePass > a{
@@ -94,22 +94,9 @@ div.input > label{
 		}
 
 		hr {
-			margin-left: 35%;
-			max-width: 45%;
-			margin: 20px 0;
-			margin-left: 85%;
-			border: 0;
-			border-top: 1px solid #eeeeee;
-			border-bottom: 7px solid #ffffff;
-		}
-		hr{
-			display: block;
-			-webkit-margin-before: 0.5em;
-			-webkit-margin-after: 0.5em;
-			-webkit-margin-start: auto;
-			-webkit-margin-end: auto;
-			border-style: inset;
-			border-width: 1px;
+			max-width: 40%;
+			border: 1px solid #D0C8C8;
+			box-shadow: 0px 1px 5px rgb(194, 194, 194)
 		}
 
 
