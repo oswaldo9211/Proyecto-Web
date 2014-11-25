@@ -1,0 +1,59 @@
+<form method="post" action="?ctrl=Reporte&id=2">
+<!--
+<div class="buuton">
+<button id='nuevo' name="Act"  value='Alta'>Nuevo</button>
+</div>
+-->
+<section><h1><span>Reportes</span></h1></section>
+<section>				
+<div id="container" >
+<div id="wrapper">
+<div class="table-responsive">
+<div class="datagrid">
+	<table class='table table-hover'>
+		<thead>
+		<tr>
+			<th><label for='vehiculo'>Vehiculo</label>
+			<select name='vehiculo'>
+			{vehiculos}
+			</select>
+			</th>
+			<tr>
+				<th>
+					<button name="buscar">Buscar</button>
+				</th>
+			</tr>
+		</tr>
+		<tr>
+		<th>VIN</th>
+		<th >Ubicación</th>
+		<th>fecha</th>
+
+		</tr>
+		</thead>
+		<tbody>
+		
+			{ListaReportes}
+		
+		</tbody>
+		<tfoot>
+			<!--
+			<tr>
+				<td>
+					Vehiculos En total
+				</td>
+				<td>
+					{cont}
+				</td>
+			</tr>
+			-->
+
+		</tfoot>
+		</table>		
+</div>
+</div>
+</div>
+</div>  
+</section>
+</form>
+

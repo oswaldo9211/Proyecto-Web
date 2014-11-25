@@ -1,0 +1,62 @@
+<form method="post" action="?ctrl=Reporte&Act=Ver&id=3">
+<!--
+<div class="buuton">
+<button id='nuevo' name="Act"  value='Alta'>Nuevo</button>
+</div>
+-->
+<section><h1><span>Reportes</span></h1></section>
+<section>				
+<div id="container" >
+<div id="wrapper">
+<div class="table-responsive">
+<div class="datagrid">
+	<table class='table table-hover'>
+		<thead>
+		<tr>
+			<th><label for='estado'>ESTADO</label>
+			<select name='estado'>
+			<option value="slope">PENDIENTE</option>
+			<option value="completed">CONCLUIDO</option>
+			<option value="cancel">CANCELADO</option>
+			<option value="exit">SALIDAS</option>
+			</select>
+			</th>
+			<tr>
+				<th>
+					<button name="buscar">Buscar</button>
+				</th>
+			</tr>
+		</tr>
+		<tr>
+		<th>VIN</th>
+		<th>Ubicacion</th>
+		<th>fecha</th>
+		<th>estado</th>
+
+		</tr>
+		</thead>
+		<tbody>
+		
+			{ListaReportes}
+		
+		</tbody>
+		<tfoot>
+			<tr>
+				<td>
+					Vehiculos En total
+				</td>
+				<td>
+					{cont}
+				</td>
+			</tr>
+
+
+		</tfoot>
+		</table>		
+</div>
+</div>
+</div>
+</div>  
+</section>
+</form>
+
