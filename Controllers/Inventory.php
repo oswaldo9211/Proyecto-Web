@@ -5,7 +5,9 @@
 * Marco 
 *Ctrl de inspecciones, generar nueva inspección y concluirla
 */
-class InventoryCtrl
+require('Controllers/CtrlEstandar.php');
+
+class InventoryCtrl  extends CtrlEstandar
 {
 
 	private $Inventory;
@@ -40,24 +42,35 @@ class InventoryCtrl
 		elseif (isset($_POST['Act'])){
 			$Act = $_POST['Act'];
 		}
-
+		//var_dump($Act);
 		 switch($Act) {
 			 case 'Alta':
-			 $this->Inventory->Alta();
+			 	if($this->isUser())
+			 		$this->Inventory->Alta();
+			 else
+			 		require('Views/error.html');
 			 	break;
 			 case 'Edit':
-			 	$this->Inventory->Modificacion();
+			 	if($this->isAdmin())
+			 		$this->Inventory->Modificacion();
+			 		else
+			 			require('Views/error.html');
 				 break;
 			 case 'Consulta':
 			 	$this->Inventory->Consulta();
 			 	break;
 			 case 'Delete':
-			 	$this->Inventory->Baja();
+			 	if($this->isAdmin())
+			 		$this->Inventory->Baja();
+			 	else
+			 		require('Views/error.html');
 			 	break;
 			 case 'Ver':
-			 	$this->Inventory->Ver();
+			 	if($this->isUser())
+			 		$this->Inventory->Ver();
+			 	else
+			 		require('Views/error.html');
 			 	break;
-				 break;
 			 default:
 			 	$this->Inventory->DefaultIns();
 			 	break;
@@ -66,6 +79,8 @@ class InventoryCtrl
 	}
 	public function Modificacion()
 	{
+		
+		$this->dataHeader{'user'} = $_SESSION['username'];
 		if(isset($_GET['id']) && $_GET['id'] != 0)
 		{
 			$this->data['id'] = $_GET['id'];
@@ -166,6 +181,7 @@ class InventoryCtrl
 	}
 	public function Ver()
 	{
+		$this->dataHeader{'user'} = $_SESSION['username'];
 		if(isset($_GET['id']) && $_GET['id'] != 0)
 		{
 			$rs= $this->model->getRow('Inventory','*', "WHERE id_inventory = $_GET[id]",$this->ok);
@@ -188,8 +204,7 @@ class InventoryCtrl
 	}
 	public function DefaultIns()
 	{
-		$dataHeader = array();
-		$dataFooter = array();
+		$this->dataHeader{'user'} = $_SESSION['username'];
 		$Inspeccion = new InventoryCtrl();
 		$result= $this->model->getRow('Inventory', ' * ',  ' WHERE status="slope" ',$this->ok);
 		if($result != false && $result->num_rows > 0){
@@ -222,7 +237,7 @@ class InventoryCtrl
 				$this->data{'ListInventory'} .= "</tr>";
 			}
 		}
-		echo  getFile('header',$dataHeader) . getFile('Inventory/defaultInventory',$this->data) . getFile('footer',$dataFooter);
+		echo  getFile('header',$this->dataHeader) . getFile('Inventory/defaultInventory',$this->data) . getFile('footer',$this->dataFooter);
 	}
 }
 ?>
