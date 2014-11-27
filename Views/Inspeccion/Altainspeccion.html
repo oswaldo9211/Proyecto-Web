@@ -1,3 +1,9 @@
+<style type="text/css">
+.section > .container{
+  max-width: 750px;
+}
+ </style>
+
 <header class="header">
               <div class="container">
               	<div class='breadcrumb'>
@@ -8,10 +14,7 @@
                 <div id="message"></div>
               </div>
             </header>
-<form action="?ctrl=inspeccion&Act=Alta" method="POST">
-<div class="buuton">
-<button id='nuevo' name="Guardar" value="Guardar">Guardar</button>
-</div>	
+<form action="?ctrl=inspeccion&Act=Alta" method="POST">	
 <!--
 <div class="input">
 <label for="cliente">Cliente</label>
@@ -27,10 +30,11 @@
                 <div class="container">
                     <div id="wrapper">
                         <div class="table-responsive">-->
-<section>				
-<div id="container" >
+<section class="section">				
+<div class="container" >
 <div id="wrapper">
 <div class="table-responsive">
+	<button id='nuevo' name="Guardar" value="Guardar" class="btn btn-primary">Guardar</button>
 	<table class='table table-hover'>
 		<thead>
 		<tr>

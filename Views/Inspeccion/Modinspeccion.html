@@ -2,7 +2,7 @@
               <div class="container">
               	<div class='breadcrumb'>
 					  <a href="index.php" class="">Tablero</a> <span class="divider">/</span>
-					  <a href="index.php?ctrl=inspeccion" class="">Inspecccion</a> <span class="divider">/</span>
+					  <a href="index.php?ctrl=inspeccion" class="">Inspección</a> <span class="divider">/</span>
 				</div>
                 <h1></h1>
                 <div id="message"></div>
@@ -11,7 +11,7 @@
 <form method="post" action="?ctrl=inspeccion&Act=Edit&idV={id}">
 
 <section>				
-<div id="container" >
+<div class="container" >
 <div id="wrapper">
 <div class="table-responsive">
 <div class="datagrid">
@@ -19,10 +19,10 @@
 		<thead>
 		<tr><th colspan="5">{error}</th></tr>
 		<tr>
-		<th>Inspeccion</th>
+		<th>Inspección</th>
 		<th>Fecha</th>
 		<th>Usuario </th>
-		<th>Vehiculo</th>
+		<th>Vehículo</th>
 		<th>Estatus</th>
 		<!--
 		<th><button id='modificar' name='modificar' >Modificar</button></th>
@@ -32,10 +32,10 @@
 		</thead>
 		<tbody>
 			<tr>
-				<th>Area</th>
+				<th>Área</th>
 				<th>
 					<select id='area'  name='area'>
-						<option selected value='1'>Seleccione un Area</option>";
+						<option selected value='1'>Seleccione un área</option>";
 						{area}
 					</select>
 				</th>
@@ -44,7 +44,7 @@
 				<th>Pieza</th>
 				<th>Severidad</th>
 				<th>Servicio</th>
-				<th>Observaciones</th>
+				<th>Observaciónes</th>
 			</tr>
 			{VerInspeccionDetalle}
 		
@@ -52,7 +52,7 @@
 
 		<tfoot>
 			<tr>
-				<th><button name='procesar' id='procesar' >Procesar</button></th>
+				<th><button name='procesar' id='procesar' class="btn btn-primary">Procesar</button></th>
 			</tr>
 		</tfoot>
 

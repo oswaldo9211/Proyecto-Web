@@ -1,19 +1,28 @@
+<header class="header">
+  <div class="container">
+  	<div class='breadcrumb'>
+		  <a href="index.php" class="">Tablero</a> <span class="divider">/</span>
+		  <a href="index.php?ctrl=Reporte" class="">Reportes</a> <span class="divider">/</span>
+	</div>
+    <h1>Reporte Totales</span></h1>
+    <div id="message"></div>
+  </div>
+</header>
 <form method="post" action="?ctrl=Reporte&Act=Ver&id=3">
 <!--
 <div class="buuton">
 <button id='nuevo' name="Act"  value='Alta'>Nuevo</button>
 </div>
 -->
-<section><h1><span>Reportes</span></h1></section>
-<section>				
-<div id="container" >
+<section class="section">				
+<div class="container" >
 <div id="wrapper">
 <div class="table-responsive">
 <div class="datagrid">
 	<table class='table table-hover'>
 		<thead>
 		<tr>
-			<th><label for='estado'>ESTADO</label>
+			<th><label for='estado'>Estado</label>
 			<select name='estado'>
 			<option value="slope">PENDIENTE</option>
 			<option value="completed">CONCLUIDO</option>
@@ -23,15 +32,15 @@
 			</th>
 			<tr>
 				<th>
-					<button name="buscar">Buscar</button>
+					<button name="buscar" class="btn btn-primary">Buscar</button>
 				</th>
 			</tr>
 		</tr>
 		<tr>
 		<th>VIN</th>
-		<th>Ubicacion</th>
-		<th>fecha</th>
-		<th>estado</th>
+		<th>Ubicación</th>
+		<th>Fecha</th>
+		<th>Estado</th>
 
 		</tr>
 		</thead>
@@ -43,7 +52,7 @@
 		<tfoot>
 			<tr>
 				<td>
-					Vehiculos En total
+					Vehículos En total
 				</td>
 				<td>
 					{cont}

@@ -1,12 +1,21 @@
+<header class="header">
+  <div class="container">
+  	<div class='breadcrumb'>
+		  <a href="index.php" class="">Tablero</a> <span class="divider">/</span>
+		  <a href="index.php?ctrl=Reporte" class="">Reportes</a> <span class="divider">/</span>
+	</div>
+    <h1>Movimiento de un vehículo</span></h1>
+    <div id="message"></div>
+  </div>
+</header>
 <form method="post" action="?ctrl=Reporte&Act=Ver&id=2">
 <!--
 <div class="buuton">
 <button id='nuevo' name="Act"  value='Alta'>Nuevo</button>
 </div>
 -->
-<section><h1><span>Reportes</span></h1></section>
-<section>				
-<div id="container" >
+<section class="section">				
+<div class="container" >
 <div id="wrapper">
 <div class="table-responsive">
 <div class="datagrid">
@@ -20,7 +29,7 @@
 			</th>
 			<tr>
 				<th>
-					<button name="buscar">Buscar</button>
+					<button name="buscar" class="btn btn-primary">Buscar</button>
 				</th>
 			</tr>
 		</tr>
