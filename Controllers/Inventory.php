@@ -191,12 +191,35 @@ class InventoryCtrl  extends CtrlEstandar
 				//var_dump($Inv);
 				$this->data{'ListInventory'} .='<tr>';
 				$this->data{'ListInventory'} .="<td>$Inv[id_inventory]</td>";
-				$this->data{'ListInventory'} .="<td>$Inv[movement]</td>";
+				if($Inv['movement'] =='in'){
+					$movement = "Entrada de inspección";
+				}
+				else
+					if($Inv['movement'] =='transfer')
+						$movement = "Transferencia";
+					else
+						$movement="Entrada"; 
+				$this->data{'ListInventory'} .="<td>$movement</td>" ;
 				$this->data{'ListInventory'} .="<td>$Inv[inv_date]</td>";
+
 				$this->data{'ListInventory'} .="<td>$Inv[service]</td>";
-				$this->data{'ListInventory'} .="<td>'".$Inv['service_ destination']."'</td>";
+				$rsU=$this->model->getRow('Location','*', "WHERE id_location = '".$Inv['service_ destination']."' ",$this->ok);
+				if($rsU  != false && $rsU->num_rows > 0){
+					//echo 'here',var_dump($rs);
+					$Ubicacion = $rsU->fetch_assoc();
+					
+					$this->data{'ListInventory'} .="<td>$Ubicacion[location_name]</td>" ;
+				}
+				else
+					$this->data{'ListInventory'} .="<td>'No hay ubucacion'</td>";
+				//$this->data{'ListInventory'} .="<td>'".$Inv['service_ destination']."'</td>";
 				$this->data{'ListInventory'} .="<td>$Inv[observations]</td>";
-				$this->data{'ListInventory'} .="<td>$Inv[status]</td>";
+				if($Inv['status'] =='slope'){
+					$estatus = "Pendiente";
+				}
+				else
+					$estatus="En espera"; 
+				$this->data{'ListInventory'} .="<td>$estatus</td>" ;
 				$this->data{'ListInventory'} .="<td>$Inv[id_vehicle]</td>";
 				$this->data{'ListInventory'} .='</tr>';
 			}
@@ -214,7 +237,15 @@ class InventoryCtrl  extends CtrlEstandar
 			while ($inv = $result->fetch_assoc()) {
 			// echo "</br>: ",var_dump($inv);
 				$this->data{'ListInventory'} .= "<tr>";
-				$this->data{'ListInventory'} .="<td>$inv[movement]</td>" ;
+				if($inv['movement'] =='in'){
+					$movement = "Entrada de inspección";
+				}
+				else
+					if($inv['movement'] =='transfer')
+						$movement = "Transferencia";
+					else
+						$movement="Entrada"; 
+				$this->data{'ListInventory'} .="<td>$movement</td>" ;
 				$this->data{'ListInventory'} .="<td>$inv[inv_date]</td>" ;
 				
 				$rs=$this->model->getRow('Location','*', "WHERE id_location = '".$inv['service_ destination']."' ",$this->ok);
@@ -225,7 +256,13 @@ class InventoryCtrl  extends CtrlEstandar
 				}
 				else
 					$this->data{'ListInventory'} .="<td>".$inv['service_ destination']."</td>" ;
-				$this->data{'ListInventory'} .="<td>$inv[status]</td>" ;
+				
+				if($inv['status'] =='slope'){
+					$estatus = "Pendiente";
+				}
+				else
+					$estatus="En espera"; 
+				$this->data{'ListInventory'} .="<td>$estatus</td>" ;
 				$rs=$this->model->getRow('Vehicle', '*', "WHERE id_vehicle=$inv[id_vehicle]",$this->ok);
 				if($rs!= false && $rs->num_rows > 0){
 					$Vehicle_name= $rs->fetch_assoc();

@@ -37,7 +37,11 @@ class InspeccionCtrl extends CtrlEstandar
 				$data['ListaInspeccion'].= $Lista{'date'} ;
 				$data['ListaInspeccion'].= '</td>';
 				$data['ListaInspeccion'].= '<td>';
-				$data['ListaInspeccion'].= $Lista{'status'} ;
+				if($Lista{'status'} == 'process'){
+					$data['ListaInspeccion'].= "Por procesar" ;
+				}
+				else
+					$data['ListaInspeccion'].= $Lista{'status'} ;
 				$data['ListaInspeccion'].= '</td>';
 				$data['ListaInspeccion'].= '<td>';
 				$rs= $this->model->getRow('Vehicle', "*","WHERE id_vehicle = $Lista[id_vehicle]",$this->ok);
@@ -156,7 +160,7 @@ class InspeccionCtrl extends CtrlEstandar
 				if($band==1){
 					$IdInspeccion =$this->model->getMaxid( 'id_inspection' ,'Inspection');
 				//var_dump($IdInspeccion);
-				$values = "$IdInspeccion,'$data[FechaEmision]','process',$vehiculo,1";
+				$values = "$IdInspeccion,'$data[FechaEmision]','process',$vehiculo,$_SESSION[user]";
 				if($IdInspeccion!= false)
 					$result=$this->model->Inset('Inspection',$campos, $values,$this->ok);
 				if($result != false )
@@ -212,26 +216,39 @@ class InspeccionCtrl extends CtrlEstandar
 					$data['VerInspeccion'] .= $value{'id_inspection'};
 					$data['VerInspeccion'] .= '</td>';
 					$data['VerInspeccion'] .= '<td>';
-					$data['VerInspeccion'] .= "<input  type='text' name='fecha' value='$value[date]' eadonly=''/> ";
+					$data['VerInspeccion'] .= "<input  type='text' name='fecha' value='$value[date]' readonly=''/> ";
 					$data['VerInspeccion'] .= '</td>';
 					$data['VerInspeccion'] .= '<td>';
-					$data['VerInspeccion'] .= "<input type='text' name='usr_id'  value='$value[id_user]'readonly=''/>";
+					$rsU = $this->model->getRow('User', '*',"WHERE id_user =$value[id_user]",$this->ok);
+					if($rsU != false && $rsU->num_rows > 0) {
+						$User = $rsU->fetch_assoc();
+
+					$data['VerInspeccion'] .= "<input type='text' name='usr_id'  value='$User[user_name]' readonly=''/>";}
+					else
+						$data['VerInspeccion'] .= "<input type='text' name='usr_id'  value='Baja de usuario' readonly=''/>";
+
 					$data['VerInspeccion'] .= '</td>';
 					$data['VerInspeccion'] .= '<td>';
-					$data['VerInspeccion'] .= "<select id='idvehiculo'  name='idvehiculo'>";
 					$resultV = $this->model->getRow('Vehicle', '*', " WHERE id_vehicle = $value[id_vehicle] ", $this->ok);
-					if($resultV != false  && $resultV->num_rows > 0)
-						while ( $vehiculo = $resultV->fetch_assoc()) {
-							$data['VerInspeccion'] .= "<option value='$vehiculo[id_vehicle]'>$vehiculo[vin] </option >";
-						}						
-					$data['VerInspeccion']	.=  "</select>";
+					if($resultV != false  && $resultV->num_rows > 0){
+						 $vehiculo = $resultV->fetch_assoc();
+						$data['VerInspeccion'] .= "<input  type='text' name='idvehiculo' value='$vehiculo[vin]' readonly=''/> ";
+					}
+					else		
+						$data['VerInspeccion'] .= "<input  type='text' name='idvehiculo' value='Vehículo no seleccionado' readonly=''/> ";
+
 					$data['VerInspeccion'] .= '</td>';
 					$data['VerInspeccion'] .= '<td>';
 					//$data['VerInspeccion'] .= "<input type='text' name='estatus' value='$value[estatus]'/>";
-					$data['VerInspeccion'] .= "<select id='estatus'  name='estatus'>
-													<option selected value='$value[status]'>$value[status]</option>
-													<option value='CANCELAR'>CANCELAR </option >
-													<option value='CONCLUIDO'>CONCLUIDO </option >
+					$data['VerInspeccion'] .= "<select id='estatus'  name='estatus'>";
+					if($value{'status'}== 'process'){
+						$status= "Por procesar" ;
+					}
+					else
+						$status= "No tine estatus";
+					$data['VerInspeccion'] .="<option selected value='$value[status]'>$status</option>
+													<option value='CANCELAR'>Cancelar </option >
+													<option value='CONCLUIDO'>Concluir</option >
 											  </select>";
 					$data['VerInspeccion'] .= '</td>';
 					
@@ -258,28 +275,32 @@ class InspeccionCtrl extends CtrlEstandar
 								}
 							}
 						else{
-							$data['VerInspeccionDetalle'] .= "<input type='text' name='idpieza' value='$value[id_piece]' />";
+							$data['VerInspeccionDetalle'] .= "<input type='text' name='idpieza' value='$value[id_piece]' readonly=''/>";
 						}
 
 						$data['VerInspeccionDetalle'] .= '</td>';
 						$data['VerInspeccionDetalle'] .= '<td>';
-						$data['VerInspeccionDetalle'] .= "<input type='text' name='severidad' value='$value[severity] ' />";;
+						$data['VerInspeccionDetalle'] .= "<input type='text' name='severidad' value='$value[severity] ' readonly=''/>";;
 						$data['VerInspeccionDetalle'] .= '</td>';
 						$data['VerInspeccionDetalle'] .= '<td>';
 						//$data['VerInspeccionDetalle'] .= "<input type='text' name='idservicio' value='$value[idservicio] ' />";;
+						//var_dump($value['id_service']);
 						if($value['id_service'] != 0)
-							$resultS = $this->model->getRow('Service', '*', " WHERE idservicio = $value[id_service]  ", $this->ok);
+						{
+							$resultS = $this->model->getRow('Service', '*', " WHERE id_service = $value[id_service]  ", $this->ok);
 							if($resultS != false  && $resultS->num_rows > 0){
 								while ( $Ser = $resultS->fetch_assoc()) {	
-									$data['VerInspeccionDetalle'] .= "<input type='text' name='idservicio' value='$Ser[name]' readonly=''/>";
+									//var_dump($Ser);
+									$data['VerInspeccionDetalle'] .= "<input type='text' name='id_service' value='$Ser[service_name]' readonly=''/>";
 								}
 							}
-						else{
-							$data['VerInspeccionDetalle'] .= "<input type='text' name='idpieza' value='$value[id_piece]' />";
+							else{
+								$data['VerInspeccionDetalle'] .= "<input type='text' name='idpieza' value='$value[id_service]' readonly='' />";
+							}
 						}
 						$data['VerInspeccionDetalle'] .= '</td>';
 						$data['VerInspeccionDetalle'] .= '<td>';
-						$data['VerInspeccionDetalle'] .= "<input type='text' name='observaciones' value='$value[observations] ' />";;
+						$data['VerInspeccionDetalle'] .= "<input type='text' name='observaciones' value='$value[observations] ' readonly='' />";
 						$data['VerInspeccionDetalle'] .= '</td>';
 						$data['VerInspeccionDetalle'] .= '</tr>';
 						}
@@ -313,14 +334,19 @@ class InspeccionCtrl extends CtrlEstandar
 				$resultV  = $this->model->getRow('Vehicle', ' *', " WHERE id_vehicle = $value[id_vehicle]", $this->ok);
 				if($resultV != false && $resultV->num_rows > 0)
 				{
-					$Vin = $resultC->fetch_assoc();
+					$Vin = $resultV->fetch_assoc();
+					//var_dump($Vin);
 					if($Vin['vin']==NULL)
 						$data['VerInspeccion'] .=  "<td> No se selcciono </td>";
 					else
 						$data['VerInspeccion'] .=  "<td>" .$Vin{'vin'} . "</td>";
 				}
 				$data['VerInspeccion'] .= '<td>';
-				$data['VerInspeccion'] .= $value{'status'};
+				if($value{'status'}== 'process'){
+					$data['VerInspeccion'].= "Por procesar" ;
+				}
+				else
+					$data['VerInspeccion'] .= $value{'status'};
 				$data['VerInspeccion'] .= '</td>';
 				//$data['VerInspeccion'] .= '<td>';
 			    //$data['VerInspeccion'] .= "<button name='procesar'>PROCESAR</buuton>";
@@ -335,13 +361,28 @@ class InspeccionCtrl extends CtrlEstandar
 				//var_dump($value);
 				$data['VerInspeccionDetalle'] .= '<tr>';
 				$data['VerInspeccionDetalle'] .= '<td>';
-				$data['VerInspeccionDetalle'] .= $value{'id_piece'};
+				$resultP = $this->model->getRow('Piece', '*', " WHERE id_piece = $value[id_piece] ", $this->ok);
+				//var_dump($result);
+				if($resultP != false && $resultP->num_rows > 0){
+				 $Pieza=$resultP->fetch_assoc();
+
+				$data['VerInspeccionDetalle'] .= $Pieza{'piece_name'};}
+				else
+					$data['VerInspeccionDetalle'] .= "Pieza no definida";
 				$data['VerInspeccionDetalle'] .= '</td>';
 				$data['VerInspeccionDetalle'] .= '<td>';
 				$data['VerInspeccionDetalle'] .= $value{'severity'};
 				$data['VerInspeccionDetalle'] .= '</td>';
 				$data['VerInspeccionDetalle'] .= '<td>';
-				$data['VerInspeccionDetalle'] .= $value{'id_service'};
+				$resultS = $this->model->getRow('Service', '*', " WHERE id_service = $value[id_service]; ", $this->ok);
+				//var_dump($result);
+				if($resultS != false && $resultS->num_rows > 0){
+				 	$Servicio=$resultS->fetch_assoc();
+					$data['VerInspeccionDetalle'] .= $Servicio{'service_name'};
+				}
+				else
+					$data['VerInspeccionDetalle'] .= "Servicio no definido";
+				//$data['VerInspeccionDetalle'] .= $value{'id_service'};
 				$data['VerInspeccionDetalle'] .= '</td>';
 				$data['VerInspeccionDetalle'] .= '<td>';
 				$data['VerInspeccionDetalle'] .= $value{'observations'};
@@ -395,19 +436,24 @@ class InspeccionCtrl extends CtrlEstandar
 				$estado = $this->model->UpdateEstado($_GET['idV'],'affected',$this->ok);
 				if($estado != false)
 				{
-					$upvehiculo = $this->model->UpdateVehiculo($_GET['idV'],$_POST['idvehiculo'],$this->ok);
-					if($upvehiculo != false){
+						//echo "here";
 						$campos = 'movement,inv_date,service,`service_ destination`,observations,status,id_vehicle,id_user';
 						$hoy = getdate();
 						$data['FechaEmision'] = $hoy['year'] . '-' .$hoy['mon'] . '-' . $hoy['mday'];
 						$data['hora'] = $hoy['hours']. ':' . $hoy['minutes']. ':'. $hoy['seconds'];
 						$fecha =$data['FechaEmision'] . " " . $data['hora'];
-						$values = "'in','$data[FechaEmision]','Inspeccion','$_POST[area]','Entrada de inspeccion','slope',$_POST[idvehiculo],1";
-						$resultInv=$this->model->Inset('Inventory',$campos, $values,$this->ok);
-						if($resultInv != false) header("Location: ?ctrl=inspeccion&M");
-						else
-							$data['error'] = $this->ok['error'];
-					}
+						$rsultV = $this->model->getRow('Vehicle','*',"WHERE vin LIKE '%$_POST[idvehiculo]%'",$this->ok);
+						if($rsultV != false && $rsultV->num_rows > 0)
+						{
+							//echo "here";
+							$Vehiculo = $rsultV->fetch_assoc();
+							$values = "'in','$data[FechaEmision]','Inspeccion','$_POST[area]','Entrada de inspeccion','slope',$Vehiculo[id_vehicle],$_SESSION[user]";
+							$resultInv=$this->model->Inset('Inventory',$campos, $values,$this->ok);
+							if($resultInv != false) header("Location: ?ctrl=inspeccion&M");
+							else
+								$data['error'] = $this->ok['error'];
+						}
+					
 				}
 			}
 			elseif ( isset($_GET['idV']) && $_GET['idV'] != 0  && $_POST['estatus'] == 'CANCELAR') {
