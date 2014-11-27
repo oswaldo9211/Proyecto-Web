@@ -104,7 +104,13 @@ class InventoryCtrl  extends CtrlEstandar
 				else
 					$this->data{'ListInventory'} .="<td>'No hay ubucacion'</td>";
 				$this->data{'ListInventory'} .="<td>$Inv[observations]</td>";
-				$this->data{'ListInventory'} .="<td>$Inv[status]</td>";
+
+				if($Inv['status'] =='slope'){
+					$estatus = "Pendiente";
+				}
+				else
+					$estatus="En espera"; 
+				$this->data{'ListInventory'} .="<td>$estatus</td>" ;
 				
 				$rsV=$this->model->getRow('Vehicle','*', "WHERE id_vehicle = $Inv[id_vehicle] ",$this->ok);
 				if($rsV  != false && $rsV->num_rows > 0){
