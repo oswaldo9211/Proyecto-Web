@@ -108,7 +108,7 @@ class ModelCtrl extends CtrlEstandar{
 		}
 		else{
 			require_once("Controllers/Validaciones.php");
-			$model = validateName($_POST['name']);
+			$model = $_POST['name'];
 			$id_brand = validateNumber($_POST['brand']);
 			$result =$this->model->create($model, $id_brand);
 
@@ -187,7 +187,7 @@ class ModelCtrl extends CtrlEstandar{
 		else{
 			$id_model= $_GET['id'];
 			require_once("Controllers/Validaciones.php");
-			$model = validateName($_POST['name']);
+			$model = $_POST['name'];
 			$id_brand = validateNumber($_POST['brand']);
 
 
